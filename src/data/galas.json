@@ -1,0 +1,106 @@
+[
+  {
+    "id": "gala-vision-mtl-2026",
+    "title": "Gala Vision Montréal 2026",
+    "date": "April 14, 2026",
+    "time": "6:00 PM",
+    "location": "Palais des congrès, Montréal",
+    "attendees": 245,
+    "prizePool": 15000,
+    "status": "Active",
+    "imageUrl": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "description": "The biggest entrepreneurial event of the year. Network with industry leaders, attend inspiring conferences, and compete for grants to grow your business.",
+    "program": [
+      {
+        "time": "18h00",
+        "title": "Welcome and cocktail",
+        "description": "Networking with entrepreneurs and partners"
+      }
+    ],
+    "grants": [
+      {
+        "id": "g1",
+        "title": "Innovation Technology Grant",
+        "amount": 5000,
+        "category": "Technology",
+        "deadline": "Mar 31",
+        "eligibility": "Tech company less than 5 years old",
+        "description": "For businesses developing innovative technology solutions.",
+        "status": "Active"
+      },
+      {
+        "id": "g2",
+        "title": "Social Entrepreneurship Grant",
+        "amount": 5000,
+        "category": "Social Imp",
+        "deadline": "Mar 31",
+        "eligibility": "Rewards businesses with a positive social impact.",
+        "description": "Rewards businesses with a positive social impact.",
+        "status": "Active"
+      },
+      {
+        "id": "g3",
+        "title": "Green Business Grant",
+        "amount": 5000,
+        "category": "Environment",
+        "deadline": "Mar 31",
+        "eligibility": "Eco-friendly businesses.",
+        "description": "For businesses developing sustainable and eco-friendly solutions.",
+        "status": "Active"
+      }
+    ]
+  },
+  {
+    "id": "gala-startup-sherbrooke-sep",
+    "title": "Gala Startup Sherbrooke",
+    "date": "September 11, 2026",
+    "time": "6:00 PM",
+    "location": "Hôtel Delta, Sherbrooke",
+    "attendees": 0,
+    "prizePool": 8000,
+    "status": "Upcoming",
+    "imageUrl": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "description": "Celebrate the vibrant startup ecosystem of Sherbrooke.",
+    "program": [],
+    "grants": [
+      {
+        "id": "g4",
+        "title": "Local Hero Grant",
+        "amount": 8000,
+        "category": "Local",
+        "deadline": "Aug 31",
+        "eligibility": "Based in Sherbrooke.",
+        "description": "For businesses heavily impacting the local community.",
+        "status": "Draft"
+      }
+    ]
+  },
+  {
+    "id": "gala-quebec-june",
+    "title": "Gala Innovation Québec",
+    "date": "June 20, 2026",
+    "time": "5:30 PM",
+    "location": "Centre des congrès, Québec",
+    "attendees": 0,
+    "prizePool": 12000,
+    "status": "Upcoming",
+    "imageUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "description": "A premier event for innovators across the province.",
+    "program": [],
+    "grants": []
+  },
+  {
+    "id": "gala-vision-mtl-2025",
+    "title": "Gala Vision Montréal 2025",
+    "date": "April 15, 2025",
+    "time": "6:00 PM",
+    "location": "Palais des congrès, Montréal",
+    "attendees": 320,
+    "prizePool": 15000,
+    "status": "Past",
+    "imageUrl": "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    "description": "Last year's incredible gathering of Montreal's top entrepreneurs.",
+    "program": [],
+    "grants": []
+  }
+]

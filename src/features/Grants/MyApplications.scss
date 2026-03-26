@@ -1,0 +1,138 @@
+.my-apps-container {
+  min-height: 100vh;
+  background-color: #fcfcfc;
+  padding-bottom: 80px;
+}
+
+.my-apps-header {
+  background: linear-gradient(135deg, #4ade80 0%, #10b981 100%);
+  padding: 60px 24px 80px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  color: white;
+  text-align: left;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 1rem;
+    opacity: 0.9;
+  }
+}
+
+.my-apps-content {
+  max-width: 1000px;
+  margin: -40px auto 0;
+  padding: 0 24px;
+  position: relative;
+  z-index: 20;
+
+  .next-gala-card {
+    background: #4ade80;
+    border-radius: 24px;
+    padding: 24px;
+    color: white;
+    margin-bottom: 32px;
+    box-shadow: 0 10px 20px rgba(74, 222, 128, 0.2);
+
+    .gala-badge {
+       display: flex; align-items: center; gap: 8px; font-size: 0.875rem; font-weight: 700; margin-bottom: 16px;
+       svg { width: 18px; height: 18px; }
+    }
+
+    h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    p { font-size: 0.9375rem; opacity: 0.9; margin-bottom: 24px; }
+
+    .btn-view-grants {
+       background: white; color: #10b981; border: none; padding: 12px 24px; border-radius: 12px;
+       font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+    }
+  }
+
+  .status-section {
+    margin-bottom: 32px;
+    
+    .section-title {
+       display: flex; align-items: center; gap: 8px; font-size: 1.125rem; font-weight: 800; color: #111827; margin-bottom: 16px;
+       svg { width: 20px; height: 20px; color: #10b981; }
+    }
+
+    .status-grid {
+       display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+       
+       .status-card {
+          background: white; padding: 20px; border-radius: 16px; border: 1px solid #f3f4f6;
+          text-align: center;
+          
+          .icon { 
+             width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;
+             svg { width: 20px; height: 20px; }
+          }
+          .val { font-size: 1.5rem; font-weight: 800; color: #111827; margin-bottom: 4px; }
+          .label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+          &.pending {
+             .icon { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+             .label { color: #f59e0b; }
+          }
+          &.approved {
+             .icon { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+             .label { color: #10b981; }
+          }
+          &.rejected {
+             .icon { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+             .label { color: #ef4444; }
+          }
+       }
+    }
+  }
+
+  .upcoming-section {
+    .section-title {
+       display: flex; align-items: center; gap: 8px; font-size: 1.125rem; font-weight: 800; color: #111827; margin-bottom: 16px;
+       svg { width: 20px; height: 20px; color: #10b981; }
+    }
+
+    .gala-group {
+       background: white; border-radius: 20px; padding: 20px; border: 1px solid #f3f4f6;
+       
+       .gala-header {
+          display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+          h3 { font-size: 1rem; font-weight: 800; color: #111827; margin-bottom: 4px; }
+          .date { font-size: 0.8125rem; color: #9ca3af; }
+          .badge { background: #4ade80; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+       }
+
+       .app-items {
+          display: flex; flex-direction: column; gap: 16px;
+          
+          .app-item {
+             background: #f9fafb; border-radius: 16px; padding: 16px; display: flex; gap: 16px; align-items: center;
+             
+             .app-icon {
+                width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+                border: 1px solid #f3f4f6; color: #f59e0b;
+             }
+             
+             .app-info {
+                flex-grow: 1;
+                h4 { font-size: 0.9375rem; font-weight: 700; color: #111827; margin-bottom: 4px; }
+                .interview { font-size: 0.8125rem; color: #10b981; font-weight: 600; }
+                .submitted { font-size: 0.75rem; color: #9ca3af; }
+             }
+             
+             .app-status {
+                background: white; padding: 4px 12px; border-radius: 50px; border: 1px solid #f3f4f6;
+                font-size: 0.75rem; font-weight: 700; color: #f59e0b;
+             }
+          }
+       }
+    }
+  }
+}

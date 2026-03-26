@@ -1,0 +1,17 @@
+{
+  "welcome": "Bienvenue !",
+  "welcome_str": "Votre profil d'entrepreneur commence à prendre forme.",
+  "profile_welcome_string": "Découvrons maintenant votre entreprise.",
+  "continue": "Continuer",
+  "almost_ready": "Vous y êtes presque !",
+  "almost_ready_str": "Voici ce qui vous attend dans l'écosystème Vision PME.",
+  "grant_price": "200000$ de subventions chaque année",
+  "grants_str": "Plus de 200 subventions à attribuer",
+  "step": "Étape",
+  "of": "sur",
+  "your_name": "Votre nom ?",
+  "step1_str": "Voici comment vous apparaîtrez dans la communauté.",
+  "first_name": "Votre prénom",
+  "last_name": "Votre nom de famille",
+  "your_company": "Votre entreprise ?"
+}

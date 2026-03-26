@@ -1,0 +1,100 @@
+/* Overlay (background) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.5); // dark background
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1000;
+}
+
+/* Modal box */
+.modal-content {
+  background: #ffffff;
+  width: 420px;
+  max-width: 90%;
+  border-radius: 12px;
+
+  padding: 20px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  animation: modalFadeIn 0.2s ease;
+}
+
+/* Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+/* Close button */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+/* Body */
+.modal-body {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 16px;
+
+  h2 {
+    font-size: 14px;
+    margin: 6px 0;
+    font-weight: 500;
+  }
+}
+
+/* Footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Primary button */
+.btn-primary {
+  background: #2ecc71; // green
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background: #27ae60;
+  }
+}
+
+/* Simple fade animation */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

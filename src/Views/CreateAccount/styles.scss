@@ -1,0 +1,402 @@
+@import "../../Shared/Colors.scss";
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+
+.login-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $secondaryGreen;
+  padding: 24px 16px;
+}
+
+.login-card {
+  background: $primaryWhite;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 44px 40px 36px;
+  width: 60vw;
+  max-width: 500px;
+
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .login-card__back{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: $secondaryText;
+    padding: 0;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+
+   &:focus{
+   outline: none;
+  }
+  &:hover{
+  color : $primaryGreen
+  }
+  }
+  
+  .login-card__heading{
+    margin-bottom: 26px;
+    text-align: center;
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: $primaryText;
+      margin-bottom: 4px;
+    }
+       p {
+      font-size: 14px;
+      color: $primaryGreen;
+      font-weight: 500;
+    }
+  }
+
+
+
+
+  .login-card__form{
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: $primaryText;
+    letter-spacing: 0.01em;
+  }
+
+  .input-wrap {
+    position: relative;
+
+    input {
+      width: 100%;
+      padding: 13px 16px;
+      background: $surfaceColor;
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      font-size: 15px;
+      color: $primaryText;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+
+      &::placeholder { color: $secondaryText }
+
+      &:focus {
+        border-color: $primaryGreen;
+        background: $primaryWhite;
+        box-shadow: 0 0 0 4px rgba($primaryGreen, 0.02);
+      }
+
+      // &.with-toggle { padding-right: 48px; }
+    }
+
+    .eye-btn {
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: $secondaryText;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+      line-height: 0;
+
+      &:hover { color: $primaryText; }
+
+      svg {
+        width: 17px;
+        height: 17px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+    }
+  }
+}
+
+// ── Terms Row ──────────────────────────────────────────────
+.terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 13px;
+  background: #f7fdfb;
+  border: 1px solid rgba($primaryGreen, 0.18);
+  border-radius: 10px;
+
+  .terms-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 5px;
+    border: 1.5px solid $primaryGreen;
+    background: $primaryWhite;
+    cursor: pointer;
+    margin-top: 1px;
+    transition: background 0.2s, border-color 0.2s;
+    position: relative;
+    flex-shrink: 0;
+
+    &:checked {
+      background: $primaryGreen;
+      border-color: $primaryGreen;
+
+      &::after {
+        content: '';
+        display: block;
+        width: 4px;
+        height: 7px;
+        border: 2px solid white;
+        border-top: none;
+        border-left: none;
+        transform: rotate(45deg);
+        position: absolute;
+        top: 2px;
+        left: 5px;
+      }
+    }
+  }
+
+  label {
+    font-size: 13px;
+    color: $secondaryText;
+    line-height: 1.5;
+    cursor: pointer;
+
+    a {
+      color: $primaryText;
+      font-weight: 600;
+      text-decoration: none;
+      &:hover { color: $primaryGreen; }
+    }
+  }
+}
+.policy-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: $secondaryText;
+  cursor: pointer;
+  text-decoration: underline;
+  font: inherit;
+
+  &:hover {
+    color: $primaryGreen;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+// ── Primary CTAs ───────────────────────────────────────────
+.btn-signin,
+.btn-create {
+  width: 100%;
+  padding: 15px;
+  background: $primaryGreen;
+  color: $primaryWhite;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  box-shadow: 0 6px 22px rgba($primaryGreen, 0.35);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s, opacity 0.2s;
+  margin-top: 2px;
+
+  &:hover {
+    background: $primaryGreen;
+    box-shadow: 0 10px 30px rgba($primaryGreen, 0.42);
+  }
+  &:active { transform: scale(0.97); }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    &:hover { background: $primaryGreen; transform: none; }
+  }
+}
+
+// ── Divider ────────────────────────────────────────────────
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: $primaryGreen;
+  }
+
+  span {
+    font-size: 13px;
+    color: $secondaryText;
+    white-space: nowrap;
+    font-weight: 400;
+  }
+}
+
+// ── Social Buttons ─────────────────────────────────────────
+.social-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.google-icon{
+  height: 28px;
+  width: 28px;
+}
+.apple-icon{
+  font-size: x-large;
+}
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: $primaryWhite;
+  border: 1.5px solid $primaryGreen;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  color: $primaryText;
+  cursor: pointer;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s, transform 0.15s;
+
+  &:hover {
+    border-color: darken($primaryGreen, 10%);
+    background: #f9fafb;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  }
+  &:active { transform: scale(0.97); }
+
+  svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  // Apple — dark pill
+  &--apple {
+    background: #0d1b2a;
+    border-color: #0d1b2a;
+    color: $primaryWhite;
+
+    &:hover {
+      background: #1a2e42;
+      border-color: #1a2e42;
+    }
+
+    svg { fill: $primaryWhite; }
+  }
+}
+
+// ── Footer ─────────────────────────────────────────────────
+.login-footer {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 14px;
+  color: $secondaryText;
+
+  button {
+    background: none;
+    border: none;
+    color: $primaryGreen;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.2s;
+
+    &:hover { opacity: 0.7; }
+  }
+}
+/* ── Logo Section ───────────────────────── */
+.login-card__logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-bubble {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background:$secondaryGreen; // light background
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.logo-bubble img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+
+/* ── Forgot Password ───────────────────── */
+.forgot-link {
+  background: none;
+  border: none;
+  padding: 0;
+
+  font-size: 14px;
+  color: #6c757d; // subtle grey
+  cursor: pointer;
+
+  align-self: flex-end; // moves to right
+  margin-top: 6px;
+  margin-bottom: 16px;
+
+  transition: color 0.2s ease;
+}
+
+.forgot-link:hover {
+  color: #2ecc71; // green hover (match your theme)
+}
+
+.error{
+color: rgb(254, 93, 93);
+font-size: 12px;
+}
