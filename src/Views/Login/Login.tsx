@@ -1,25 +1,76 @@
 import "../CreateAccount/styles.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faApple } from "@fortawesome/free-brands-svg-icons";
-import PasswordField from "../../Components/Atom/PasswordField";
+import PasswordField from "../../Shared/Components/PasswordField";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+import { useLoginMutation } from "../../Services/Api/module/AuthApi";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from "../../validations/userSchema";
+import { Bounce, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login } from "../../Store/Common";
 
 
 export default function LoginPage() {
     const navigate = useNavigate();
     const { t } = useTranslation();
-
+    const dispatch = useDispatch();
+    const [loginApi, { isLoading }] = useLoginMutation();
 
     const {
         register,
-        handleSubmit,
-    } = useForm();
+        handleSubmit, formState: { errors }
+    } = useForm(
+        {
+            resolver: yupResolver(loginSchema),
+            mode: "onTouched"
+        });
 
-    const onSubmit = (data: any) => {
-        console.log(data);
+    const onSubmit = async (data: any) => {
+        const payload = {
+            email: data.email,
+            password: data.password,
+        };
+        console.log(payload)
+        try {
+            const response = await loginApi(
+                payload
+            ).unwrap();
+
+            console.log("Login Response (Full):", response);
+            const token = response.data?.accessToken;
+            const refreshToken = response.data?.refreshToken;
+            const email = response.data?.email;
+            const userName = response.data?.username;
+            const isProfileCompleted = response.data?.isProfileCompleted;
+
+            console.log("Dispatching Login with:", { token, refreshToken, email, userName, isProfileCompleted });
+
+            dispatch(login({
+                token,
+                refreshToken,
+                email,
+                userName,
+                isProfileCompleted,
+            }));
+        } catch (err: any) {
+            console.log("error-", err);
+            toast(err?.data?.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        }
     };
+
 
     return (
         <div className="login-page">
@@ -47,6 +98,9 @@ export default function LoginPage() {
                                 placeholder="your.email@example.com"
                                 {...register("email")}
                             />
+                            {errors.email && (
+                                <span className="error">{errors.email.message}</span>
+                            )}
                         </div>
                     </div>
                     <PasswordField
@@ -54,6 +108,7 @@ export default function LoginPage() {
                         label={t('password')}
                         name="password"
                         register={register}
+                        error={errors.password?.message}
                     />
 
                     <button className="forgot-link" type="button" onClick={() => navigate("/forgot-password")}>
@@ -61,9 +116,12 @@ export default function LoginPage() {
                     </button>
 
                     {/* Sign In CTA */}
-                    <button className="btn-signin" type="button" onClick={handleSubmit(onSubmit)}>
-                        {t('sign_in')}
+                    <button
+                        type="button" className="btn-signin"
+                        onClick={handleSubmit(onSubmit)}>
+                        {isLoading ? t('signing_in') : t('sign_in')}
                     </button>
+
 
                     <div className="or-divider">
                         <span>{t('social_option')}</span>
@@ -89,6 +147,6 @@ export default function LoginPage() {
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 }

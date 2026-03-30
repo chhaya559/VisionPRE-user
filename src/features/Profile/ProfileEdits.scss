@@ -1,13 +1,15 @@
+@import '../../Shared/Colors.scss';
+
 .edit-profile-container {
   min-height: 100vh;
-  background-color: white;
+  background-color: $primaryWhite;
   padding-bottom: 60px;
 }
 
 .edit-profile-header {
-  background: linear-gradient(135deg, #4ade80 0%, #10b981 100%);
+  background: linear-gradient(135deg, lighten($primaryGreen, 10%) 0%, $primaryGreen 100%);
   padding: 40px 24px 60px;
-  color: white;
+  color: $primaryWhite;
   text-align: center;
   position: relative;
   border-bottom-left-radius: 40px;
@@ -18,7 +20,7 @@
   .back-btn {
     position: absolute;
     top: 24px; left: 24px;
-    background: none; border: none; color: white;
+    background: none; border: none; color: $primaryWhite;
     display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 700;
     cursor: pointer;
   }
@@ -31,15 +33,15 @@
      margin: 0 auto 12px;
      
      .avatar-circle {
-        width: 100%; height: 100%; border-radius: 50%; background: white; color: #10b981;
+        width: 100%; height: 100%; border-radius: 50%; background: $primaryWhite; color: $primaryGreen;
         font-size: 2.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center;
-        border: 4px solid rgba(255,255,255,0.3);
+        border: 4px solid rgba($primaryWhite, 0.3);
      }
      
      .camera-icon {
         position: absolute; bottom: 0; right: 0;
-        width: 32px; height: 32px; background: #10b981; color: white;
-        border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center;
+        width: 32px; height: 32px; background: $primaryGreen; color: $primaryWhite;
+        border-radius: 50%; border: 3px solid $primaryWhite; display: flex; align-items: center; justify-content: center;
         svg { width: 14px; height: 14px; }
      }
   }
@@ -57,11 +59,11 @@
     
     .section-header {
        display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
-       border-left: 4px solid #10b981; padding-left: 12px;
+       border-left: 4px solid $primaryGreen; padding-left: 12px;
        
-       h3 { font-size: 1.125rem; font-weight: 800; color: #111827; }
+       h3 { font-size: 1.125rem; font-weight: 800; color: $primaryText; }
        .step-badge { 
-          font-size: 0.75rem; background: #ecfdf5; color: #10b981; padding: 4px 10px; border-radius: 50px; font-weight: 700; 
+          font-size: 0.75rem; background: $secondaryGreen; color: $primaryGreen; padding: 4px 10px; border-radius: 50px; font-weight: 700; 
           margin-left: auto;
        }
     }
@@ -70,11 +72,11 @@
        display: flex; flex-direction: column; gap: 24px;
        
        .form-group {
-          label { display: block; font-size: 0.875rem; font-weight: 700; color: #374151; margin-bottom: 8px; }
+          label { display: block; font-size: 0.875rem; font-weight: 700; color: $textDarkGray; margin-bottom: 8px; }
           input, select, textarea {
-             width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid #e5e7eb;
-             background: #f9fafb; font-size: 1rem; color: #111827;
-             &:focus { outline: none; border-color: #10b981; background: white; }
+             width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid $borderColor;
+             background: $surfaceColor; font-size: 1rem; color: $primaryText;
+             &:focus { outline: none; border-color: $primaryGreen; background: $primaryWhite; }
           }
           textarea { min-height: 100px; resize: vertical; }
        }
@@ -83,43 +85,43 @@
     .tags-grid {
        display: flex; flex-wrap: wrap; gap: 12px;
        .tag {
-          padding: 10px 18px; border-radius: 50px; background: #f3f4f6; color: #4b5563;
+          padding: 10px 18px; border-radius: 50px; background: $borderColorLight; color: $textGray;
           font-size: 0.8125rem; font-weight: 700; cursor: pointer; border: 1px solid transparent;
           
-          &.active { background: #10b981; color: white; border-color: #10b981; }
+          &.active { background: $primaryGreen; color: $primaryWhite; border-color: $primaryGreen; }
        }
     }
 
     .goals-list {
        display: flex; flex-direction: column; gap: 12px;
        .goal-item {
-          padding: 16px; border-radius: 16px; border: 1px solid #f3f4f6; background: #fdfdfd;
+          padding: 16px; border-radius: 16px; border: 1px solid $borderColorLight; background: $primaryWhite;
           display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.2s ease;
           
           .icon-box { 
-             width: 40px; height: 40px; border-radius: 12px; background: white; border: 1px solid #f3f4f6;
-             display: flex; align-items: center; justify-content: center; color: #9ca3af;
+             width: 40px; height: 40px; border-radius: 12px; background: $primaryWhite; border: 1px solid $borderColorLight;
+             display: flex; align-items: center; justify-content: center; color: $placeholderColor;
              svg { width: 20px; height: 20px; }
           }
           
-          span { font-size: 0.9375rem; font-weight: 700; color: #4b5563; }
+          span { font-size: 0.9375rem; font-weight: 700; color: $textGray; }
           
           &.active {
-             background: #ecfdf5; border-color: #10b981;
-             .icon-box { border-color: #10b981; color: #10b981; }
-             span { color: #10b981; }
+             background: $secondaryGreen; border-color: $primaryGreen;
+             .icon-box { border-color: $primaryGreen; color: $primaryGreen; }
+             span { color: $primaryGreen; }
           }
        }
     }
   }
 
   .btn-save {
-     width: 100%; background: #10b981; color: white; border: none; padding: 16px; border-radius: 16px;
+     width: 100%; background: $primaryGreen; color: $primaryWhite; border: none; padding: 16px; border-radius: 16px;
      font-size: 1.0625rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
-     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+     box-shadow: 0 4px 12px rgba($primaryGreen, 0.2);
      margin-bottom: 32px;
      
-     &:hover { background: #059669; transform: translateY(-2px); }
+     &:hover { background: darken($primaryGreen, 10%); transform: translateY(-2px); }
   }
 }
 
@@ -137,79 +139,79 @@
    display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px;
    
    .setting-toggle {
-      background: white; border: 1px solid #f3f4f6; border-radius: 16px; padding: 18px 20px;
+      background: $primaryWhite; border: 1px solid $borderColorLight; border-radius: 16px; padding: 18px 20px;
       display: flex; justify-content: space-between; align-items: center;
       
       .st-info {
-         h4 { font-size: 0.9375rem; font-weight: 700; color: #111827; margin-bottom: 2px; }
-         p { font-size: 0.8125rem; color: #9ca3af; margin: 0; }
+         h4 { font-size: 0.9375rem; font-weight: 700; color: $primaryText; margin-bottom: 2px; }
+         p { font-size: 0.8125rem; color: $placeholderColor; margin: 0; }
       }
       
       .toggle-switch {
-         width: 44px; height: 24px; background: #e5e7eb; border-radius: 50px; position: relative; cursor: pointer;
-         &::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.2s; }
+         width: 44px; height: 24px; background: $borderColor; border-radius: 50px; position: relative; cursor: pointer;
+         &::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: $primaryWhite; border-radius: 50%; transition: 0.2s; }
          &.on {
-            background: #10b981;
+            background: $primaryGreen;
             &::after { left: 22px; }
          }
       }
    }
 
    .account-action {
-      background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 16px; padding: 18px 20px;
+      background: $surfaceColor; border: 1px solid $borderColorLight; border-radius: 16px; padding: 18px 20px;
       display: flex; align-items: center; gap: 16px; cursor: pointer; transition: 0.2s;
       
-      .aa-icon { width: 40px; height: 40px; border-radius: 12px; background: white; border: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: center; color: #10b981; }
+      .aa-icon { width: 40px; height: 40px; border-radius: 12px; background: $primaryWhite; border: 1px solid $borderColorLight; display: flex; align-items: center; justify-content: center; color: $primaryGreen; }
       .aa-text { 
-         flex-grow: 1; h5 { font-size: 0.9375rem; font-weight: 700; color: #4b5563; }
+         flex-grow: 1; h5 { font-size: 0.9375rem; font-weight: 700; color: $textGray; }
       }
-      .badge-en { background: #ecfdf5; color: #10b981; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
-      svg.chevron { color: #d1d5db; }
+      .badge-en { background: $secondaryGreen; color: $primaryGreen; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
+      svg.chevron { color: $placeholderColor; }
 
-      &:hover { background: #f3f4f6; }
+      &:hover { background: $borderColorLight; }
       
       &.danger {
-         background: #fef2f2; border-color: #fee2e2;
-         .aa-icon { background: white; color: #ef4444; border-color: #fee2e2; }
-         .aa-text h5 { color: #ef4444; }
-         svg.chevron { color: #fca5a5; }
+         background: $dangerBg; border-color: $dangerBorder;
+         .aa-icon { background: $primaryWhite; color: $danger; border-color: $dangerBorder; }
+         .aa-text h5 { color: $danger; }
+         svg.chevron { color: lighten($danger, 20%); }
       }
    }
 }
 
 .logout-btn {
    display: flex; align-items: center; justify-content: center; gap: 12px;
-   width: 100%; border: none; background: none; color: #ef4444; font-size: 1rem; font-weight: 700;
+   width: 100%; border: none; background: none; color: $danger; font-size: 1rem; font-weight: 700;
    padding: 16px; cursor: pointer;
    svg { width: 20px; height: 20px; }
 }
 
 .premium-card {
-   background: #ecfdf5; border: 2px solid #10b981; border-radius: 20px; padding: 20px; margin-bottom: 32px;
+   background: $secondaryGreen; border: 2px solid $primaryGreen; border-radius: 20px; padding: 20px; margin-bottom: 32px;
    display: flex; flex-direction: column; gap: 20px;
    
    .pc-header {
       display: flex; justify-content: space-between; align-items: center;
       .pc-main {
          display: flex; gap: 16px; align-items: center;
-         .pc-icon { width: 48px; height: 48px; background: #10b981; color: white; border-radius: 14px; display: flex; align-items: center; justify-content: center; svg { width: 24px; height: 24px; } }
-         .pc-text { h4 { font-size: 1.125rem; font-weight: 800; color: #111827; } p { font-size: 0.875rem; color: #6b7280; } }
+         .pc-icon { width: 48px; height: 48px; background: $primaryGreen; color: $primaryWhite; border-radius: 14px; display: flex; align-items: center; justify-content: center; svg { width: 24px; height: 24px; } }
+         .pc-text { h4 { font-size: 1.125rem; font-weight: 800; color: $primaryText; } p { font-size: 0.875rem; color: $secondaryText; } }
       }
-      .pc-badge { font-size: 0.7rem; font-weight: 800; background: #10b981; color: white; padding: 4px 10px; border-radius: 50px; letter-spacing: 0.05em; }
+      .pc-badge { font-size: 0.7rem; font-weight: 800; background: $primaryGreen; color: $primaryWhite; padding: 4px 10px; border-radius: 50px; letter-spacing: 0.05em; }
    }
    
    .pc-meta {
-      display: flex; justify-content: space-between; border-top: 1px solid rgba(16, 185, 129, 0.1); padding-top: 16px;
+      display: flex; justify-content: space-between; border-top: 1px solid rgba($primaryGreen, 0.1); padding-top: 16px;
       .meta-item {
          display: flex; flex-direction: column; gap: 4px;
-         .label { font-size: 0.75rem; color: #10b981; font-weight: 700; opacity: 0.8; }
-         .val { font-size: 0.875rem; font-weight: 800; color: #111827; }
+         .label { font-size: 0.75rem; color: $primaryGreen; font-weight: 700; opacity: 0.8; }
+         .val { font-size: 0.875rem; font-weight: 800; color: $primaryText; }
          &.right { text-align: right; }
       }
    }
    
    .btn-manage {
-      background: #10b981; color: white; border: none; padding: 14px; border-radius: 14px;
+      background: $primaryGreen; color: $primaryWhite; border: none; padding: 14px; border-radius: 14px;
       font-size: 1rem; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 8px;
       cursor: pointer;
    }

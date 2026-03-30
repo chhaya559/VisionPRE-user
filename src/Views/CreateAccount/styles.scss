@@ -1,8 +1,12 @@
-@import "../../Shared/Colors.scss";
+@import '../../Shared/Colors.scss';
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 .login-page {
   min-height: 100vh;
@@ -22,13 +26,7 @@
   width: 60vw;
   max-width: 500px;
 
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  .login-card__back{
+  .login-card__back {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -42,15 +40,15 @@
     margin-bottom: 20px;
     transition: color 0.2s;
 
-   &:focus{
-   outline: none;
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      color: $primaryGreen;
+    }
   }
-  &:hover{
-  color : $primaryGreen
-  }
-  }
-  
-  .login-card__heading{
+
+  .login-card__heading {
     margin-bottom: 26px;
     text-align: center;
 
@@ -60,17 +58,14 @@
       color: $primaryText;
       margin-bottom: 4px;
     }
-       p {
+    p {
       font-size: 14px;
       color: $primaryGreen;
       font-weight: 500;
     }
   }
 
-
-
-
-  .login-card__form{
+  .login-card__form {
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -101,17 +96,19 @@
       font-size: 15px;
       color: $primaryText;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
 
-      &::placeholder { color: $secondaryText }
+      &::placeholder {
+        color: $placeholderColor;
+      }
 
       &:focus {
         border-color: $primaryGreen;
         background: $primaryWhite;
         box-shadow: 0 0 0 4px rgba($primaryGreen, 0.02);
       }
-
-      // &.with-toggle { padding-right: 48px; }
     }
 
     .eye-btn {
@@ -129,7 +126,9 @@
       transition: color 0.2s;
       line-height: 0;
 
-      &:hover { color: $primaryText; }
+      &:hover {
+        color: $primaryText;
+      }
 
       svg {
         width: 17px;
@@ -144,13 +143,13 @@
   }
 }
 
-// ── Terms Row ──────────────────────────────────────────────
+// ── Terms Row ───
 .terms-row {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   padding: 11px 13px;
-  background: #f7fdfb;
+  background: rgba($primaryGreen, 0.05);
   border: 1px solid rgba($primaryGreen, 0.18);
   border-radius: 10px;
 
@@ -165,7 +164,9 @@
     background: $primaryWhite;
     cursor: pointer;
     margin-top: 1px;
-    transition: background 0.2s, border-color 0.2s;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
     position: relative;
     flex-shrink: 0;
 
@@ -178,7 +179,7 @@
         display: block;
         width: 4px;
         height: 7px;
-        border: 2px solid white;
+        border: 2px solid $primaryWhite;
         border-top: none;
         border-left: none;
         transform: rotate(45deg);
@@ -199,7 +200,9 @@
       color: $primaryText;
       font-weight: 600;
       text-decoration: none;
-      &:hover { color: $primaryGreen; }
+      &:hover {
+        color: $primaryGreen;
+      }
     }
   }
 }
@@ -220,7 +223,7 @@
     outline: none;
   }
 }
-// ── Primary CTAs ───────────────────────────────────────────
+
 .btn-signin,
 .btn-create {
   width: 100%;
@@ -229,41 +232,40 @@
   color: $primaryWhite;
   font-size: 16px;
   font-weight: 700;
-  font-family: 'DM Sans', sans-serif;
   border: none;
   border-radius: 50px;
   cursor: pointer;
   letter-spacing: 0.01em;
-  box-shadow: 0 6px 22px rgba($primaryGreen, 0.35);
-  transition: background 0.2s, box-shadow 0.2s, transform 0.15s, opacity 0.2s;
   margin-top: 2px;
 
-  &:hover {
-    background: $primaryGreen;
-    box-shadow: 0 10px 30px rgba($primaryGreen, 0.42);
+  &:active {
+    transform: scale(0.97);
+    outline: none;
   }
-  &:active { transform: scale(0.97); }
-
+  &:focus {
+    outline: none;
+  }
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.7;
     cursor: not-allowed;
     box-shadow: none;
-    &:hover { background: $primaryGreen; transform: none; }
+    outline: none;
   }
 }
 
-// ── Divider ────────────────────────────────────────────────
+// ── Divider ───
 .or-divider {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 2px 0;
+  margin: 2px;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     flex: 1;
     height: 1px;
-    background: $primaryGreen;
+    background: $borderColor;
   }
 
   span {
@@ -274,17 +276,17 @@
   }
 }
 
-// ── Social Buttons ─────────────────────────────────────────
+// ---- Social Buttons --
 .social-btns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.google-icon{
+.google-icon {
   height: 28px;
   width: 28px;
 }
-.apple-icon{
+.apple-icon {
   font-size: x-large;
 }
 .btn-social {
@@ -298,36 +300,29 @@
   border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
-  font-family: 'DM Sans', sans-serif;
   color: $primaryText;
   cursor: pointer;
-  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s, transform 0.15s;
 
   &:hover {
-    border-color: darken($primaryGreen, 10%);
-    background: #f9fafb;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    background: $secondaryGreen;
+    border-color: $primaryGreen;
   }
-  &:active { transform: scale(0.97); }
 
-  svg { width: 18px; height: 18px; flex-shrink: 0; }
+  &:active {
+    transform: scale(0.97);
+  }
 
-  // Apple — dark pill
   &--apple {
-    background: #0d1b2a;
-    border-color: #0d1b2a;
+    background: $primaryText;
+    border-color: $primaryText;
     color: $primaryWhite;
 
     &:hover {
-      background: #1a2e42;
-      border-color: #1a2e42;
+      background: $secondaryText;
+      border-color: $primaryText;
     }
-
-    svg { fill: $primaryWhite; }
   }
 }
-
-// ── Footer ─────────────────────────────────────────────────
 .login-footer {
   text-align: center;
   margin-top: 18px;
@@ -340,15 +335,17 @@
     color: $primaryGreen;
     font-weight: 700;
     font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
     cursor: pointer;
     padding: 0;
-    transition: opacity 0.2s;
 
-    &:hover { opacity: 0.7; }
+    &:hover {
+      opacity: 0.7;
+    }
+    &:focus {
+      outline: none;
+    }
   }
 }
-/* ── Logo Section ───────────────────────── */
 .login-card__logo {
   display: flex;
   justify-content: center;
@@ -359,7 +356,7 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background:$secondaryGreen; // light background
+  background: $secondaryGreen;
 
   display: flex;
   align-items: center;
@@ -374,7 +371,6 @@
   object-fit: contain;
 }
 
-
 /* ── Forgot Password ───────────────────── */
 .forgot-link {
   background: none;
@@ -382,21 +378,22 @@
   padding: 0;
 
   font-size: 14px;
-  color: #6c757d; // subtle grey
+  color: $secondaryText;
   cursor: pointer;
-
-  align-self: flex-end; // moves to right
+  align-self: flex-end;
   margin-top: 6px;
   margin-bottom: 16px;
 
-  transition: color 0.2s ease;
+  &:focus {
+    outline: none;
+  }
 }
 
 .forgot-link:hover {
-  color: #2ecc71; // green hover (match your theme)
+  color: $primaryGreen;
 }
 
-.error{
-color: rgb(254, 93, 93);
-font-size: 12px;
+.error {
+  color: $error;
+  font-size: 12px;
 }

@@ -1,171 +1,172 @@
-@use "../ProfileSetupLayout.scss" as layout;
+@import '../../../Shared/Colors.scss';
 
 .intro-step {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex: 1;
+  text-align: center;
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
-  .text-center {
-    text-align: center;
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: $primaryText;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.025em;
   }
 
-  .mb-6 {
-    margin-bottom: 1.5rem;
-  }
-
-  .mb-8 {
-    margin-bottom: 2rem;
+  .subtitle {
+    font-size: 1.125rem;
+    color: $textGray;
+    margin-bottom: 2.5rem;
+    max-width: 480px;
+    line-height: 1.6;
   }
 
   .icon-badge {
-    width: 80px;
-    height: 80px;
-    border-radius: 24px;
+    width: 88px;
+    height: 88px;
+    border-radius: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    
+    margin-bottom: 1.5rem;
+    box-shadow: 0 10px 25px -5px rgba($primaryGreen, 0.3);
+
     &.success-badge {
-      background-color: layout.$primary-green;
-      color: white;
+      background: linear-gradient(135deg, $primaryGreen, darken($primaryGreen, 10%));
+      color: $primaryWhite;
+      
       svg {
         width: 40px;
         height: 40px;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
       }
+    }
+  }
+
+  .rocket-icon-wrapper {
+    width: 96px;
+    height: 96px;
+    background: linear-gradient(135deg, $borderColorLight, $primaryWhite);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0,0,0,0.03);
+
+    .rocket-icon-fa {
+      font-size: 2.5rem;
+      color: $primaryGreen;
+      animation: float 3s ease-in-out infinite;
     }
   }
 
   .info-box {
     display: flex;
     align-items: center;
-    background-color: rgba(layout.$primary-green, 0.1);
-    border: 1px solid rgba(layout.$primary-green, 0.2);
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    gap: 1rem;
-    color: layout.$primary-green;
-    font-weight: 500;
+    background-color: rgba($primaryGreen, 0.06);
+    border: 1.5px solid rgba($primaryGreen, 0.2);
+    border-radius: 16px;
+    padding: 1.25rem 1.75rem;
+    gap: 1.25rem;
+    color: $primaryGreen;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 
-    .info-icon svg {
-      width: 24px;
-      height: 24px;
+    svg {
+      font-size: 1.25rem;
     }
   }
 
   .stats-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
     width: 100%;
+    max-width: 500px;
+    margin-bottom: 2.5rem;
 
     .stat-card {
-      background-color: white;
-      border: 1px solid layout.$border-color;
-      border-radius: 12px;
-      padding: 1.5rem;
+      background: $primaryWhite;
+      border: 1.5px solid $borderColorLight;
+      border-radius: 20px;
+      padding: 1.75rem 1rem;
       text-align: center;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        border-color: rgba($primaryGreen, 0.2);
+      }
 
       h2 {
-        color: layout.$primary-green;
-        font-size: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 0.25rem;
+        color: $primaryGreen;
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
       }
 
       p {
-        color: layout.$text-light;
+        color: $secondaryText;
         font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.4;
       }
-      
-      &.highlight h2 {
-        color: layout.$primary-green;
+
+      &.large {
+        background: linear-gradient(135deg, $primaryWhite, $surfaceColor);
       }
     }
   }
 
-  .quote-box {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background-color: layout.$bg-color;
-    padding: 1rem;
-    border-radius: 12px;
+  .btn-continue {
     width: 100%;
-
-    .avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      overflow: hidden;
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    .quote-text {
-      text-align: left;
-      .author {
-        display: block;
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: layout.$primary-green;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.25rem;
-      }
-      p {
-        font-size: 0.875rem;
-        color: layout.$text-dark;
-      }
-    }
-  }
-
-  .speaker-card {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    background-color: #f9fafb;
-    border-radius: 16px;
+    max-width: 400px;
     padding: 1.25rem;
-    width: 100%;
-    
-    .speaker-avatar {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      overflow: hidden;
-      background-color: #e5e7eb;
-      img { width: 100%; height: 100%; object-fit: cover; }
+    background-color: $primaryGreen;
+    color: $primaryWhite;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba($primaryGreen, 0.3);
+
+    &:hover:not(:disabled) {
+      background-color: darken($primaryGreen, 5%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba($primaryGreen, 0.4);
     }
 
-    .speaker-info {
-       text-align: left;
-       .speaker-badge {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 0.625rem;
-          font-weight: 800;
-          color: layout.$primary-green;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          margin-bottom: 4px;
-       }
-       h5 { font-size: 0.9375rem; font-weight: 800; color: #111827; margin: 0; }
-       p { font-size: 0.75rem; color: #6b7280; margin: 0; }
+    &:active:not(:disabled) {
+      transform: translateY(0);
     }
-  }
 
-  .stat-card.large {
-     padding: 1.5rem 1rem;
-     border: 2px solid rgba(layout.$primary-green, 0.2);
-     background-color: rgba(layout.$primary-green, 0.02);
-     h2 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-     p { font-size: 0.8125rem; font-weight: 500; }
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 }
 
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}

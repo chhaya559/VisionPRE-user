@@ -1,3 +1,5 @@
+@import "../../../Shared/Colors.scss";
+
 /* Overlay (background) */
 .modal-overlay {
   position: fixed;
@@ -16,7 +18,7 @@
 
 /* Modal box */
 .modal-content {
-  background: #ffffff;
+  background: $primaryWhite;
   width: 420px;
   max-width: 90%;
   border-radius: 12px;
@@ -39,6 +41,7 @@
     margin: 0;
     font-size: 18px;
     font-weight: 600;
+    color: $primaryText;
   }
 }
 
@@ -48,6 +51,7 @@
   border: none;
   font-size: 20px;
   cursor: pointer;
+  color: $secondaryText;
 
   &:hover {
     opacity: 0.7;
@@ -57,7 +61,7 @@
 /* Body */
 .modal-body {
   font-size: 14px;
-  color: #555;
+  color: $textGray;
   margin-bottom: 16px;
 
   h2 {
@@ -75,15 +79,15 @@
 
 /* Primary button */
 .btn-primary {
-  background: #2ecc71; // green
-  color: white;
+  background: $primaryGreen;
+  color: $primaryWhite;
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
 
   &:hover {
-    background: #27ae60;
+    background: darken($primaryGreen, 10%);
   }
 }
 

@@ -1,58 +1,81 @@
-@use "../ProfileSetupLayout.scss" as layout;
+@import '../../../Shared/Colors.scss';
 
 .profile-step {
   display: flex;
   flex-direction: column;
   flex: 1;
+  animation: fadeIn 0.4s ease-out;
+
+  h1 {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: $primaryText;
+    margin-bottom: 14px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: $secondaryText;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
 
   .step-icon {
-    width: 48px;
-    height: 48px;
-    background-color: rgba(layout.$primary-green, 0.1);
-    color: layout.$primary-green;
-    border-radius: 12px;
-    
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(
+      135deg,
+      rgba($primaryGreen, 0.1),
+      rgba($primaryGreen, 0.05)
+    );
+    color: $primaryGreen;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
     svg {
       width: 24px;
       height: 24px;
     }
   }
 
-  .mb-6 {
-    margin-bottom: 1.5rem;
-  }
-
   .form-group-stack {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
 
-    .step-input, .step-textarea {
+    .step-input,
+    .step-textarea {
       width: 100%;
-      padding: 1rem 1.25rem;
-      border: 1px solid layout.$border-color;
-      border-radius: 12px;
+      padding: 1.125rem 1.25rem;
+      border: 1.5px solid $borderColor;
+      border-radius: 14px;
       font-size: 1rem;
-      color: layout.$text-dark;
-      background-color: layout.$bg-color;
-      transition: all 0.2s;
+      color: $primaryText;
+      background-color: $surfaceColor;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
       &:focus {
         outline: none;
-        border-color: layout.$primary-green;
-        box-shadow: 0 0 0 3px rgba(layout.$primary-green, 0.1);
-        background-color: white;
+        border-color: $primaryGreen;
+        box-shadow: 0 0 0 4px rgba($primaryGreen, 0.1);
+        background-color: $primaryWhite;
+        transform: translateY(-1px);
       }
-      
+
       &::placeholder {
-        color: #9CA3AF;
+        color: $placeholderColor;
       }
     }
 
     .step-textarea {
-      min-height: 150px;
+      min-height: 160px;
       resize: vertical;
+      line-height: 1.6;
     }
   }
 
@@ -60,41 +83,61 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 
     .grid-option {
-      background-color: transparent;
-      border: 1px solid layout.$border-color;
-      border-radius: 12px;
-      padding: 1.25rem 1rem;
+      background-color: $primaryWhite;
+      border: 1.5px solid $borderColorLight;
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.75rem;
+      gap: 1rem;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+
+      &:hover {
+        border-color: rgba($primaryGreen, 0.4);
+        background-color: rgba($primaryGreen, 0.02);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+      }
 
       .grid-icon {
-        font-size: 1.5rem;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $surfaceColor;
+        border-radius: 12px;
+        color: $textGray;
+        font-size: 1.25rem;
+        transition: all 0.3s;
       }
 
       .grid-label {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: layout.$text-dark;
-      }
-
-      &:hover {
-        border-color: rgba(layout.$primary-green, 0.5);
-        background-color: rgba(layout.$primary-green, 0.05);
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: $textDarkGray;
+        transition: all 0.3s;
       }
 
       &.selected {
-        border-color: layout.$primary-green;
-        background-color: rgba(layout.$primary-green, 0.1);
-        
+        border-color: $primaryGreen;
+        background-color: rgba($primaryGreen, 0.05);
+        box-shadow: 0 4px 12px rgba($primaryGreen, 0.1);
+
+        .grid-icon {
+          background-color: $primaryGreen;
+          color: $primaryWhite;
+          transform: scale(1.1);
+        }
+
         .grid-label {
-          color: layout.$primary-green;
+          color: $primaryGreen;
         }
       }
     }
@@ -103,91 +146,181 @@
   .list-options {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
 
     .list-option {
-      background-color: transparent;
-      border: 1px solid layout.$border-color;
-      border-radius: 12px;
-      padding: 1rem;
+      background-color: $primaryWhite;
+      border: 1.5px solid $borderColorLight;
+      border-radius: 16px;
+      padding: 1.125rem 1.25rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.25rem;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       text-align: left;
+      position: relative;
+      overflow: hidden;
+
+      &:hover {
+        border-color: rgba($primaryGreen, 0.4);
+        background-color: rgba($primaryGreen, 0.02);
+        transform: translateX(4px);
+      }
 
       .list-icon {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: layout.$bg-color;
-        border-radius: 8px;
-        font-size: 1.25rem;
+        background-color: $surfaceColor;
+        border-radius: 12px;
+        color: $textGray;
+        font-size: 1.125rem;
+        transition: all 0.3s;
       }
 
       .list-text {
         flex: 1;
         display: flex;
         flex-direction: column;
-        
+
         .list-label {
-          font-weight: 500;
-          color: layout.$text-dark;
+          font-weight: 600;
+          color: $textBlack;
+          font-size: 1rem;
         }
-        
+
         .list-desc {
-          font-size: 0.875rem;
-          color: layout.$text-light;
+          font-size: 0.8125rem;
+          color: $secondaryText;
           margin-top: 0.25rem;
+          line-height: 1.4;
         }
       }
 
       .check-icon {
-        color: layout.$primary-green;
-        svg {
-          width: 20px;
-          height: 20px;
-        }
+        color: $primaryGreen;
+        font-size: 1rem;
+        animation: scaleIn 0.2s ease-out;
       }
 
       .checkbox {
         width: 24px;
         height: 24px;
-        border: 2px solid layout.$border-color;
-        border-radius: 6px;
+        border: 2px solid $borderColor;
+        border-radius: 7px;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s;
-        
-        svg {
-          width: 14px;
-          height: 14px;
-          color: white;
-        }
-        
-        &.checked {
-          background-color: layout.$primary-green;
-          border-color: layout.$primary-green;
-        }
-      }
+        transition: all 0.25s;
+        background-color: $primaryWhite;
 
-      &:hover {
-        border-color: rgba(layout.$primary-green, 0.5);
+        svg {
+          font-size: 0.75rem;
+          color: $primaryWhite;
+          opacity: 0;
+          transform: scale(0.5);
+          transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        &.checked {
+          background-color: $primaryGreen;
+          border-color: $primaryGreen;
+          box-shadow: 0 4px 10px rgba($primaryGreen, 0.3);
+
+          svg {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
       }
 
       &.selected {
-        border-color: layout.$primary-green;
-        background-color: rgba(layout.$primary-green, 0.05);
-        
+        border-color: $primaryGreen;
+        background-color: rgba($primaryGreen, 0.04);
+
         .list-icon {
-          background-color: white;
+          background-color: $primaryGreen;
+          color: $primaryWhite;
         }
       }
     }
+  }
+
+  .btn-continue {
+    width: 100%;
+    padding: 1.125rem;
+    background-color: $primaryGreen;
+    color: $primaryWhite;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba($primaryGreen, 0.25);
+    margin-top: auto;
+
+    &:hover:not(:disabled) {
+      background-color: darken($primaryGreen, 5%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($primaryGreen, 0.35);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      background-color: $borderColor;
+      color: $placeholderColor;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+
+  .btn-skip {
+    background: none;
+    border: none;
+    color: $secondaryText;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 1.5rem auto 1rem;
+    transition: all 0.2s;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: transparent;
+
+    &:hover {
+      color: $textDarkGray;
+      text-decoration-color: currentColor;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

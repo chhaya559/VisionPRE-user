@@ -1,15 +1,27 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { SetupContextProps } from "../ProfileSetupLayout";
 import "./ProfileSteps.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { 
+  faUserTie, 
+  faSeedling, 
+  faGlobe, 
+  faRocket, 
+  faChartLine, 
+  faLightbulb, 
+  faLeaf,
+  faCircleQuestion,
+  faCheck
+} from "@fortawesome/free-solid-svg-icons";
 
 const PROFILES = [
-  { id: 'woman', label: 'Woman entrepreneur', icon: '👩‍💼' },
-  { id: 'young', label: 'Young entrepreneur (35 and under)', icon: '🌱' },
-  { id: 'diverse', label: 'Entrepreneur from a diverse background', icon: '🌍' },
-  { id: 'startup', label: 'Startup', icon: '🚀' },
-  { id: 'growth', label: 'Growth-stage business', icon: '📈' },
-  { id: 'innovation', label: 'Innovation / technology', icon: '💡' },
-  { id: 'impact', label: 'Social or environmental impact', icon: '🌿' }
+  { id: 'woman', label: 'Woman entrepreneur', icon: faUserTie },
+  { id: 'young', label: 'Young entrepreneur (35 and under)', icon: faSeedling },
+  { id: 'diverse', label: 'Entrepreneur from a diverse background', icon: faGlobe },
+  { id: 'startup', label: 'Startup', icon: faRocket },
+  { id: 'growth', label: 'Growth-stage business', icon: faChartLine },
+  { id: 'innovation', label: 'Innovation / technology', icon: faLightbulb },
+  { id: 'impact', label: 'Social or environmental impact', icon: faLeaf }
 ];
 
 export default function StepProfile() {
@@ -45,15 +57,15 @@ export default function StepProfile() {
               className={`list-option ${isSelected ? 'selected' : ''}`}
               onClick={() => toggleSelection(profile.id)}
             >
-              <span className="list-icon">{profile.icon}</span>
+              <span className="list-icon">
+                <FontAwesomeIcon icon={profile.icon} />
+              </span>
               <div className="list-text">
                 <span className="list-label">{profile.label}</span>
               </div>
               <div className={`checkbox ${isSelected ? 'checked' : ''}`}>
                 {isSelected && (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
+                  <FontAwesomeIcon icon={faCheck} />
                 )}
               </div>
             </button>
@@ -64,15 +76,15 @@ export default function StepProfile() {
           className={`list-option ${formData.notSure ? 'selected' : ''}`}
           onClick={handleNotSure}
         >
-          <span className="list-icon">➖</span>
+          <span className="list-icon">
+            <FontAwesomeIcon icon={faCircleQuestion} />
+          </span>
           <div className="list-text">
             <span className="list-label">I'm not sure</span>
           </div>
           <div className={`checkbox ${formData.notSure ? 'checked' : ''}`}>
             {formData.notSure && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+              <FontAwesomeIcon icon={faCheck} />
             )}
           </div>
         </button>

@@ -18,6 +18,8 @@
   "login_str": "Connectez-vous pour continuer vers Vision PME",
   "email": "Adresse e-mail",
   "password": "Mot de passe",
+  "creating_acc": "Création du compte...",
+  "signing_in": "Connexion en cours...",
   "forgot_pass": "Mot de passe oublié",
   "social_option": "Ou continuer avec",
   "email_Placeholder": "vousremail@gmail.com",
@@ -45,5 +47,8 @@
   "dont_receive_email": "Vous n'avez pas reçu l'e-mail ?",
   "resenď": "Renvoyer",
   "wrong_email": "Mauvaise adresse e-mail ?",
-  "change_it": "Modifiez-la"
+  "change_it": "Modifiez-la",
+  "go_to_login": "Aller à la connexion",
+  "check_inbox_msg": "Vérifiez votre boîte de réception, un lien y a été envoyé.",
+  "reset_link_sent_title": "Lien envoyé"
 }

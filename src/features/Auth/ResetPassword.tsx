@@ -1,43 +1,79 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './AuthScreens.scss';
+import { faArrowLeft, faKey } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PasswordField from '../../Shared/Components/PasswordField';
+import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { resetPasswordSchema } from '../../validations/userSchema';
+import { useResetPasswordMutation } from '../../Services/Api/module/AuthApi';
+import { ROUTES_CONFIG } from '../../Shared/Constants';
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+  const [resetPasswordApi, { isLoading }] = useResetPasswordMutation();
+  const { register, handleSubmit, formState: { errors } } =
+    useForm({
+      resolver: yupResolver(resetPasswordSchema),
+      mode: "onTouched"
+    })
+
+  const onSubmit = async (data: any) => {
+    try {
+      const paylaod = {
+        token: token,
+        newPassword: data.password
+      }
+      const response = await resetPasswordApi(paylaod).unwrap();
+      console.log(response);
+      if (response?.success) {
+        navigate(ROUTES_CONFIG.LOGIN.path)
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="auth-page-container">
       <div className="auth-card">
         <div className="illustration-circle">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.778-7.778zM12 7l.96 2.035 2.26.328-1.635 1.593.387 2.251-2.012-1.058-2.012 1.058.387-2.251-1.635-1.593 2.26-.328L12 7z"></path></svg>
+          <FontAwesomeIcon icon={faKey} className='main-icon' />
         </div>
-        <h1>Create New Password</h1>
-        <p className="subtitle">Your new password must be different from previously used passwords.</p>
+        <h1>{t('create_newPass')}</h1>
+        <p className="subtitle">{t('create_newPass_subtitle')}</p>
 
-        <form className="auth-form" style={{ marginTop: '24px' }} onSubmit={(e) => { e.preventDefault(); navigate('/login'); }}>
+        <form className="auth-form" style={{ marginTop: '24px' }} onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
-            <label>New Password</label>
-            <input type="password" placeholder="••••••••••••" />
-          </div>
-          
-          <div className="form-group">
-            <label>Confirm Password</label>
-            <input type="password" placeholder="••••••••••••" />
+            <PasswordField
+              id="signup-pass"
+              label={t('password')}
+              register={register}
+              name="password"
+              error={errors.password?.message}
+            />
+
+
+
+            <PasswordField
+              id="signup-confirm"
+              label={t('confirm_pass')}
+              register={register}
+              name="confirmPassword"
+              error={errors.confirmPassword?.message}
+            />
           </div>
 
-          <div className="password-criteria">
-             <h4>Password must contain:</h4>
-             <ul>
-               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"></polyline></svg> At least 8 characters</li>
-               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"></polyline></svg> One uppercase letter</li>
-               <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"></polyline></svg> One number</li>
-             </ul>
-          </div>
-          
-          <button type="submit" className="btn-primary">Reset Password</button>
+          <button type="submit" className="btn-primary" disabled={isLoading}>{t('reset_pass')}</button>
 
           <div className="back-btn" onClick={() => navigate(-1)}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            Back
+            <FontAwesomeIcon icon={faArrowLeft} />
+            {t('back')}
           </div>
         </form>
       </div>

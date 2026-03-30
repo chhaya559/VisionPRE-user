@@ -1,28 +1,11 @@
-$bg-light: #f8fafc;
-$white: #ffffff;
-$text-main: #0f172a;
-$text-light: #64748b;
-$border-col: #e2e8f0;
-
-$green-primary: #34d385; // slightly softer like the mockup
-$green-dark: #2ea76b;
-
-// Status colors
-$blue-light: #eff6ff;
-$blue-text: #3b82f6;
-
-$orange-light: #fff7ed;
-$orange-text: #f97316;
-
-$green-light: #f0fdf4;
-$green-text: #22c55e;
+@import '../../Shared/Colors.scss';
 
 // General Layout
 .dashboard-layout {
   display: flex;
   height: 100vh;
   width: 100vw;
-  background-color: $bg-light;
+  background-color: $surfaceColor;
   font-family: 'Inter', -apple-system, sans-serif;
   overflow: hidden;
 
@@ -35,8 +18,8 @@ $green-text: #22c55e;
 // ── Sidebar (Desktop only) ─────────────────────────────────
 .dashboard-sidebar {
   width: 250px;
-  background-color: $white;
-  border-right: 1px solid $border-col;
+  background-color: $primaryWhite;
+  border-right: 1px solid $borderColor;
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -51,12 +34,12 @@ $green-text: #22c55e;
     gap: 12px;
     font-size: 20px;
     font-weight: 800;
-    color: $text-main;
+    color: $primaryText;
     margin-bottom: 48px;
 
     .logo-icon {
       font-size: 24px;
-      color: $green-primary;
+      color: $primaryGreen;
     }
   }
 
@@ -71,7 +54,7 @@ $green-text: #22c55e;
       gap: 16px;
       padding: 14px 16px;
       border-radius: 12px;
-      color: $text-light;
+      color: $secondaryText;
       text-decoration: none;
       font-weight: 600;
       transition: all 0.2s;
@@ -79,13 +62,13 @@ $green-text: #22c55e;
       svg { width: 20px; height: 20px; }
 
       &:hover {
-        background-color: $bg-light;
-        color: $text-main;
+        background-color: $surfaceColor;
+        color: $primaryText;
       }
 
       &.active {
-        background-color: rgba($green-primary, 0.1);
-        color: $green-dark;
+        background-color: rgba($primaryGreen, 0.1);
+        color: darken($primaryGreen, 15%);
       }
     }
   }
@@ -102,7 +85,7 @@ $green-text: #22c55e;
 // ── Header ─────────────────────────────────────────────────
 .dashboard-header {
   height: 80px;
-  background-color: $bg-light;
+  background-color: $surfaceColor;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -131,13 +114,13 @@ $green-text: #22c55e;
       
       .welcome-text {
         font-size: 13px;
-        color: $text-light;
+        color: $secondaryText;
         font-weight: 500;
       }
       .user-name {
         font-size: 18px;
         font-weight: 800;
-        color: $text-main;
+        color: $primaryText;
         margin: 0;
         letter-spacing: -0.02em;
       }
@@ -152,9 +135,9 @@ $green-text: #22c55e;
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      border: 1px solid $border-col;
-      background: $white;
-      color: $text-main;
+      border: 1px solid $borderColor;
+      background: $primaryWhite;
+      color: $primaryText;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -162,9 +145,9 @@ $green-text: #22c55e;
       position: relative;
       transition: all 0.2s;
 
-      svg { width: 22px; height: 22px; color: $text-main; }
+      svg { width: 22px; height: 22px; color: $primaryText; }
 
-      &:hover { background: $bg-light; }
+      &:hover { background: $surfaceColor; }
 
       .badge {
         position: absolute;
@@ -172,9 +155,9 @@ $green-text: #22c55e;
         right: 12px;
         width: 10px;
         height: 10px;
-        background-color: #ef4444;
+        background-color: $error;
         border-radius: 50%;
-        border: 2px solid $white;
+        border: 2px solid $primaryWhite;
       }
     }
   }
@@ -199,13 +182,13 @@ $green-text: #22c55e;
 
 /* Green Gala Hero Card */
 .gala-card {
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  background: linear-gradient(135deg, lighten($primaryGreen, 10%) 0%, $primaryGreen 100%);
   border-radius: 24px;
   padding: 32px;
-  color: white;
+  color: $primaryWhite;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 16px 32px rgba(34, 197, 94, 0.25);
+  box-shadow: 0 16px 32px rgba($primaryGreen, 0.25);
 
   .gala-badge {
     display: inline-block;
@@ -279,8 +262,8 @@ $green-text: #22c55e;
   }
 
   .btn-light {
-    background: white;
-    color: $green-dark;
+    background: $primaryWhite;
+    color: darken($primaryGreen, 10%);
     border: none;
     padding: 16px 24px;
     border-radius: 12px;
@@ -299,7 +282,7 @@ $green-text: #22c55e;
   .section-title {
     font-size: 18px;
     font-weight: 700;
-    color: $text-main;
+    color: $primaryText;
     margin: 0 0 16px;
     display: flex;
     align-items: center;
@@ -334,24 +317,24 @@ $green-text: #22c55e;
     .status-label { font-size: 14px; font-weight: 600; }
 
     &.blue {
-      background-color: $blue-light;
-      .status-label { color: $blue-text; }
-      .status-val { color: $blue-text; }
-      .status-icon svg { color: $blue-text; }
+      background-color: $blueLight;
+      .status-label { color: $blueText; }
+      .status-val { color: $blueText; }
+      .status-icon svg { color: $blueText; }
     }
     
     &.orange {
-      background-color: $orange-light;
-      .status-label { color: $orange-text; }
-      .status-val { color: $orange-text; }
-      .status-icon svg { color: $orange-text; }
+      background-color: $orangeLight;
+      .status-label { color: $orangeText; }
+      .status-val { color: $orangeText; }
+      .status-icon svg { color: $orangeText; }
     }
     
     &.green {
-      background-color: $green-light;
-      .status-label { color: $green-text; }
-      .status-val { color: $green-text; }
-      .status-icon svg { color: $green-text; }
+      background-color: $greenLight;
+      .status-label { color: $greenText; }
+      .status-val { color: $greenText; }
+      .status-icon svg { color: $greenText; }
     }
   }
 }
@@ -371,7 +354,7 @@ $green-text: #22c55e;
   .section-title {
     font-size: 18px;
     font-weight: 700;
-    color: $text-main;
+    color: $primaryText;
     margin: 0 0 16px;
     display: flex;
     align-items: center;
@@ -401,9 +384,9 @@ $green-text: #22c55e;
 
       svg { width: 20px; height: 20px; }
 
-      &.blue-bg { background: $blue-light; color: $blue-text; }
-      &.green-bg { background: $green-light; color: $green-text; }
-      &.orange-bg { background: $orange-light; color: $orange-text; }
+      &.blue-bg { background: $blueLight; color: $blueText; }
+      &.green-bg { background: $greenLight; color: $greenText; }
+      &.orange-bg { background: $orangeLight; color: $orangeText; }
     }
 
     .feed-content {
@@ -411,27 +394,27 @@ $green-text: #22c55e;
       display: flex;
       flex-direction: column;
       
-      h4 { font-size: 15px; font-weight: 700; color: $text-main; margin: 0 0 4px; line-height: 1.4; }
-      p { font-size: 14px; color: $text-light; margin: 0 0 10px; line-height: 1.5; }
-      span { font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+      h4 { font-size: 15px; font-weight: 700; color: $primaryText; margin: 0 0 4px; line-height: 1.4; }
+      p { font-size: 14px; color: $secondaryText; margin: 0 0 10px; line-height: 1.5; }
+      span { font-size: 12px; color: $inactiveTabText; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
     }
 
     /* Used for announcements style */
     &.small-card {
-      background: $white;
+      background: $primaryWhite;
       padding: 16px;
       border-radius: 16px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-      border: 1px solid $border-col;
+      border: 1px solid $borderColor;
     }
 
     /* Used for activity style */
     &.card-style {
-      background: $white;
+      background: $primaryWhite;
       padding: 24px;
       border-radius: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-      border: 1px solid $border-col;
+      border: 1px solid $borderColor;
 
       .feed-header {
         display: flex;
@@ -455,8 +438,8 @@ $green-text: #22c55e;
       left: 0;
       right: 0;
       height: 80px;
-      background: $white;
-      border-top: 1px solid $border-col;
+      background: $primaryWhite;
+      border-top: 1px solid $borderColor;
       justify-content: space-around;
       align-items: center;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
@@ -468,7 +451,7 @@ $green-text: #22c55e;
         flex-direction: column;
         align-items: center;
         gap: 4px;
-        color: $text-light;
+        color: $secondaryText;
         text-decoration: none;
 
         .nav-icon {
@@ -484,8 +467,8 @@ $green-text: #22c55e;
         span { font-size: 11px; font-weight: 600; }
 
         &.active {
-          color: $green-primary;
-          .nav-icon { background: rgba($green-primary, 0.1); }
+          color: $primaryGreen;
+          .nav-icon { background: rgba($primaryGreen, 0.1); }
         }
       }
     }

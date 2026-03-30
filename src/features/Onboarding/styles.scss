@@ -163,7 +163,7 @@ border: 2px solid $primaryGreen;
 
     &--inactive {
       width: 8px;
-      background-color: #e2e8f0;
+      background-color: $borderColor;
     }
   }
 }

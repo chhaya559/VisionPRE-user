@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './Store';
 import RootRouter from './Routes/RootRouter';
 import './App.css';
+import { ToastContainer } from 'react-toastify';
 
 const baseName = import.meta.env.VITE_BASE_NAME;
 
@@ -19,13 +20,13 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  // const [count, setCount] = useState<number>(0);
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <HelmetProvider>
           <RouterProvider router={router} />
         </HelmetProvider>
+        <ToastContainer />
       </PersistGate>
     </Provider>
   );

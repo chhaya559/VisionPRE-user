@@ -1,15 +1,25 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { SetupContextProps } from "../ProfileSetupLayout";
 import "./ProfileSteps.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { 
+  faLaptopCode, 
+  faBagShopping, 
+  faStethoscope, 
+  faHandshake, 
+  faHelmetSafety, 
+  faGraduationCap, 
+  faEllipsis 
+} from "@fortawesome/free-solid-svg-icons";
 
 const INDUSTRIES = [
-  { id: 'tech', label: 'Technology', icon: '💻' },
-  { id: 'retail', label: 'Retail', icon: '🛍️' },
-  { id: 'health', label: 'Health', icon: '⚕️' },
-  { id: 'services', label: 'Services', icon: '🤝' },
-  { id: 'construction', label: 'Construction', icon: '🏗️' },
-  { id: 'education', label: 'Education', icon: '🎓' },
-  { id: 'other', label: 'Other', icon: '...' }
+  { id: 'tech', label: 'Technology', icon: faLaptopCode },
+  { id: 'retail', label: 'Retail', icon: faBagShopping },
+  { id: 'health', label: 'Health', icon: faStethoscope },
+  { id: 'services', label: 'Services', icon: faHandshake },
+  { id: 'construction', label: 'Construction', icon: faHelmetSafety },
+  { id: 'education', label: 'Education', icon: faGraduationCap },
+  { id: 'other', label: 'Other', icon: faEllipsis }
 ];
 
 export default function StepIndustry() {
@@ -30,7 +40,9 @@ export default function StepIndustry() {
             className={`grid-option ${formData.industry === industry.id ? 'selected' : ''}`}
             onClick={() => updateForm({ industry: industry.id })}
           >
-            <span className="grid-icon">{industry.icon}</span>
+            <span className="grid-icon">
+              <FontAwesomeIcon icon={industry.icon} />
+            </span>
             <span className="grid-label">{industry.label}</span>
           </button>
         ))}

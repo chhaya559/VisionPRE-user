@@ -1,15 +1,20 @@
 // Variables for quick theme updates
-$primary-green: #34A853;
-$bg-color: #F8FAF9;
-$card-bg: #FFFFFF;
-$text-dark: #1F2937;
-$text-light: #6B7280;
-$border-color: #E5E7EB;
+@import '../../Shared/Colors.scss';
+
+$primary-green: $primaryGreen;
+$bg-color: $surfaceColor;
+$card-bg: $primaryWhite;
+$text-dark: $primaryText;
+$text-light: $secondaryText;
+$border-color: $borderColor;
 
 .profile-setup-layout {
   min-height: 100vh;
   width: 100%;
   background-color: $bg-color;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba($primary-green, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba($primary-green, 0.03) 0px, transparent 50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,118 +23,105 @@ $border-color: #E5E7EB;
 
   .profile-setup-container {
     width: 100%;
-    max-width: 600px;
+    max-width: 580px;
     background-color: $card-bg;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border-radius: 32px;
+    box-shadow: 
+      0 20px 50px rgba(0, 0, 0, 0.04),
+      0 10px 15px rgba(0, 0, 0, 0.03);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-
-    /* Add min-height to prevent jitter between steps */
-    min-height: 500px;
+    min-height: 620px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
   }
 
   .profile-setup-header {
-    padding: 1.5rem 2rem 0;
+    padding: 2rem 2.5rem 0.5rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
     font-size: 0.875rem;
 
     .step-count {
       color: $primary-green;
-      font-weight: 600;
+      font-weight: 700;
       white-space: nowrap;
+      letter-spacing: -0.01em;
     }
 
     .progress-bar-container {
       flex: 1;
-      height: 6px;
-      background-color: rgba($primary-green, 0.15);
-      border-radius: 4px;
+      height: 8px;
+      background-color: $borderColorLight;
+      border-radius: 10px;
       overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 
       .progress-bar-fill {
         height: 100%;
-        background-color: $primary-green;
-        transition: width 0.4s ease-in-out;
+        background: linear-gradient(90deg, $primary-green, lighten($primary-green, 15%));
+        border-radius: 10px;
+        transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0) 100%
+          );
+          animation: shimmer 2s infinite;
+        }
       }
     }
 
     .progress-percentage {
       color: $text-light;
-      font-weight: 500;
-      width: 40px;
+      font-weight: 700;
+      width: 45px;
       text-align: right;
     }
   }
 
   .profile-setup-content {
     flex: 1;
-    padding: 2rem;
+    padding: 1.5rem 2.5rem 2.5rem;
     display: flex;
     flex-direction: column;
+  }
+}
 
-    // Shared styling for step content
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: $text-dark;
-      margin-bottom: 0.5rem;
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@media (max-width: 640px) {
+  .profile-setup-layout {
+    padding: 0;
+    
+    .profile-setup-container {
+      max-width: 100%;
+      height: 100vh;
+      border-radius: 0;
+      min-height: auto;
     }
-
-    p.subtitle {
-      color: $text-light;
-      font-size: 1rem;
-      margin-bottom: 2rem;
+    
+    .profile-setup-header {
+      padding: 1.5rem 1.5rem 0.5rem;
     }
-
-    .btn-continue {
-      margin-top: 20px;
-      width: 100%;
-      background-color: $primary-green;
-      color: white;
-      border: none;
-      padding: 1rem;
-      border-radius: 99px;
-      font-size: 1.125rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s, transform 0.1s;
-
-      &:hover {
-        background-color: darken($primary-green, 5%);
-      }
-
-      &:active {
-        transform: scale(0.98);
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-
-        &:active {
-          transform: none;
-        }
-      }
-    }
-
-    .btn-skip {
-      margin-top: 1rem;
-      width: 100%;
-      background-color: transparent;
-      color: $text-light;
-      border: none;
-      padding: 0.75rem;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-
-      &:hover {
-        color: $text-dark;
-      }
+    
+    .profile-setup-content {
+      padding: 1.5rem;
     }
   }
 }

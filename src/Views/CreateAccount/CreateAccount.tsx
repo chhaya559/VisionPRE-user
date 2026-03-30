@@ -1,16 +1,19 @@
 import { useState } from "react";
 import "./styles.scss";
 import { faApple } from "@fortawesome/free-brands-svg-icons";
-import PasswordField from "../../Components/Atom/PasswordField";
+import PasswordField from "../../Shared/Components/PasswordField";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../../Shared/Modal";
+import Modal from "../../Shared/Components/Modal";
 import { useTranslation } from "react-i18next";
-import { useRegisterMutation } from "../../Services/Api/api";
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userSchema } from "../../validations/userSchema";
+import { ROUTES_CONFIG } from "../../Shared/Constants";
+import { useRegisterMutation } from "../../Services/Api/module/AuthApi";
+import { useDispatch } from "react-redux";
+import { setAuthData } from "../../Store/Common";
 
 export default function CreateAccount() {
     const navigate = useNavigate();
@@ -18,7 +21,7 @@ export default function CreateAccount() {
     const [showTerms, setShowTerms] = useState(false);
     const [showPolicy, setShowPolicy] = useState(false);
     const { t } = useTranslation();
-    const [registerApi] = useRegisterMutation();
+    const [registerApi, { isLoading }] = useRegisterMutation();
 
     function handleBack() {
         navigate(-1);
@@ -27,20 +30,34 @@ export default function CreateAccount() {
     const { register, handleSubmit, formState: { errors, isValid } } =
         useForm({
             resolver: yupResolver(userSchema),
-            mode: "onChange"
+            mode: "onTouched"
         })
+
+    const dispatch = useDispatch();
 
     const onSubmit = async (data: any) => {
         if (!agreed) return alert("Please agree to terms");
 
+        const payload = {
+            userName: data.userName,
+            email: data.email,
+            password: data.password,
+        };
+        console.log(payload)
         try {
-            const response = await registerApi({
-                userName: data.userName,
-                email: data.email,
-                password: data.password,
-            }).unwrap();
+            const response = await registerApi(
+                payload
+            ).unwrap();
 
             console.log(response);
+            if (response.success) {
+                dispatch(setAuthData({
+                    email: response.data.email,
+                    userName: response.data.userName,
+                    isProfileCompleted: response.data.isProfileCompleted,
+                }));
+                navigate(ROUTES_CONFIG.EMAILVERIFICATION.path)
+            }
         } catch (err) {
             console.log("error-", err);
         }
@@ -142,25 +159,57 @@ export default function CreateAccount() {
                         title="Terms & Conditions"
                         onClose={() => setShowTerms(false)}
                     >
+                        <h1>Terms & Conditions</h1>
                         <h2>1. Acceptance of Terms</h2>
+                        <p>
+                            By accessing and using Vision PME, you accept and agree to be bound by the terms and provisions of this agreement.
+                        </p>
                         <h2>2. Use License</h2>
+                        <p>
+                            Permission is granted to temporarily access the materials on Vision PME for personal, non-commercial use only.
+                        </p>
                         <h2>3. User Account</h2>
+                        <p>
+                            You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.
+                        </p>
                         <h2>4. Privacy Policy</h2>
+                        <p>
+                            Your use of Vision PME is also governed by our Privacy Policy. Please review our Privacy Policy, which also governs the site.
+                        </p>
                         <h2>5. Grant Applications</h2>
-
+                        <p>
+                            All grant applications are subject to review and approval. Vision PME reserves the right to accept or reject any application at its sole discretion.
+                        </p>
                     </Modal>
+
                     <Modal
                         isOpen={showPolicy}
                         title="Privacy Policy"
                         onClose={() => setShowPolicy(false)}
                     >
+                        <h1>Privacy Policy</h1>
                         <h2>Information We Collect</h2>
+                        <p>
+                            We collect information you provide directly to us, including your name, email address, company information, and other details you submit through our application.
+                        </p>
                         <h2>How We Use Your Information</h2>
+                        <p>
+                            We use the information we collect to provide, maintain, and improve our services, process grant applications, and send you updates about events and opportunities.
+                        </p>
                         <h2>Information Sharing</h2>
+                        <p>
+                            We do not share your personal information with third parties except as described in this policy or with your consent.
+                        </p>
                         <h2>Data Security</h2>
+                        <p>
+                            We implement appropriate technical and organizational measures to protect your personal information against unauthorized or unlawful processing.
+                        </p>
                         <h2>Your Rights</h2>
-
+                        <p>
+                            You have the right to access, update, or delete your personal information at any time through your account settings.
+                        </p>
                     </Modal>
+
                     {/* Create Account CTA */}
                     <button
                         className="btn-create"
@@ -168,7 +217,7 @@ export default function CreateAccount() {
                         disabled={!isValid || !agreed}
                         onClick={handleSubmit(onSubmit)}
                     >
-                        {t('create_acc')}
+                        {isLoading ? t('creating_acc') : t('create_acc')}
                     </button>
 
                     {/* Divider */}
@@ -193,7 +242,7 @@ export default function CreateAccount() {
                 {/* Footer */}
                 <div className="login-footer">
                     {t('already_account')}{" "}
-                    <button type="button" onClick={handleBack}>
+                    <button type="button" onClick={() => navigate(ROUTES_CONFIG.LOGIN.path)}>
                         {t('sign_in')}
                     </button>
                 </div>

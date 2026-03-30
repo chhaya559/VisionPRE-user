@@ -12,6 +12,18 @@ import MyProfile from '../features/Profile/MyProfile';
 import EditPublicProfile from '../features/Profile/EditPublicProfile';
 import EditBusinessProfile from '../features/Profile/EditBusinessProfile';
 import AccountSettings from '../features/Profile/AccountSettings';
+import ProfileSetupLayout from '../features/ProfileSetup/ProfileSetupLayout';
+import Welcome from '../features/ProfileSetup/Steps/Welcome';
+import AlmostReady from '../features/ProfileSetup/Steps/AlmostReady';
+import StepName from '../features/ProfileSetup/Steps/StepName';
+import StepCompany from '../features/ProfileSetup/Steps/StepCompany';
+import StepIndustry from '../features/ProfileSetup/Steps/StepIndustry';
+import StepStage from '../features/ProfileSetup/Steps/StepStage';
+import StepProfile from '../features/ProfileSetup/Steps/StepProfile';
+import StepDescribe from '../features/ProfileSetup/Steps/StepDescribe';
+import StepGoal from '../features/ProfileSetup/Steps/StepGoal';
+import StepPhone from '../features/ProfileSetup/Steps/StepPhone';
+import ProfileReady from '../features/ProfileSetup/Steps/ProfileReady';
 
 // eslint-disable-next-line import/prefer-default-export
 export const PRIVATE_ROUTES: Array<CustomRouter> = [
@@ -40,9 +52,23 @@ export const PRIVATE_ROUTES: Array<CustomRouter> = [
     ],
   },
   {
-    path: '/wishlist',
-    element: 'Your wishlist here',
-    title: 'Dashboard',
+    path: ROUTES_CONFIG.SETUP.path,
+    element: <ProfileSetupLayout />,
+    title: ROUTES_CONFIG.SETUP.title,
+    children: [
+      { path: 'welcome', element: <Welcome /> },
+      { path: 'ready', element: <AlmostReady /> },
+      { path: 'name', element: <StepName /> },
+      { path: 'company', element: <StepCompany /> },
+      { path: 'industry', element: <StepIndustry /> },
+      { path: 'stage', element: <StepStage /> },
+      { path: 'profile', element: <StepProfile /> },
+      { path: 'describe', element: <StepDescribe /> },
+      { path: 'goal', element: <StepGoal /> },
+      { path: 'phone', element: <StepPhone /> },
+      { path: 'finish', element: <ProfileReady /> },
+      { path: '', element: <Navigate to="welcome" replace /> }
+    ]
   },
   {
     path: '*',

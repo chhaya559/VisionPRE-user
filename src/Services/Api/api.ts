@@ -26,9 +26,7 @@ const baseQueryWithInterceptor = async (
   extraOptions: object
 ) => {
   const result = await baseQuery(args, api, extraOptions);
-  if (
-    (result as ResponseOptions).error?.status === 401
-  ) {
+  if ((result as ResponseOptions).error?.status === 401) {
     // here you can deal with 401 error
   }
   return result;
@@ -37,22 +35,7 @@ const baseQueryWithInterceptor = async (
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithInterceptor,
-  endpoints: (builder) => ({
-    register: builder.mutation({
-      query: (body) => ({
-        url: '/auth/register',
-        method: 'POST',
-        body,
-      }),
-    }),
-    login: builder.mutation({
-      query: (body) => ({
-        url: '/auth/login',
-        method: 'POST',
-        body,
-      }),
-    }),
-  }),
+  endpoints: () => ({ }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = api;
+export default api;

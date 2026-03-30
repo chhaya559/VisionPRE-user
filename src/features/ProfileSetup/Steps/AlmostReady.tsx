@@ -1,34 +1,37 @@
 import { useNavigate } from "react-router-dom";
 import "./IntroSteps.scss";
+import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRocket } from "@fortawesome/free-solid-svg-icons";
 
 export default function AlmostReady() {
   const navigate = useNavigate();
+  const { t } = useTranslation("profile")
 
   return (
-    <div className="intro-step text-center">
-      <div className="rocket-icon mb-4" style={{ fontSize: '2rem' }}>
-         🚀
+    <div className="intro-step">
+      <div className="rocket-icon-wrapper">
+        <FontAwesomeIcon icon={faRocket} className="rocket-icon-fa" />
       </div>
 
-      <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', color: '#111827' }}>You're almost ready!</h1>
-      <p className="subtitle" style={{ fontSize: '0.9375rem', color: '#6b7280', maxWidth: '300px', margin: '0 auto 1.5rem' }}>
-        Here's what awaits you in the Vision PME ecosystem:
-      </p>
+      <h1>{t('almost_ready')}</h1>
+      <p className="subtitle">
+        {t('almost_ready_str')}   </p>
 
-      <div className="stats-grid mb-4">
+      <div className="stats-grid">
         <div className="stat-card large">
-          <h2>200 000 $</h2>
-          <p>in grants every year!</p>
+          <h2>{t('grant_price')}</h2>
+          <p>{t('grant_price2')}</p>
         </div>
-        
+
         <div className="stat-card large">
-          <h2>200+ Grants</h2>
-          <p>to be awarded</p>
+          <h2>{t('grants_str')}</h2>
+          <p>{t('grants_str2')}</p>
         </div>
       </div>
 
       <button className="btn-continue" onClick={() => navigate("/setup/name")}>
-        Continue
+        {t('continue')}
       </button>
     </div>
   );

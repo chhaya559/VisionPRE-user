@@ -1,26 +1,28 @@
+@import '../../Shared/Colors.scss';
+
 .gala-grants-container {
   min-height: 100vh;
-  background-color: #fcfcfc;
+  background-color: $surfaceColor;
   padding-bottom: 60px;
 }
 
 .gala-grants-header {
   padding: 40px 40px 20px;
-  background: white;
+  background: $primaryWhite;
   position: sticky;
   top: 0;
   z-index: 10;
   max-width: 1000px;
   margin: 0 auto;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid $borderColorLight;
 
   .back-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #f3f4f6;
+    background: $borderColorLight;
     border: none;
-    color: #4b5563;
+    color: $textGray;
     padding: 8px 16px;
     border-radius: 50px;
     font-size: 0.875rem;
@@ -30,7 +32,7 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background: #e5e7eb;
+      background: $borderColor;
       transform: translateX(-4px);
     }
 
@@ -40,7 +42,7 @@
   h1 {
     font-size: 2rem;
     font-weight: 800;
-    color: #111827;
+    color: $primaryText;
     letter-spacing: -0.02em;
   }
 }
@@ -56,14 +58,14 @@
   .empty-state {
     grid-column: 1 / -1;
     text-align: center;
-    color: #9ca3af;
+    color: $placeholderColor;
     padding: 4rem 0;
     font-size: 1.125rem;
   }
 }
 
 .grant-card {
-  background: white;
+  background: $primaryWhite;
   border-radius: 24px;
   padding: 32px;
   box-shadow: 0 10px 25px -4px rgba(0,0,0,0.04);
@@ -86,7 +88,7 @@
     h3 {
       font-size: 1.5rem;
       font-weight: 800;
-      color: #111827;
+      color: $primaryText;
       max-width: 75%;
       line-height: 1.2;
       letter-spacing: -0.01em;
@@ -97,8 +99,8 @@
       font-weight: 700;
       padding: 6px 12px;
       border-radius: 50px;
-      background: rgba(16, 185, 129, 0.1);
-      color: #10b981;
+      background: rgba($primaryGreen, 0.1);
+      color: $primaryGreen;
       text-transform: uppercase;
     }
   }
@@ -106,17 +108,17 @@
   .grant-gala-ref {
     font-size: 0.9375rem;
     font-weight: 600;
-    color: #6b7280;
+    color: $secondaryText;
     margin-bottom: 20px;
 
     span {
-      color: #10b981;
+      color: $primaryGreen;
     }
   }
 
   .grant-desc {
     font-size: 1rem;
-    color: #4b5563;
+    color: $textGray;
     line-height: 1.6;
     margin-bottom: 24px;
     flex-grow: 1;
@@ -129,8 +131,8 @@
     flex-wrap: wrap;
 
     .pill {
-      background: #f9fafb;
-      color: #111827;
+      background: $surfaceColor;
+      color: $primaryText;
       padding: 8px 14px;
       border-radius: 12px;
       font-size: 0.875rem;
@@ -138,18 +140,18 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      border: 1px solid #f3f4f6;
+      border: 1px solid $borderColorLight;
 
-      svg { color: #10b981; }
+      svg { color: $primaryGreen; }
     }
   }
 
   .eligibility-section {
     margin-bottom: 32px;
-    background: #fdfdfd;
+    background: $surfaceColor;
     padding: 16px;
     border-radius: 16px;
-    border-left: 4px solid #10b981;
+    border-left: 4px solid $primaryGreen;
 
     h4 {
       display: flex;
@@ -157,15 +159,15 @@
       gap: 8px;
       font-size: 0.9375rem;
       font-weight: 700;
-      color: #111827;
+      color: $primaryText;
       margin-bottom: 8px;
 
-      .text-green { color: #10b981; }
+      .text-green { color: $primaryGreen; }
     }
 
     p {
       font-size: 0.875rem;
-      color: #6b7280;
+      color: $secondaryText;
       margin: 0;
       line-height: 1.5;
     }
@@ -173,8 +175,8 @@
 
   .btn-apply {
     width: 100%;
-    background: #111827;
-    color: white;
+    background: $primaryText;
+    color: $primaryWhite;
     border: none;
     padding: 16px;
     border-radius: 16px;
@@ -185,7 +187,7 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background: #1f2937;
+      background: $textBlack;
       transform: translateY(-2px);
     }
   }

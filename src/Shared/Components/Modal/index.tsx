@@ -7,9 +7,10 @@ type ModalProps = {
     onClose: () => void;
     title: string;
     children: React.ReactNode;
+    showFooter?: boolean;
 };
 
-const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+const Modal = ({ isOpen, onClose, title, children, showFooter = true }: ModalProps) => {
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose();
@@ -39,11 +40,13 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
 
                 <div className="modal-body">{children}</div>
 
-                <div className="modal-footer">
-                    <button className="btn-primary" onClick={onClose}>
-                        I Understand
-                    </button>
-                </div>
+                {showFooter && (
+                    <div className="modal-footer">
+                        <button className="btn-primary" onClick={onClose}>
+                            I Understand
+                        </button>
+                    </div>
+                )}
             </div>
         </div>,
         document.body

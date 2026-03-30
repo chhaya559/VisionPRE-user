@@ -1,6 +1,8 @@
+@import '../../Shared/Colors.scss';
+
 .gala-details-container {
   min-height: 100vh;
-  background-color: #fcfcfc;
+  background-color: $surfaceColor;
   padding-bottom: 120px;
 }
 
@@ -38,7 +40,7 @@
       background: rgba(255,255,255,0.2);
       backdrop-filter: blur(4px);
       border: none;
-      color: white;
+      color: $primaryWhite;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
     }
@@ -51,7 +53,7 @@
   .hero-content {
     position: relative;
     z-index: 10;
-    color: white;
+    color: $primaryWhite;
 
     .status-badge {
       display: inline-block;
@@ -69,7 +71,7 @@
         background: currentColor;
         margin-right: 6px;
       }
-      &.active { background: #10b981; color: white; }
+      &.active { background: $primaryGreen; color: $primaryWhite; }
     }
 
     h1 {
@@ -96,19 +98,19 @@
       display: flex;
       align-items: center;
       gap: 20px;
-      background: white;
+      background: $primaryWhite;
       padding: 16px;
       border-radius: 16px;
       box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
-      border: 1px solid #f3f4f6;
+      border: 1px solid $borderColorLight;
 
       .info-icon {
         width: 40px; height: 40px;
         border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
         &.green-bg {
-          background: rgba(74, 222, 128, 0.1);
-          color: #10b981;
+          background: rgba($primaryGreen, 0.1);
+          color: $primaryGreen;
         }
         svg { width: 20px; height: 20px; }
       }
@@ -119,13 +121,13 @@
         
         .label {
           font-size: 0.75rem;
-          color: #9ca3af;
+          color: $placeholderColor;
           margin-bottom: 2px;
         }
         .val {
           font-size: 0.875rem;
           font-weight: 600;
-          color: #111827;
+          color: $primaryText;
         }
       }
     }
@@ -133,8 +135,8 @@
 
   .about-section {
     margin-bottom: 40px;
-    h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: #111827; letter-spacing: -0.01em;}
-    p { font-size: 1rem; color: #4b5563; line-height: 1.6; }
+    h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; color: $primaryText; letter-spacing: -0.01em;}
+    p { font-size: 1rem; color: $textGray; line-height: 1.6; }
   }
 
   .stats-cards {
@@ -159,41 +161,41 @@
       span { font-size: 0.875rem; font-weight: 600; opacity: 0.8;}
 
       &.participants {
-        background: rgba(74, 222, 128, 0.1);
-        color: #10b981;
+        background: rgba($primaryGreen, 0.1);
+        color: $primaryGreen;
       }
       &.grants-count {
-        background: rgba(245, 158, 11, 0.1);
-        color: #d97706;
+        background: rgba($amberSecondary, 0.1);
+        color: darken($amberSecondary, 5%);
       }
       &.prize {
-        background: rgba(139, 92, 246, 0.1);
-        color: #7c3aed;
+        background: $purpleBg;
+        color: $purple;
       }
     }
   }
 
   .program-section {
-    h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 24px; color: #111827;}
+    h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 24px; color: $primaryText;}
 
     .program-item {
       display: flex;
-      background: white;
+      background: $primaryWhite;
       border-radius: 16px;
       padding: 24px;
       gap: 24px;
       margin-bottom: 16px;
-      border: 1px solid #f3f4f6;
+      border: 1px solid $borderColorLight;
 
       .program-time {
         font-weight: 700;
-        color: #10b981;
+        color: $primaryGreen;
         font-size: 1rem;
         min-width: 60px;
       }
       .program-content {
-        h4 { font-size: 1.125rem; font-weight: 700; color: #111827; margin-bottom: 6px; }
-        p { font-size: 0.9375rem; color: #6b7280; margin: 0; line-height: 1.5; }
+        h4 { font-size: 1.125rem; font-weight: 700; color: $primaryText; margin-bottom: 6px; }
+        p { font-size: 0.9375rem; color: $secondaryText; margin: 0; line-height: 1.5; }
       }
     }
   }
@@ -202,7 +204,7 @@
 .bottom-sticky-bar {
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba($primaryWhite, 0.82);
   backdrop-filter: blur(12px);
   padding: 24px 40px 48px;
   box-shadow: 0 -10px 40px rgba(0,0,0,0.05);
@@ -213,8 +215,8 @@
   .btn-apply-grant {
     width: 100%;
     max-width: 600px;
-    background: #10b981;
-    color: white;
+    background: $primaryGreen;
+    color: $primaryWhite;
     border: none;
     padding: 20px;
     border-radius: 16px;
@@ -225,9 +227,9 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background: #059669;
+      background: darken($primaryGreen, 10%);
       transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+      box-shadow: 0 10px 20px rgba($primaryGreen, 0.2);
     }
   }
 }
