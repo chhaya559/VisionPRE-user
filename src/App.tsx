@@ -11,19 +11,37 @@ import { store, persistor } from './Store';
 import RootRouter from './Routes/RootRouter';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
+import ErrorBoundary from './Components/ErrorBoundary';
+import { useEffect } from 'react';
+
+import { requestNotificationPermission } from './Services/notifications';
+import { useFCMtokenMutation } from './Services/Api/module/NotificationApi';
 
 const baseName = import.meta.env.VITE_BASE_NAME;
 
 const router = createBrowserRouter(
-  createRoutesFromElements(<Route path="*" element={<RootRouter />} />),
+  createRoutesFromElements(
+    <Route path="*" element={<RootRouter />} errorElement={<ErrorBoundary />} />
+  ),
   { basename: baseName }
 );
+
+function NotificationSetup() {
+  const [sendToken] = useFCMtokenMutation();
+
+  useEffect(() => {
+    requestNotificationPermission(sendToken);
+  }, [sendToken]);
+
+  return null;
+}
 
 function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <HelmetProvider>
+          <NotificationSetup />
           <RouterProvider router={router} />
         </HelmetProvider>
         <ToastContainer />

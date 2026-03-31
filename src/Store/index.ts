@@ -1,4 +1,3 @@
-import {api} from '../Services/Api/api';
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import {
@@ -13,6 +12,7 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { setupListeners } from '@reduxjs/toolkit/query';
+import { api } from '../Services/Api/api';
 import common from './Common';
 import loader from './Loader';
 

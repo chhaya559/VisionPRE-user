@@ -1,0 +1,254 @@
+@import '../../Shared/Colors.scss';
+
+.grants-hub-view {
+  padding: 32px 24px 100px;
+  background-color: $surfaceColor;
+  min-height: 100vh;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  &.loading { display: flex; justify-content: center; align-items: center; .spinner { color: $secondaryText; font-weight: 600; } }
+
+  .view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding: 26px 28px;
+    background: linear-gradient(135deg, $primaryGreen 0%, lighten($primaryGreen, 8%) 100%);
+    border: none;
+    border-radius: 28px;
+    box-shadow: 0 14px 34px rgba($primaryGreen, 0.14);
+
+    .header-content {
+      h1 { font-size: 1.55rem; font-weight: 800; color: white; margin: 0 0 6px; letter-spacing: -0.02em; }
+      p { font-size: 0.92rem; color: rgba(255,255,255,0.9); margin: 0; font-weight: 500; }
+    }
+
+    .btn-discover {
+      background: white;
+      color: $primaryGreen;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.1);
+
+      &:hover { background: #F8FAFC; transform: translateY(-1px); }
+    }
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: $primaryText;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: -0.01em;
+
+    .title-icon { color: $primaryGreen; opacity: 0.8; }
+  }
+
+  /* Status Cards Section */
+  .status-section {
+    margin-bottom: 48px;
+
+    .status-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+
+      .status-card {
+        background: white;
+        padding: 24px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border: 1px solid $borderColor;
+        transition: transform 0.2s;
+
+        &:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.04); }
+
+        .icon-wrapper {
+          width: 56px;
+          height: 56px;
+          border-radius: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+        }
+
+        .card-info {
+          display: flex;
+          flex-direction: column;
+          .count { font-size: 28px; font-weight: 900; color: $primaryText; line-height: 1; margin-bottom: 4px; }
+          .label { font-size: 14px; font-weight: 600; color: $secondaryText; }
+        }
+
+        &.pending { .icon-wrapper { background: rgba($orangeText, 0.1); color: $orangeText; } }
+        &.approved { .icon-wrapper { background: rgba($greenText, 0.1); color: $greenText; } }
+        &.rejected { .icon-wrapper { background: rgba($error, 0.1); color: $error; } }
+      }
+    }
+  }
+
+  /* Upcoming Galas Section */
+  .upcoming-galas-section {
+    .galas-group-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .gala-group-card {
+      background: white;
+      border-radius: 28px;
+      border: 1px solid $borderColor;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.02);
+
+      .gala-group-header {
+        padding: 24px 32px;
+        background: rgba($surfaceColor, 0.5);
+        border-bottom: 1px solid $borderColorLight;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .gala-meta {
+          h3 { font-size: 20px; font-weight: 800; color: $primaryText; margin: 0 0 4px; }
+          .event-date { font-size: 14px; color: $secondaryText; font-weight: 600; }
+        }
+
+        .app-count-badge {
+          background: $primaryGreen;
+          color: white;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          font-weight: 800;
+        }
+      }
+
+      .nested-apps-list {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .nested-app-item {
+          background: $primaryWhite;
+          padding: 16px 24px;
+          border-radius: 20px;
+          border: 1px solid $borderColorLight;
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          transition: all 0.2s;
+
+          &:hover { border-color: $primaryGreen; background: rgba($primaryGreen, 0.02); }
+
+          .app-icon-box {
+            width: 48px;
+            height: 48px;
+            background: $surfaceColor;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $placeholderColor;
+            font-size: 18px;
+          }
+
+          .app-details {
+            flex: 1;
+            h4 { font-size: 16px; font-weight: 700; color: $primaryText; margin: 0 0 6px; }
+            .interview-info { font-size: 13px; color: $primaryGreen; font-weight: 700; margin: 0 0 2px; }
+            .submission-date { font-size: 12px; color: $secondaryText; font-weight: 500; margin: 0; }
+          }
+
+          .app-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            .status-badge {
+              padding: 6px 14px;
+              border-radius: 50px;
+              font-size: 12px;
+              font-weight: 800;
+              text-transform: capitalize;
+
+              &.pending { background: $orangeLight; color: $orangeText; }
+              &.approved { background: $greenLight; color: $greenText; }
+              &.rejected { background: $dangerBg; color: $danger; }
+            }
+
+            .chevron { color: $placeholderColor; font-size: 12px; }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .grants-hub-view {
+    padding: 20px 20px 110px;
+    padding-bottom: 100px;
+    
+    .status-cards-grid { grid-template-columns: 1fr; }
+    
+    .view-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      .btn-discover { width: 100%; justify-content: center; }
+    }
+
+    .gala-group-card {
+      .gala-group-header { padding: 16px 20px; }
+      .nested-app-item { padding: 12px 16px; gap: 12px; }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .grants-hub-view {
+    padding: 16px 16px 110px;
+
+    .view-header {
+      padding: 24px 20px;
+      border-radius: 24px;
+    }
+
+    .status-section .status-cards-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .upcoming-galas-section .gala-group-card .nested-apps-list .nested-app-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .upcoming-galas-section .gala-group-card .nested-apps-list .nested-app-item .app-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}

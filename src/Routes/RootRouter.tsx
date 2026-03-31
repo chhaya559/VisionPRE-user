@@ -6,37 +6,53 @@ import AppLayout from '../Components/Layouts/AppLayout';
 import { ROUTES } from '../Shared/Constants';
 import type { RootState } from '../Store';
 
+const GUEST_PATHS = [
+  ROUTES.SplashScreen,
+  ROUTES.LOGIN,
+  ROUTES.CREATE_ACCOUNT,
+  ROUTES.EMAIL_VERIFICATION,
+  ROUTES.FORGOT_PASSWORD,
+  ROUTES.RESET_PASSWORD,
+  ROUTES.Onboarding,
+];
+
 function RootRouter() {
   const location = useLocation();
   const guest = useRoutes(guestRoutes);
   const authenticated = useRoutes(authenticatedRoutes);
-  // const { token, isProfileCompleted } = useSelector((state: RootState) => state.common);
-  const { isProfileCompleted } = useSelector((state: RootState) => state.common);
+  const { token, isProfileCompleted } = useSelector(
+    (state: RootState) => state.common
+  );
 
-  // const isAuthenticated = !!token;
-  const isAuthenticated = true;
+  const isAuthenticated = !!token;
+  const setupBasePath = ROUTES.SETUP || '/setup';
+  const isSetupWelcomePath = location.pathname === `${setupBasePath}/welcome`;
+  const hasVerificationToken = Boolean(
+    new URLSearchParams(location.search).get('token')
+  );
+  const isGuestPath = GUEST_PATHS.includes(location.pathname);
+  const isPublicVerificationPath = isSetupWelcomePath && hasVerificationToken;
+  const isProfilePath =
+    location.pathname === setupBasePath ||
+    location.pathname.startsWith(`${setupBasePath}/`);
 
   if (isAuthenticated) {
-    const isGuestPath = [
-      ROUTES.SplashScreen,
-      ROUTES.LOGIN,
-      ROUTES.CREATE_ACCOUNT,
-      ROUTES.FORGOT_PASSWORD,
-      ROUTES.RESET_PASSWORD,
-      ROUTES.Onboarding
-    ].includes(location.pathname);
-
+    // Redirect away from guest pages
     if (isGuestPath) {
-      return <Navigate to="/dashboard" replace />;
+      return <Navigate to={ROUTES.DASHBOARD ?? '/dashboard'} replace />;
     }
 
-    if (!isProfileCompleted && location.pathname !== '/profile') {
-      return <Navigate to="/profile" replace />;
+    // Redirect to profile completion if not done yet (but not already there)
+    if (!isProfileCompleted && !isProfilePath) {
+      return <Navigate to={setupBasePath} replace />;
     }
 
-    if (isProfileCompleted && location.pathname === '/profile') {
-      return <Navigate to="/dashboard" replace />;
+    // Redirect away from profile page if already completed
+    if (isProfileCompleted && isProfilePath) {
+      return <Navigate to={ROUTES.DASHBOARD ?? '/dashboard'} replace />;
     }
+  } else if (!isGuestPath && !isPublicVerificationPath) {
+    return <Navigate to={ROUTES.LOGIN ?? '/login'} replace />;
   }
 
   return (

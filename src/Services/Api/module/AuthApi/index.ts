@@ -1,6 +1,6 @@
 import api from '../../api';
 
-export const userApi = api.injectEndpoints({
+export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation({
       query: (payload) => ({
@@ -44,6 +44,20 @@ export const userApi = api.injectEndpoints({
         body: { refreshToken },
       }),
     }),
+    googleLogin: builder.mutation({
+      query: (body: { idToken: string }) => ({
+        url: '/auth/google',
+        method: 'POST',
+        body,
+      }),
+    }),
+    appleLogin: builder.mutation({
+      query: (body: { idToken: string }) => ({
+        url: '/auth/apple',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -55,4 +69,6 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useLogoutMutation,
-} = userApi;
+  useGoogleLoginMutation,
+  useAppleLoginMutation,
+} = authApi;

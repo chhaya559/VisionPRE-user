@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+
 export const userSchema = yup.object({
   userName: yup
     .string()
@@ -30,9 +31,7 @@ export const loginSchema = yup.object({
     .string()
     .required('Email is required')
     .email('Invalid email format'),
-  password: yup
-    .string()
-    .required('Password is required'),
+  password: yup.string().required('Password is required'),
 });
 
 export const emailSchema = yup.object({

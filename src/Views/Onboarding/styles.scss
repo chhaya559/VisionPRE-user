@@ -1,0 +1,199 @@
+@import '../../Shared/Colors.scss';
+
+.onboarding-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: $primaryWhite;
+}
+
+.onboarding-sidebar {
+  flex: 1.2;
+  background: $secondaryGreen;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+
+  .illustration-wrapper {
+    z-index: 2;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    animation: float 6s ease-in-out infinite;
+
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+}
+
+.onboarding-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: $primaryWhite;
+  z-index: 5;
+
+  @media (max-width: 1024px) {
+    padding: 24px;
+  }
+}
+
+.onboarding-card {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: fadeIn 0.8s ease-out;
+
+  .mobile-illustration {
+    display: none;
+    width: 100%;
+    max-width: 250px;
+    margin-bottom: 32px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 1024px) {
+      display: block;
+    }
+  }
+
+  h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: $primaryText;
+    margin: 0 0 16px;
+  }
+
+  p {
+    font-size: 16px;
+    color: $secondaryText;
+    max-width: 320px;
+    margin: 0 auto 32px;
+  }
+}
+
+.ActionSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+
+  .btn-primary {
+    width: 100%;
+    padding: 18px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background-color: $primaryGreen;
+    color: $primaryWhite;
+    outline: none;
+
+    &:active {
+      border: 2px solid $primaryGreen;
+      outline: $primaryGreen;
+      background-color: $primaryWhite;
+      color: $primaryGreen;
+    }
+  }
+
+  .btn-skip {
+    background: transparent;
+    border: none;
+    color: $secondaryText;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px;
+
+    &:focus {
+      outline: $primaryGreen;
+      border: 1px solid $primaryGreen;
+    }
+  }
+
+  .signin-text {
+    font-size: 15px;
+    color: $secondaryText;
+    margin-top: 4px;
+
+    .link-text {
+      color: $primaryGreen;
+      font-weight: 700;
+      text-decoration: none;
+      margin-left: 4px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  .dot {
+    height: 8px;
+    border-radius: 50px;
+    transition:
+      width 0.3s ease,
+      background-color 0.3s ease;
+
+    &--active {
+      width: 32px;
+      background-color: $primaryGreen;
+    }
+
+    &--inactive {
+      width: 8px;
+      background-color: $borderColor;
+    }
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,19 +1,21 @@
 import { Navigate } from 'react-router-dom';
 import { ROUTES_CONFIG, WILDCARD_ROUTES } from '../Shared/Constants';
 import { CustomRouter } from './RootRoutes';
-import SplashScreen from '../features/Splash/Splash';
-import OnboardingFlow from '../features/Onboarding/OnboardingFlow';
+import SplashScreen from '../Views/Splash/Splash';
+import OnboardingFlow from '../Views/Onboarding/OnboardingFlow';
 import Login from '../Views/Login/Login';
 import CreateAccount from '../Views/CreateAccount/CreateAccount';
-import EmailVerification from '../features/Auth/EmailVerification';
-import ForgotPassword from '../features/Auth/ForgotPassword';
-import ResetPassword from '../features/Auth/ResetPassword';
+import EmailVerification from '../Views/Auth/EmailVerification';
+import ForgotPassword from '../Views/Auth/ForgotPassword';
+import ResetPassword from '../Views/Auth/ResetPassword';
+import ProfileSetupLayout from '../Views/ProfileSetup/ProfileSetupLayout';
+import Welcome from '../Views/ProfileSetup/Steps/Welcome';
 
 export const PUBLIC_ROUTES: Array<CustomRouter> = [
   {
     path: ROUTES_CONFIG.SPLASHSCREEN.path,
     element: <SplashScreen />,
-    title: ROUTES_CONFIG.SPLASHSCREEN.title
+    title: ROUTES_CONFIG.SPLASHSCREEN.title,
   },
   {
     path: ROUTES_CONFIG.ONBOARDING.path,
@@ -34,6 +36,12 @@ export const PUBLIC_ROUTES: Array<CustomRouter> = [
     path: ROUTES_CONFIG.EMAILVERIFICATION.path,
     element: <EmailVerification />,
     title: ROUTES_CONFIG.EMAILVERIFICATION.title,
+  },
+  {
+    path: ROUTES_CONFIG.SETUP.path,
+    element: <ProfileSetupLayout />,
+    title: ROUTES_CONFIG.SETUP.title,
+    children: [{ path: 'welcome', element: <Welcome /> }],
   },
   {
     path: ROUTES_CONFIG.FORGOT_PASSWORD.path,

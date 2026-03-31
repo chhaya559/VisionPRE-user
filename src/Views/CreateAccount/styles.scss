@@ -285,9 +285,19 @@
 .google-icon {
   height: 28px;
   width: 28px;
+
+  &:focus {
+    outline: none;
+    border: 1px solid $primaryGreen;
+  }
 }
 .apple-icon {
   font-size: x-large;
+
+  &:focus {
+    outline: none;
+    border: 1px solid $primaryText;
+  }
 }
 .btn-social {
   display: flex;

@@ -3,39 +3,90 @@ import {
   createApi,
   fetchBaseQuery,
   BaseQueryFn,
-  BaseQueryApi,
+  FetchArgs,
+  FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
 import type { RootState } from '../../Store';
 import { API_BASE_URL } from './Constants';
-import { ResponseOptions } from './api.d';
+import { logout, setAuthData } from '../../Store/Common';
 
-const baseQuery: BaseQueryFn = fetchBaseQuery({
+type RefreshResponse = {
+  data?: {
+    accessToken?: string;
+    token?: string;
+    refreshToken?: string;
+  };
+  accessToken?: string;
+  token?: string;
+  refreshToken?: string;
+};
+
+const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   prepareHeaders: async (headers: Headers, { getState }) => {
     const { token } = (getState() as RootState).common;
     if (token) {
-      headers.append('authorization', `${token}`);
+      headers.set('Authorization', `Bearer ${token}`);
     }
+    const language = (getState() as RootState).common.language || 'en';
+    headers.set('X-Language', language);
+    headers.set('Accept-Language', language);
+
+    // Fix for ngrok CORS issues: skip the interstitial warning page
+    headers.set('ngrok-skip-browser-warning', 'true');
     return headers;
   },
 });
 
-const baseQueryWithInterceptor = async (
-  args: unknown,
-  api: BaseQueryApi,
-  extraOptions: object
-) => {
-  const result = await baseQuery(args, api, extraOptions);
-  if ((result as ResponseOptions).error?.status === 401) {
-    // here you can deal with 401 error
+const baseQueryWithInterceptor: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result.error?.status === 401) {
+    const { refreshToken } = (api.getState() as RootState).common;
+
+    if (!refreshToken) {
+      api.dispatch(logout());
+      return result;
+    }
+
+    const refreshResult = await baseQuery(
+      {
+        url: '/auth/refresh',
+        method: 'POST',
+        body: { refreshToken },
+      },
+      api,
+      extraOptions
+    );
+
+    const refreshPayload = refreshResult.data as RefreshResponse | undefined;
+    const nextToken = refreshPayload?.data?.accessToken;
+    const nextRefreshToken = refreshPayload?.data?.refreshToken;
+
+    if (nextToken) {
+      api.dispatch(
+        setAuthData({
+          token: nextToken,
+          refreshToken: nextRefreshToken,
+        })
+      );
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      api.dispatch(logout());
+    }
   }
+
   return result;
 };
 
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithInterceptor,
-  endpoints: () => ({ }),
+  endpoints: () => ({}),
 });
 
 export default api;

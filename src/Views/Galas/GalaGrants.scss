@@ -1,0 +1,271 @@
+@import '../../Shared/Colors.scss';
+
+.gala-grants-container {
+  min-height: 100vh;
+  background-color: $surfaceColor;
+  padding-bottom: 60px;
+}
+
+.gala-grants-top-shell {
+  position: relative;
+  padding-bottom: 16px;
+}
+
+.gala-grants-header {
+  padding: 26px 28px;
+  background: linear-gradient(135deg, #33c978 0%, #57d495 100%);
+  color: $primaryWhite;
+  border: none;
+  border-radius: 28px;
+  max-width: 1280px;
+  margin: 0 auto;
+  box-shadow: 0 14px 34px rgba($primaryGreen, 0.14);
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.16);
+    border: none;
+    color: $primaryWhite;
+    padding: 8px 14px;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateX(-4px);
+    }
+
+    svg { width: 18px; height: 18px; }
+  }
+
+  .header-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .header-eyebrow {
+    display: inline-flex;
+    width: fit-content;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    color: $primaryWhite;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(1.45rem, 2.6vw, 2rem);
+    font-weight: 800;
+    color: $primaryWhite;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  p {
+    max-width: 720px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+}
+
+.grants-list {
+  padding: 24px 24px 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: $placeholderColor;
+    padding: 4rem 2rem;
+    font-size: 1.125rem;
+    background: $primaryWhite;
+    border: 1px solid $borderColor;
+    border-radius: 24px;
+  }
+}
+
+.grant-card {
+  background: $primaryWhite;
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 20px 44px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -8px rgba(0,0,0,0.08);
+  }
+
+  .grant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+
+    h3 {
+      font-size: clamp(1.55rem, 2vw, 2rem);
+      font-weight: 800;
+      color: $primaryText;
+      max-width: 75%;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 50px;
+      background: rgba($primaryGreen, 0.1);
+      color: $primaryGreen;
+      text-transform: uppercase;
+    }
+  }
+
+  .grant-gala-ref {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: $secondaryText;
+    margin-bottom: 20px;
+
+    span {
+      color: $primaryGreen;
+    }
+  }
+
+  .grant-desc {
+    font-size: 1rem;
+    color: $textGray;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+
+  .grant-pills {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+
+    .pill {
+      background: $surfaceColor;
+      color: $primaryText;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid $borderColorLight;
+
+      svg { color: $primaryGreen; }
+    }
+  }
+
+  .eligibility-section {
+    margin-bottom: 32px;
+    background: $surfaceColor;
+    padding: 16px;
+    border-radius: 16px;
+    border-left: 4px solid $primaryGreen;
+
+    h4 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: $primaryText;
+      margin-bottom: 8px;
+
+      .text-green { color: $primaryGreen; }
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: $secondaryText;
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  .btn-apply {
+    width: 100%;
+    min-height: 56px;
+    background: $primaryText;
+    color: $primaryWhite;
+    border: none;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $textBlack;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .gala-grants-header {
+    padding: 24px;
+  }
+
+  .grants-list {
+    padding: 20px 20px 110px;
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .gala-grants-top-shell {
+    padding-bottom: 12px;
+  }
+
+  .gala-grants-header {
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  .grants-list {
+    grid-template-columns: 1fr;
+    padding: 16px 16px 110px;
+  }
+
+  .grant-card {
+    padding: 24px 20px;
+  }
+
+  .grant-card .grant-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .grant-card .grant-header h3 {
+    max-width: 100%;
+  }
+}

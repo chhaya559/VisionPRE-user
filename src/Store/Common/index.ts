@@ -16,6 +16,7 @@ export type CommonState = {
   businessDescription: string | null;
   goal: string | null;
   phoneNumber: string | null;
+  language: string;
 };
 
 const initialState: CommonState = {
@@ -34,6 +35,7 @@ const initialState: CommonState = {
   goal: null,
   phoneNumber: null,
   companyName: null,
+  language: 'en',
 };
 
 const common = createSlice({
@@ -62,6 +64,7 @@ const common = createSlice({
       state,
       action: PayloadAction<{
         token?: string;
+        refreshToken?: string;
         email?: string;
         userName?: string;
         isProfileCompleted?: boolean;
@@ -85,12 +88,16 @@ const common = createSlice({
     ) => {
       Object.assign(state, action.payload);
     },
+    setLanguage: (state, action: PayloadAction<string>) => {
+      state.language = action.payload;
+    },
     logout: () => {
       return initialState;
     },
   },
 });
 
-export const { login, setAuthData, setUserData, logout } = common.actions;
+export const { login, setAuthData, setUserData, setLanguage, logout } =
+  common.actions;
 
 export default common.reducer;
