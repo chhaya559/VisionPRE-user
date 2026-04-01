@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 
 import { requestNotificationPermission } from './Services/notifications';
 import { useFCMtokenMutation } from './Services/Api/module/NotificationApi';
+import { WalletProvider } from './Context/WalletContext';
 
 const baseName = import.meta.env.VITE_BASE_NAME;
 
@@ -40,10 +41,12 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <HelmetProvider>
-          <NotificationSetup />
-          <RouterProvider router={router} />
-        </HelmetProvider>
+        <WalletProvider>
+          <HelmetProvider>
+            <NotificationSetup />
+            <RouterProvider router={router} />
+          </HelmetProvider>
+        </WalletProvider>
         <ToastContainer />
       </PersistGate>
     </Provider>

@@ -20,30 +20,18 @@ export default function GalaGrants() {
 
   if (isLoading) {
     return (
-      <div
-        className="gala-grants-container"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-        }}
-      >
-        <div style={{ color: '#94A3B8' }}>{t('galas.grants.loading')}</div>
+      <div className="gala-grants-container gala-grants-state loading">
+        <div className="gala-grants-message">{t('galas.grants.loading')}</div>
       </div>
     );
   }
 
   if (error || !apiResponse) {
     return (
-      <div
-        className="gala-grants-container"
-        style={{ padding: '2rem', textAlign: 'center' }}
-      >
-        <h2 style={{ color: '#EF4444' }}>{t('galas.grants.notFound')}</h2>
+      <div className="gala-grants-container gala-grants-state error">
+        <h2 className="gala-grants-error-title">{t('galas.grants.notFound')}</h2>
         <button
-          className="btn-continue"
-          style={{ marginTop: '1rem', width: 'auto', padding: '10px 20px' }}
+          className="btn-continue gala-grants-back-btn"
           onClick={() => navigate('/dashboard/galas')}
         >
           {t('galas.grants.backToDiscover')}
@@ -89,6 +77,7 @@ export default function GalaGrants() {
             const statusMap: Record<number, string> = {
               1: 'Upcoming',
               2: 'Published',
+              3: 'Past',
               5: 'Active',
             };
             const gStatus =
@@ -135,51 +124,36 @@ export default function GalaGrants() {
 
                 <div className="grant-pills">
                   <span className="pill">
-                    <FontAwesomeIcon
-                      icon={faDollarSign}
-                      style={{ marginRight: '4px' }}
-                    />{' '}
+                    <FontAwesomeIcon icon={faDollarSign} className="pill-icon" />{' '}
                     {gAmount.toLocaleString()}$
                   </span>
                   <span className="pill">
-                    <FontAwesomeIcon
-                      icon={faTag}
-                      style={{ marginRight: '4px' }}
-                    />{' '}
+                    <FontAwesomeIcon icon={faTag} className="pill-icon" />{' '}
                     {gCategory}
                   </span>
                   <span className="pill">
-                    <FontAwesomeIcon
-                      icon={faCalendar}
-                      style={{ marginRight: '4px' }}
-                    />{' '}
+                    <FontAwesomeIcon icon={faCalendar} className="pill-icon" />{' '}
                     {gDeadline}
                   </span>
                 </div>
 
                 <div className="eligibility-section">
                   <h4>
-                    <FontAwesomeIcon
-                      icon={faCheckCircle}
-                      className="text-green"
-                      style={{ marginRight: '8px' }}
-                    />
+                    <FontAwesomeIcon icon={faCheckCircle} className="text-green" />
                     {t('galas.grants.eligibilityCriteria')}
                   </h4>
                   <p>{gEligibility}</p>
                 </div>
 
                 <button
-                  className="btn-apply"
+                  className={`btn-apply ${grant.status > 2 ? 'disabled' : ''}`}
+                  disabled={grant.status > 2}
                   onClick={() =>
                     navigate(`/dashboard/galas/${id}/apply/${gId}`)
                   }
                 >
-                  {t('galas.grants.applyToGrant')}
-                  <FontAwesomeIcon
-                    icon={faPaperPlane}
-                    style={{ marginLeft: '8px' }}
-                  />
+                  {grant.status > 2 ? t('galas.grants.status3') : t('galas.grants.applyToGrant')}
+                  <FontAwesomeIcon icon={faPaperPlane} className="apply-icon" />
                 </button>
               </div>
             );

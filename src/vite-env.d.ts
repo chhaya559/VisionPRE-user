@@ -2,3 +2,9 @@
 export interface ComponentProps {
     children: React.ReactNode | React.Fc<React.ReactNode>;
 }
+
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}

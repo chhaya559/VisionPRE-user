@@ -10,9 +10,18 @@ import {
   faTimesCircle,
   faChevronRight,
   faPlus,
+  faLayerGroup,
+  faArrowTrendUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import {
+  getGrantApplicationStatusLabel,
+  getGrantApplicationStatusValue,
+  GrantApplicationStatus,
+  isGrantApprovedStatus,
+  isGrantPendingStatus,
+} from '../../Shared/GrantApplicationStatus';
 
 export default function GrantsList() {
   const navigate = useNavigate();
@@ -38,28 +47,27 @@ export default function GrantsList() {
   // Stats
   const pendingCount = Array.isArray(applications)
     ? applications.filter(
-      (a: any) =>
-        a.status === 1 || String(a.status).toLowerCase() === 'pending'
+      (a: any) => isGrantPendingStatus(getGrantApplicationStatusValue(a))
     ).length
     : 0;
   const approvedCount = Array.isArray(applications)
     ? applications.filter(
-      (a: any) =>
-        a.status === 2 || String(a.status).toLowerCase() === 'approved'
+      (a: any) => isGrantApprovedStatus(getGrantApplicationStatusValue(a))
     ).length
     : 0;
   const rejectedCount = Array.isArray(applications)
     ? applications.filter(
       (a: any) =>
-        a.status === 3 || String(a.status).toLowerCase() === 'rejected'
+        getGrantApplicationStatusValue(a) === GrantApplicationStatus.Rejected
     ).length
     : 0;
 
   const getStatusBadge = (status: any) => {
-    const s = String(status).toLowerCase();
-    if (s === 'approved' || status === 2)
+    const normalizedStatus = Number(status);
+
+    if (isGrantApprovedStatus(normalizedStatus))
       return <span className="status-badge approved">{t('grants.list.approved')}</span>;
-    if (s === 'rejected' || status === 3)
+    if (normalizedStatus === GrantApplicationStatus.Rejected)
       return <span className="status-badge rejected">{t('grants.list.rejected')}</span>;
     return <span className="status-badge pending">{t('grants.list.pending')}</span>;
   };
@@ -91,20 +99,7 @@ export default function GrantsList() {
       {/* Your Status Section */}
       <section className="status-section">
         <h2 className="section-title">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="title-icon"
-          >
-            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-            <polyline points="17 6 23 6 23 12" />
-          </svg>
+          <FontAwesomeIcon icon={faArrowTrendUp} className="title-icon" />
           {t('grants.list.yourStatus')}
         </h2>
         <div className="status-cards-grid">
@@ -141,21 +136,7 @@ export default function GrantsList() {
       {/* Upcoming Galas Section */}
       <section className="upcoming-galas-section">
         <h2 className="section-title">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="title-icon"
-          >
-            <path d="M12 2L2 7L12 12L22 7L12 2Z" />
-            <path d="M2 17L12 22L22 17" />
-            <path d="M2 12L12 17L22 12" />
-          </svg>
+          <FontAwesomeIcon icon={faLayerGroup} className="title-icon" />
           {t('grants.list.upcomingGalas')}
         </h2>
 
@@ -204,7 +185,9 @@ export default function GrantsList() {
                             {t('grants.list.interview')}{' '}
                             {app.interviewDate
                               ? new Date(app.interviewDate).toLocaleDateString()
-                              : 'Pending'}{' '}
+                              : getGrantApplicationStatusLabel(
+                                  getGrantApplicationStatusValue(app)
+                                )}{' '}
                             {t('grants.list.at')}
                           </p>
                           <p className="submission-date">

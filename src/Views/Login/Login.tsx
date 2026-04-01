@@ -45,6 +45,9 @@ export default function LoginPage() {
       const response = await loginApi(payload).unwrap();
 
       console.log('Login Response (Full):', response);
+      if (response.message) {
+        toast.success(response.message, { position: 'top-right' });
+      }
       const token = response.data?.accessToken;
       const refreshToken = response.data?.refreshToken;
       const email = response.data?.email;
@@ -62,7 +65,7 @@ export default function LoginPage() {
       );
     } catch (err: any) {
       console.log('error-', err);
-      toast(err?.data?.message, {
+      toast.error(err?.data?.message || 'Login failed', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,

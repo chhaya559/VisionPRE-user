@@ -6,6 +6,30 @@
   padding-bottom: 60px;
 }
 
+.gala-grants-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.gala-grants-message {
+  color: #94A3B8;
+}
+
+.gala-grants-error-title {
+  color: #EF4444;
+}
+
+.gala-grants-back-btn {
+  margin-top: 1rem;
+  width: auto;
+  padding: 10px 20px;
+}
+
 .gala-grants-top-shell {
   position: relative;
   padding-bottom: 16px;
@@ -178,6 +202,10 @@
       gap: 8px;
       border: 1px solid $borderColorLight;
 
+      .pill-icon {
+        margin-right: 4px;
+      }
+
       svg { color: $primaryGreen; }
     }
   }
@@ -189,16 +217,16 @@
     border-radius: 16px;
     border-left: 4px solid $primaryGreen;
 
-    h4 {
-      display: flex;
-      align-items: center;
+      h4 {
+        display: flex;
+        align-items: center;
       gap: 8px;
       font-size: 0.9375rem;
       font-weight: 700;
       color: $primaryText;
       margin-bottom: 8px;
 
-      .text-green { color: $primaryGreen; }
+      .text-green { color: $primaryGreen; margin-right: 8px; }
     }
 
     p {
@@ -226,6 +254,20 @@
     &:hover {
       background: $textBlack;
       transform: translateY(-2px);
+    }
+
+    .apply-icon {
+      margin-left: 8px;
+    }
+
+    &.disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      transform: none !important;
+      &:hover {
+        background: #94a3b8;
+        transform: none !important;
+      }
     }
   }
 }

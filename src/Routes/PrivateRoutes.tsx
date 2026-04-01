@@ -8,6 +8,7 @@ import GalaDetails from '../Views/Galas/GalaDetails';
 import GalaGrants from '../Views/Galas/GalaGrants';
 import GrantApplication from '../Views/Grants/GrantApplication';
 import GrantsList from '../Views/Grants/GrantsList';
+import Notifications from '../Views/Notifications/Notifications';
 import MyProfile from '../Views/Profile/MyProfile';
 import EditPublicProfile from '../Views/Profile/EditPublicProfile';
 import EditBusinessProfile from '../Views/Profile/EditBusinessProfile';
@@ -18,6 +19,8 @@ import TermsAndConditions from '../Views/Settings/TermsAndConditions';
 import PrivacyPolicy from '../Views/Settings/PrivacyPolicy';
 import DeleteAccount from '../Views/Settings/DeleteAccount';
 import ProfileSetupLayout from '../Views/ProfileSetup/ProfileSetupLayout';
+import SubscriptionDetails from '../Views/Settings/SubscriptionDetails';
+import SubscriptionPlans from '../Views/Settings/SubscriptionPlans';
 // ... rest of imports
 import Welcome from '../Views/ProfileSetup/Steps/Welcome';
 import AlmostReady from '../Views/ProfileSetup/Steps/AlmostReady';
@@ -51,6 +54,7 @@ export const PRIVATE_ROUTES: Array<CustomRouter> = [
       { path: 'galas/:id/grants', element: <GalaGrants /> },
       { path: 'galas/:id/apply/:grantId', element: <GrantApplication /> },
       { path: 'grants', element: <GrantsList /> },
+      { path: 'notifications', element: <Notifications /> },
       { path: 'profile', element: <MyProfile /> },
       { path: 'profile/edit-public', element: <EditPublicProfile /> },
       { path: 'profile/edit-business', element: <EditBusinessProfile /> },
@@ -60,6 +64,8 @@ export const PRIVATE_ROUTES: Array<CustomRouter> = [
       { path: 'profile/settings/terms', element: <TermsAndConditions /> },
       { path: 'profile/settings/privacy', element: <PrivacyPolicy /> },
       { path: 'profile/settings/delete-account', element: <DeleteAccount /> },
+      { path: 'profile/settings/subscription', element: <SubscriptionDetails /> },
+      { path: 'profile/settings/plans', element: <SubscriptionPlans /> },
     ],
   },
   {

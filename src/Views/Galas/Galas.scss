@@ -112,18 +112,29 @@ button:focus {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
 
-  .section-title {
-    grid-column: 1 / -1;
-    font-size: 1.35rem;
-    font-weight: 800;
-    color: #1E293B;
-    margin: 12px 0 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    .section-title {
+      grid-column: 1 / -1;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #1E293B;
+      margin: 12px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .section-icon {
+        &.active,
+        &.upcoming {
+          color: #F97316;
+        }
+
+        &.past {
+          color: #94A3B8;
+        }
+      }
     
-    .count {
-      color: #94A3B8;
+      .count {
+        color: #94A3B8;
       font-weight: 500;
       margin-left: 4px;
     }
@@ -296,6 +307,19 @@ button:focus {
     margin: 0;
     color: #64748B;
     font-size: 0.98rem;
+  }
+}
+
+.galas-feedback {
+  padding: 40px;
+  text-align: center;
+
+  &.loading {
+    color: #94A3B8;
+  }
+
+  &.error {
+    color: #EF4444;
   }
 }
 

@@ -20,6 +20,7 @@ export default function GalaDetails() {
   const navigate = useNavigate();
   const { t } = useTranslation('private');
   const { data: apiResponse, isLoading, error } = useGetGalaByIdQuery(id || '');
+
   if (isLoading) {
     return (
       <div
@@ -54,7 +55,6 @@ export default function GalaDetails() {
     );
   }
 
-  // Map specific fields from the provided API response shape
   const galaData = (apiResponse as any)?.data || apiResponse || {};
   const title = galaData.name;
 
@@ -87,7 +87,6 @@ export default function GalaDetails() {
   const rawGrants = galaData.grants;
   const grants = Array.isArray(rawGrants) ? rawGrants : [];
 
-  // Format the prize pool shortcut ($15,000 -> $15K)
   const formatCompact = (num: number) => {
     return num >= 1000 ? `$${(num / 1000).toFixed(0)}K` : `$${num}`;
   };
@@ -95,15 +94,19 @@ export default function GalaDetails() {
   return (
     <div className="gala-details-container">
       <div className="gala-details-shell">
+
+        {/* ── LEFT: Hero image, fills full height of right col ── */}
         <div
           className="hero-section"
           style={{
-            backgroundImage: `url(${imageUrl ||
+            backgroundImage: `url(${
+              imageUrl ||
               'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
-              })`,
+            })`,
           }}
         >
           <div className="hero-overlay" />
+
           <div className="hero-nav">
             <button className="icon-btn-round" onClick={() => navigate(-1)}>
               <FontAwesomeIcon icon={faChevronLeft} />
@@ -117,15 +120,23 @@ export default function GalaDetails() {
               </button>
             </div>
           </div>
+
           <div className="hero-content">
             <div className={`status-badge floating ${status.toLowerCase()}`}>
               {t(`galas.discover.status${status}`).toUpperCase()}
             </div>
             <h1>{title}</h1>
+            {/* Description preview card at bottom of hero */}
+            <div className="hero-about-preview">
+              <p>{description}</p>
+            </div>
           </div>
         </div>
 
+        {/* ── RIGHT: all details stacked ── */}
         <div className="details-content">
+
+          {/* Main content: about + program + stats */}
           <div className="details-main">
             <div className="about-section">
               <h2>{t('galas.details.aboutEvent')}</h2>
@@ -171,6 +182,7 @@ export default function GalaDetails() {
             </div>
           </div>
 
+          {/* Sidebar: info cards + apply button */}
           <div className="details-sidebar">
             <div className="info-list">
               <div className="info-item">
@@ -179,9 +191,7 @@ export default function GalaDetails() {
                 </div>
                 <div className="info-text">
                   <span className="label">{t('galas.details.dateTime')}</span>
-                  <span className="val">
-                    {date} • {time}
-                  </span>
+                  <span className="val">{date} • {time}</span>
                 </div>
               </div>
               <div className="info-item">
@@ -216,25 +226,28 @@ export default function GalaDetails() {
             </div>
 
             <button
-              className="btn-apply-grant inline"
+              className={`btn-apply-grant inline ${galaData.status > 2 ? 'disabled' : ''}`}
+              disabled={galaData.status > 2}
               onClick={() => navigate(`/dashboard/galas/${id}/grants`)}
             >
-              {t('galas.details.applyToGrant')}
-              <FontAwesomeIcon
-                icon={faArrowRight}
-                style={{ marginLeft: '8px' }}
-              />
+              {galaData.status > 2 ? t('galas.details.pastEvent') : t('galas.details.applyToGrant')}
+              <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '8px' }} />
             </button>
           </div>
+
         </div>
+        {/* end .details-content */}
+
       </div>
+      {/* end .gala-details-shell */}
 
       <div className="bottom-sticky-bar">
         <button
-          className="btn-apply-grant"
+          className={`btn-apply-grant ${galaData.status > 2 ? 'disabled' : ''}`}
+          disabled={galaData.status > 2}
           onClick={() => navigate(`/dashboard/galas/${id}/grants`)}
         >
-          {t('galas.details.applyToGrant')}
+          {galaData.status > 2 ? t('galas.details.pastEvent') : t('galas.details.applyToGrant')}
           <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '8px' }} />
         </button>
       </div>

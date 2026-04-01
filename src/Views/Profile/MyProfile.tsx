@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useGetProfileQuery } from '../../Services/Api/module/UserApi';
 import { logout } from '../../Store/Common';
 import './MyProfile.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,74 +12,62 @@ import {
   faCircle,
   faExclamationTriangle,
   faSignOutAlt,
+  faRedo,
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import type { DashboardOutletContext } from '../Dashboard/Dashboard';
 
 export default function MyProfile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { t } = useTranslation('private');
-  const { data: apiResponse, isLoading, error } = useGetProfileQuery({});
+  const { t } = useTranslation('settings');
+  const { profile, profileLoading, profileError } =
+    useOutletContext<DashboardOutletContext>();
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
   };
 
-  if (isLoading) {
+  if (profileLoading) {
     return (
-      <div
-        className="my-profile-container"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-        }}
-      >
-        <div style={{ color: '#94A3B8' }}>{t('profile.myProfile.loading')}</div>
+      <div className="my-profile-container my-profile-state-center">
+        <div className="my-profile-loading-text">{t('myProfile.loading')}</div>
       </div>
     );
   }
 
-  if (error) {
+  if (profileError) {
     return (
-      <div
-        className="my-profile-container"
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-          padding: '24px',
-          textAlign: 'center',
-        }}
-      >
-        <FontAwesomeIcon
-          icon={faExclamationTriangle}
-          style={{ fontSize: '3rem', color: '#EF4444', marginBottom: '1rem' }}
-        />
-        <h2 style={{ color: '#1E293B', marginBottom: '8px' }}>
-          {t('profile.myProfile.error')}
-        </h2>
-        <p
-          style={{ color: '#64748B', maxWidth: '400px', marginBottom: '24px' }}
-        >
-          {t('profile.myProfile.errorDescription')}
-        </p>
-        <button
-          className="btn-edit"
-          style={{ background: '#1E293B', color: '#fff', padding: '10px 24px' }}
-          onClick={() => window.location.reload()}
-        >
-          {t('profile.myProfile.tryAgain')}
-        </button>
+      <div className="my-profile-container my-profile-state-center">
+        <div className="error-state-card">
+          <div className="error-icon-wrap">
+            <FontAwesomeIcon icon={faExclamationTriangle} />
+          </div>
+          <h2 className="my-profile-error-title">
+            {t('myProfile.error', 'Something went wrong')}
+          </h2>
+          <p className="my-profile-error-desc">
+            {t(
+              'myProfile.errorDescription',
+              "We couldn't load your profile. This might be due to a connection issue."
+            )}
+          </p>
+          <div className="my-profile-error-actions">
+            <button
+              className="btn-error-action btn-primary"
+              onClick={() => window.location.reload()}
+            >
+              <FontAwesomeIcon icon={faRedo} />
+              {t('myProfile.tryAgain', 'Try Again')}
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
-  const profileData = (apiResponse as any)?.data || apiResponse || {};
+  const profileData = profile || {};
   const firstName = profileData.firstName || profileData.FirstName || 'User';
   const lastName = profileData.lastName || profileData.LastName || '';
   const email = profileData.email || profileData.Email || '';
@@ -88,15 +75,15 @@ export default function MyProfile() {
   const bio =
     profileData.businessDescription ||
     profileData.BusinessDescription ||
-    t('profile.myProfile.noBio');
+    t('myProfile.noBio', 'No bio available.');
   const initials = firstName.charAt(0).toUpperCase();
 
   return (
     <div className="my-profile-container">
       <header className="my-profile-header">
         <div className="header-inner">
-          <h1>{t('profile.myProfile.title')}</h1>
-          <p>{t('profile.myProfile.description')}</p>
+          <h1>{t('myProfile.title')}</h1>
+          <p>{t('myProfile.description')}</p>
         </div>
       </header>
 
@@ -117,9 +104,7 @@ export default function MyProfile() {
 
           <div className="card-main-content">
             <div className="name-details">
-              <h2>
-                {firstName} {lastName}
-              </h2>
+              <h2>{firstName} {lastName}</h2>
               <p className="email-text">{email}</p>
             </div>
 
@@ -145,8 +130,8 @@ export default function MyProfile() {
                 <FontAwesomeIcon icon={faBriefcase} />
               </div>
               <div className="title-text">
-                <h3>{t('profile.myProfile.businessProfile')}</h3>
-                <p>{t('profile.myProfile.grantInfo')}</p>
+                <h3>{t('myProfile.businessProfile')}</h3>
+                <p>{t('myProfile.grantInfo')}</p>
               </div>
             </div>
             <button
@@ -159,16 +144,16 @@ export default function MyProfile() {
 
           <div className="card-body">
             {!companyName ? (
-              <div className="empty-state">{t('profile.myProfile.incomplete')}</div>
+              <div className="empty-state">{t('myProfile.incomplete')}</div>
             ) : (
               <div className="business-summary">
                 <div className="summary-item">
-                  <strong>{t('profile.myProfile.industry')}</strong>{' '}
-                  {profileData.industry || profileData.Industry || t('profile.myProfile.notSet')}
+                  <strong>{t('myProfile.industry')}</strong>{' '}
+                  {profileData.industry || profileData.Industry || t('myProfile.notSet')}
                 </div>
                 <div className="summary-item">
-                  <strong>{t('profile.myProfile.stage')}</strong>{' '}
-                  {profileData.stage || profileData.Stage || t('profile.myProfile.notSet')}
+                  <strong>{t('myProfile.stage')}</strong>{' '}
+                  {profileData.stage || profileData.Stage || t('myProfile.notSet')}
                 </div>
               </div>
             )}
@@ -183,7 +168,7 @@ export default function MyProfile() {
                 <FontAwesomeIcon icon={faCog} />
               </div>
               <div className="title-text">
-                <h3>{t('profile.myProfile.settings')}</h3>
+                <h3>{t('myProfile.settings')}</h3>
               </div>
             </div>
             <button
@@ -198,14 +183,16 @@ export default function MyProfile() {
             <div className="settings-section">
               <div className="section-subtitle">
                 <FontAwesomeIcon icon={faBell} className="label-icon" />
-                {t('profile.myProfile.notifications')}
+                {t('myProfile.notifications')}
               </div>
               <ul className="settings-list">
                 <li>
-                  <FontAwesomeIcon icon={faCircle} className="dot" /> {t('profile.myProfile.emailEnabled')}
+                  <FontAwesomeIcon icon={faCircle} className="dot" />
+                  {t('myProfile.emailEnabled')}
                 </li>
                 <li>
-                  <FontAwesomeIcon icon={faCircle} className="dot" /> {t('profile.myProfile.newGalasDisabled')}
+                  <FontAwesomeIcon icon={faCircle} className="dot" />
+                  {t('myProfile.newGalasDisabled')}
                 </li>
               </ul>
             </div>
@@ -214,7 +201,7 @@ export default function MyProfile() {
 
         <button className="btn-logout" onClick={handleLogout}>
           <FontAwesomeIcon icon={faSignOutAlt} />
-          {t('profile.myProfile.logout')}
+          {t('myProfile.logout')}
         </button>
       </div>
     </div>

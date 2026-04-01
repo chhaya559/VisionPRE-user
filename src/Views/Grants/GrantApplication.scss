@@ -6,6 +6,45 @@
   padding-bottom: 60px;
 }
 
+.grant-app-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  &.error,
+  &.success {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+}
+
+.grant-app-message {
+  color: #94A3B8;
+}
+
+.grant-app-error-title {
+  color: #EF4444;
+}
+
+.grant-app-back-btn {
+  margin-top: 1rem;
+  width: auto;
+  padding: 10px 20px;
+}
+
+.grant-app-success-icon {
+  font-size: 4rem;
+  color: #22C55E;
+  margin-bottom: 1.5rem;
+}
+
+.grant-app-success-copy {
+  color: #64748B;
+  margin-top: 0.5rem;
+}
+
 .grant-app-header {
   padding: 24px 24px 0;
   max-width: 800px;
@@ -161,6 +200,10 @@
       .cal-header {
          display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
          font-weight: 700; color: $primaryText;
+
+         .cal-next-icon {
+          transform: rotate(180deg);
+         }
       }
       .cal-grid {
          display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center;
@@ -184,6 +227,12 @@
     }
   }
 
+  .time-slots-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
   .checkbox-group {
     margin-bottom: 32px;
     
@@ -204,6 +253,10 @@
       background: $primaryGreen; color: $primaryWhite; border: none; padding: 16px; border-radius: 14px;
       font-size: 1rem; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 8px;
       cursor: pointer; box-shadow: 0 4px 12px rgba($primaryGreen, 0.2);
+
+      .submit-icon {
+        margin-right: 8px;
+      }
     }
     .btn-draft {
       background: $borderColorLight; color: $primaryText; border: none; padding: 16px; border-radius: 14px;

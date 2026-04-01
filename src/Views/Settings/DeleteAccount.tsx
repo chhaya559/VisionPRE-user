@@ -1,13 +1,31 @@
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../Store/Common';
 import './Settings.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faChevronLeft,
+  faTriangleExclamation,
+  faXmarkCircle,
+} from '@fortawesome/free-solid-svg-icons';
+import { useDeleteAccountMutation } from '../../Services/Api/module/UserApi';
 
 export default function DeleteAccount() {
+  const { t } = useTranslation('settings');
+  const [deleteAccount] = useDeleteAccountMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleDelete = () => {
-    // API logic for account deletion would go here
-    console.log('Account deletion requested');
-    // navigate('/login', { replace: true });
+  const handleDelete = async () => {
+    try {
+      const response = await deleteAccount({}).unwrap();
+      console.log('Account deleted successfully:', response);
+      dispatch(logout());
+      navigate('/');
+    } catch (error) {
+      console.error('Error deleting account:', error);
+    }
   };
 
   return (
@@ -16,108 +34,48 @@ export default function DeleteAccount() {
         <button
           className="back-btn"
           onClick={() => navigate(-1)}
-          style={{ position: 'static', marginBottom: '16px', padding: 0 }}
         >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            width="20"
-            height="20"
-          >
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-          Back
+          <FontAwesomeIcon icon={faChevronLeft} />
+          {t('deleteAccount.back')}
         </button>
         <div className="header-info">
-          <h1>Delete Account</h1>
-          <p>We're sorry to see you go</p>
+          <h1>{t('deleteAccount.title')}</h1>
+          <p>{t('deleteAccount.subtitle')}</p>
         </div>
       </header>
 
       <div className="edit-profile-form">
-        <div
-          className="warning-box"
-          style={{ maxWidth: '600px', margin: '0 auto' }}
-        >
+        <div className="warning-box delete-account-box">
           <div className="warning-icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              width="40"
-              height="40"
-            >
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-              <line x1="12" y1="9" x2="12" y2="13" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
+            <FontAwesomeIcon icon={faTriangleExclamation} />
           </div>
 
-          <h2>Delete Account?</h2>
-          <p>
-            Are you sure you want to delete your account? This action cannot be
-            undone and you will lose access to all your data.
-          </p>
+          <h2>{t('deleteAccount.confirmTitle')}</h2>
+          <p>{t('deleteAccount.confirmDescription')}</p>
 
           <div className="loss-card">
-            <h4>You will lose:</h4>
+            <h4>{t('deleteAccount.lose')}</h4>
             <ul>
               <li>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  width="18"
-                  height="18"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="15" y1="9" x2="9" y2="15" />
-                  <line x1="9" y1="9" x2="15" y2="15" />
-                </svg>
-                All your grant applications
+                <FontAwesomeIcon icon={faXmarkCircle} />
+                {t('deleteAccount.loseApplications')}
               </li>
               <li>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  width="18"
-                  height="18"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="15" y1="9" x2="9" y2="15" />
-                  <line x1="9" y1="9" x2="15" y2="15" />
-                </svg>
-                Your profile and business information
+                <FontAwesomeIcon icon={faXmarkCircle} />
+                {t('deleteAccount.loseProfile')}
               </li>
               <li>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  width="18"
-                  height="18"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="15" y1="9" x2="9" y2="15" />
-                  <line x1="9" y1="9" x2="15" y2="15" />
-                </svg>
-                Access to all events and updates
+                <FontAwesomeIcon icon={faXmarkCircle} />
+                {t('deleteAccount.loseAccess')}
               </li>
             </ul>
           </div>
 
           <button className="btn-delete" onClick={handleDelete}>
-            Yes, Delete My Account
+            {t('deleteAccount.delete')}
           </button>
           <button className="btn-cancel" onClick={() => navigate(-1)}>
-            Cancel
+            {t('deleteAccount.cancel')}
           </button>
         </div>
       </div>

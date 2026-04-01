@@ -36,7 +36,7 @@ export default function DiscoverGalas() {
           <h1>{t('galas.discover.title')}</h1>
           <p>{t('galas.discover.subtitle')}</p>
         </header>
-        <div style={{ padding: '40px', textAlign: 'center', color: '#94A3B8' }}>
+        <div className="galas-feedback loading">
           {t('galas.discover.loading')}
         </div>
       </div>
@@ -50,7 +50,7 @@ export default function DiscoverGalas() {
           <h1>{t('galas.discover.title')}</h1>
           <p>{t('galas.discover.subtitle')}</p>
         </header>
-        <div style={{ padding: '40px', textAlign: 'center', color: '#EF4444' }}>
+        <div className="galas-feedback error">
           {t('galas.discover.error')}
         </div>
       </div>
@@ -122,7 +122,7 @@ export default function DiscoverGalas() {
         {showActive && activeGalas.length > 0 && (
           <section className="galas-section">
             <h2 className="section-title">
-              <FontAwesomeIcon icon={faFire} style={{ color: '#F97316' }} />{' '}
+              <FontAwesomeIcon icon={faFire} className="section-icon active" />{' '}
               {t('galas.discover.activeGalas')} <span className="count">({activeGalas.length})</span>
             </h2>
             {activeGalas.map((gala: any) => (
@@ -141,7 +141,7 @@ export default function DiscoverGalas() {
         {showUpcoming && upcomingGalas.length > 0 && (
           <section className="galas-section">
             <h2 className="section-title">
-              <FontAwesomeIcon icon={faClock} style={{ color: '#F97316' }} />{' '}
+              <FontAwesomeIcon icon={faClock} className="section-icon upcoming" />{' '}
               {activeFilter === 'Planned' ? t('galas.discover.plannedGalas') : t('galas.discover.upcomingGalas')}{' '}
               <span className="count">({upcomingGalas.length})</span>
             </h2>
@@ -161,7 +161,7 @@ export default function DiscoverGalas() {
         {showPast && pastGalas.length > 0 && (
           <section className="galas-section">
             <h2 className="section-title">
-              <FontAwesomeIcon icon={faArchive} style={{ color: '#94A3B8' }} />{' '}
+              <FontAwesomeIcon icon={faArchive} className="section-icon past" />{' '}
               {t('galas.discover.pastGalas')} <span className="count">({pastGalas.length})</span>
             </h2>
             {pastGalas.map((gala: any) => (

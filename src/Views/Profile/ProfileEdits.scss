@@ -1,428 +1,893 @@
 @import '../../Shared/Colors.scss';
 
+/* ─── Edit Profile Container ─────────────────────────────────────────────── */
+
 .edit-profile-container {
   min-height: 100vh;
-  background-color: $primaryWhite;
+  background-color: #f4f6f9;
   padding-bottom: 60px;
+
+  &.edit-profile-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 1rem;
+  }
 }
+
+/* ─── Edit Profile Header ────────────────────────────────────────────────── */
 
 .edit-profile-header {
   background: linear-gradient(135deg, lighten($primaryGreen, 10%) 0%, $primaryGreen 100%);
-  padding: 28px 24px 30px;
+  // Full-width — no max-width or centering
+  padding: 32px 32px 36px;
   color: $primaryWhite;
   text-align: left;
-  position: relative;
-  border-bottom-left-radius: 28px;
-  border-bottom-right-radius: 28px;
-  max-width: 1000px;
-  margin: 0 auto;
-  box-shadow: 0 12px 28px rgba($primaryGreen, 0.14);
+  box-shadow: 0 8px 32px rgba($primaryGreen, 0.18);
 
   .back-btn {
-    position: static;
-    background: none; border: none; color: $primaryWhite;
-    display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700;
+    background: rgba($primaryWhite, 0.15);
+    border: none;
+    color: $primaryWhite;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    font-weight: 700;
     cursor: pointer;
-    padding: 0;
-    margin-bottom: 16px;
+    padding: 8px 14px;
+    margin-bottom: 20px;
+    border-radius: 50px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba($primaryWhite, 0.25);
+    }
   }
 
-  h1 { font-size: 1.55rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.02em; }
+  h1 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+    color: $primaryWhite;
+  }
+
+  // Replaces inline style={{ height: '40px' }} spacer div
+  .header-spacer {
+    height: 32px;
+  }
 
   .avatar-edit {
-     position: relative;
-     width: 100px; height: 100px;
-     margin: 8px 0 12px;
-     
-     .avatar-circle {
-        width: 100%; height: 100%; border-radius: 50%; background: $primaryWhite; color: $primaryGreen;
-        font-size: 2.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center;
-        border: 4px solid rgba($primaryWhite, 0.3);
-     }
-     
-     .camera-icon {
-        position: absolute; bottom: 0; right: 0;
-        width: 32px; height: 32px; background: $primaryGreen; color: $primaryWhite;
-        border-radius: 50%; border: 3px solid $primaryWhite; display: flex; align-items: center; justify-content: center;
-        svg { width: 14px; height: 14px; }
-     }
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 8px 0 12px;
+
+    .avatar-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: $primaryWhite;
+      color: $primaryGreen;
+      font-size: 2.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid rgba($primaryWhite, 0.3);
+    }
+
+    .camera-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 32px;
+      height: 32px;
+      background: $primaryGreen;
+      color: $primaryWhite;
+      border-radius: 50%;
+      border: 3px solid $primaryWhite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
   }
 
-  .change-photo { display: inline-flex; font-size: 0.875rem; font-weight: 700; opacity: 0.9; cursor: pointer; }
+  .change-photo {
+    display: inline-flex;
+    font-size: 0.875rem;
+    font-weight: 700;
+    opacity: 0.9;
+    cursor: pointer;
+    color: $primaryWhite;
+  }
 }
 
+/* Secondary header variant (Business Profile edit) */
+.edit-profile-header.secondary {
+  .header-info {
+    h1 {
+      margin-bottom: 6px;
+    }
+
+    p {
+      font-size: 0.9375rem;
+      opacity: 0.88;
+      margin: 0;
+      color: $primaryWhite;
+    }
+  }
+}
+
+/* ─── Edit Profile Form ──────────────────────────────────────────────────── */
+
 .edit-profile-form {
-  max-width: 800px;
-  margin: 24px auto 0;
-  padding: 0 24px;
+  // Full-width — matches header and settings page pattern
+  padding: 28px 32px;
 
   .section {
-    margin-bottom: 40px;
-    
+    margin-bottom: 36px;
+
+    // Hint text below section header (e.g. "Select all that apply")
+    .section-hint {
+      font-size: 0.8125rem;
+      color: #9ca3af;
+      margin-bottom: 16px;
+      margin-top: -8px;
+    }
+
     .section-header {
-       display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
-       border-left: 4px solid $primaryGreen; padding-left: 12px;
-       
-       h3 { font-size: 1.125rem; font-weight: 800; color: $primaryText; }
-       .step-badge { 
-          font-size: 0.75rem; background: $secondaryGreen; color: $primaryGreen; padding: 4px 10px; border-radius: 50px; font-weight: 700; 
-          margin-left: auto;
-       }
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-left: 4px solid $primaryGreen;
+      padding-left: 12px;
+
+      h3 {
+        font-size: 1.125rem;
+        font-weight: 800;
+        color: $primaryText;
+      }
+
+      .step-badge {
+        font-size: 0.75rem;
+        background: $secondaryGreen;
+        color: $primaryGreen;
+        padding: 4px 10px;
+        border-radius: 50px;
+        font-weight: 700;
+        margin-left: auto;
+      }
     }
 
     .form-grid {
-       display: flex; flex-direction: column; gap: 24px;
-       
-       .form-group {
-          label { display: block; font-size: 0.875rem; font-weight: 700; color: $textDarkGray; margin-bottom: 8px; }
-          input, select, textarea {
-             width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid $borderColor;
-             background: $surfaceColor; font-size: 1rem; color: $primaryText;
-             &:focus { outline: none; border-color: $primaryGreen; background: $primaryWhite; }
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+
+      // Full-width fields
+      .form-group:has(textarea),
+      .form-group:has(.name-inputs-row) {
+        grid-column: 1 / -1;
+      }
+
+      .form-group {
+        // Label + step badge row
+        .label-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+
+          label {
+            margin: 0;
           }
-          textarea { min-height: 100px; resize: vertical; }
-       }
+
+          .step-label {
+            font-size: 0.7rem;
+            color: $primaryGreen;
+            font-weight: 800;
+          }
+        }
+
+        label {
+          display: block;
+          font-size: 0.875rem;
+          font-weight: 700;
+          color: $textDarkGray;
+          margin-bottom: 8px;
+        }
+
+        // Side-by-side first/last name inputs
+        .name-inputs-row {
+          display: flex;
+          gap: 12px;
+
+          input {
+            flex: 1;
+          }
+        }
+
+        input,
+        select,
+        textarea {
+          width: 100%;
+          padding: 14px 16px;
+          border-radius: 12px;
+          border: 1px solid $borderColor;
+          background: $surfaceColor;
+          font-size: 1rem;
+          color: $primaryText;
+          box-sizing: border-box;
+          transition: border-color 0.2s ease, background 0.2s ease;
+
+          &:focus {
+            outline: none;
+            border-color: $primaryGreen;
+            background: $primaryWhite;
+          }
+        }
+
+        textarea {
+          min-height: 110px;
+          resize: vertical;
+        }
+
+        select {
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 14px center;
+          padding-right: 40px;
+          cursor: pointer;
+        }
+      }
     }
 
     .tags-grid {
-       display: flex; flex-wrap: wrap; gap: 12px;
-       .tag {
-          padding: 10px 18px; border-radius: 50px; background: $borderColorLight; color: $textGray;
-          font-size: 0.8125rem; font-weight: 700; cursor: pointer; border: 1px solid transparent;
-          
-          &.active { background: $primaryGreen; color: $primaryWhite; border-color: $primaryGreen; }
-       }
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      .tag {
+        padding: 10px 18px;
+        border-radius: 50px;
+        background: $borderColorLight;
+        color: $textGray;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+        user-select: none;
+
+        &:hover {
+          border-color: rgba($primaryGreen, 0.3);
+        }
+
+        &.active {
+          background: $primaryGreen;
+          color: $primaryWhite;
+          border-color: $primaryGreen;
+        }
+      }
     }
 
     .goals-list {
-       display: flex; flex-direction: column; gap: 12px;
-       .goal-item {
-          padding: 16px; border-radius: 16px; border: 1px solid $borderColorLight; background: $primaryWhite;
-          display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.2s ease;
-          
-          .icon-box { 
-             width: 40px; height: 40px; border-radius: 12px; background: $primaryWhite; border: 1px solid $borderColorLight;
-             display: flex; align-items: center; justify-content: center; color: $placeholderColor;
-             svg { width: 20px; height: 20px; }
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .goal-item {
+        padding: 16px 20px;
+        border-radius: 16px;
+        border: 1px solid $borderColorLight;
+        background: $primaryWhite;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: none;
+
+        &:hover {
+          border-color: rgba($primaryGreen, 0.2);
+          background: #f9fefb;
+        }
+
+        .icon-box {
+          width: 42px;
+          height: 42px;
+          border-radius: 12px;
+          background: $surfaceColor;
+          border: 1px solid $borderColorLight;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $placeholderColor;
+          flex-shrink: 0;
+          transition: all 0.2s ease;
+
+          svg {
+            width: 20px;
+            height: 20px;
           }
-          
-          span { font-size: 0.9375rem; font-weight: 700; color: $textGray; }
-          
-          &.active {
-             background: $secondaryGreen; border-color: $primaryGreen;
-             .icon-box { border-color: $primaryGreen; color: $primaryGreen; }
-             span { color: $primaryGreen; }
+        }
+
+        span {
+          font-size: 0.9375rem;
+          font-weight: 700;
+          color: $textGray;
+          transition: color 0.2s ease;
+        }
+
+        &.active {
+          background: $secondaryGreen;
+          border-color: $primaryGreen;
+
+          .icon-box {
+            border-color: $primaryGreen;
+            background: rgba($primaryGreen, 0.1);
+            color: $primaryGreen;
           }
-       }
+
+          span {
+            color: $primaryGreen;
+          }
+        }
+      }
     }
   }
 
   .btn-save {
-     width: 100%; background: $primaryGreen; color: $primaryWhite; border: none; padding: 16px; border-radius: 16px;
-     font-size: 1.0625rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
-     box-shadow: 0 4px 12px rgba($primaryGreen, 0.2);
-     margin-bottom: 32px;
-     
-     &:hover { background: darken($primaryGreen, 10%); transform: translateY(-2px); }
+    width: 100%;
+    background: $primaryGreen;
+    color: $primaryWhite;
+    border: none;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba($primaryGreen, 0.2);
+    margin-bottom: 32px;
+
+    &:hover {
+      background: darken($primaryGreen, 8%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba($primaryGreen, 0.28);
+    }
   }
 }
 
-/* Secondary header for business edit */
-.edit-profile-header.secondary {
-   text-align: left;
-   padding: 28px 24px 30px;
-   .header-info {
-      h1 { margin-bottom: 8px; }
-      p { font-size: 0.9375rem; opacity: 0.9; }
-   }
-}
+/* ─── Settings Layout ────────────────────────────────────────────────────── */
 
-/* Settings Layout */
 .settings-list {
-   display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px;
-   
-   .setting-toggle {
-      background: $primaryWhite; border: 1px solid $borderColorLight; border-radius: 16px; padding: 18px 20px;
-      display: flex; justify-content: space-between; align-items: center;
-      
-      .st-info {
-         h4 { font-size: 0.9375rem; font-weight: 700; color: $primaryText; margin-bottom: 2px; }
-         p { font-size: 0.8125rem; color: $placeholderColor; margin: 0; }
-      }
-      
-      .toggle-switch {
-         width: 44px; height: 24px; background: $borderColor; border-radius: 50px; position: relative; cursor: pointer;
-         &::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: $primaryWhite; border-radius: 50%; transition: 0.2s; }
-         &.on {
-            background: $primaryGreen;
-            &::after { left: 22px; }
-         }
-      }
-   }
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
 
-   .account-action {
-      background: $surfaceColor; border: 1px solid $borderColorLight; border-radius: 16px; padding: 18px 20px;
-      display: flex; align-items: center; gap: 16px; cursor: pointer; transition: 0.2s;
-      
-      .aa-icon { width: 40px; height: 40px; border-radius: 12px; background: $primaryWhite; border: 1px solid $borderColorLight; display: flex; align-items: center; justify-content: center; color: $primaryGreen; }
-      .aa-text { 
-         flex-grow: 1; h5 { font-size: 0.9375rem; font-weight: 700; color: $textGray; }
-      }
-      .badge-en { background: $secondaryGreen; color: $primaryGreen; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; }
-      svg.chevron { color: $placeholderColor; }
+  .setting-toggle {
+    background: $primaryWhite;
+    border: 1px solid $borderColorLight;
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.2s ease;
 
-      &:hover { background: $borderColorLight; }
-      
-      &.danger {
-         background: $dangerBg; border-color: $dangerBorder;
-         .aa-icon { background: $primaryWhite; color: $danger; border-color: $dangerBorder; }
-         .aa-text h5 { color: $danger; }
-         svg.chevron { color: lighten($danger, 20%); }
-      }
-   }
-}
+    &:hover {
+      border-color: rgba($primaryGreen, 0.2);
+    }
 
-.logout-btn {
-   display: flex; align-items: center; justify-content: center; gap: 12px;
-   width: 100%; border: none; background: none; color: $danger; font-size: 1rem; font-weight: 700;
-   padding: 16px; cursor: pointer;
-   svg { width: 20px; height: 20px; }
-}
-
-.premium-card {
-   background: $secondaryGreen; border: 2px solid $primaryGreen; border-radius: 20px; padding: 20px; margin-bottom: 32px;
-   display: flex; flex-direction: column; gap: 20px;
-   
-   .pc-header {
-      display: flex; justify-content: space-between; align-items: center;
-      .pc-main {
-         display: flex; gap: 16px; align-items: center;
-         .pc-icon { width: 48px; height: 48px; background: $primaryGreen; color: $primaryWhite; border-radius: 14px; display: flex; align-items: center; justify-content: center; svg { width: 24px; height: 24px; } }
-         .pc-text { h4 { font-size: 1.125rem; font-weight: 800; color: $primaryText; } p { font-size: 0.875rem; color: $secondaryText; } }
-      }
-      .pc-badge { font-size: 0.7rem; font-weight: 800; background: $primaryGreen; color: $primaryWhite; padding: 4px 10px; border-radius: 50px; letter-spacing: 0.05em; }
-   }
-   
-   .pc-meta {
-      display: flex; justify-content: space-between; border-top: 1px solid rgba($primaryGreen, 0.1); padding-top: 16px;
-      .meta-item {
-         display: flex; flex-direction: column; gap: 4px;
-         .label { font-size: 0.75rem; color: $primaryGreen; font-weight: 700; opacity: 0.8; }
-         .val { font-size: 0.875rem; font-weight: 800; color: $primaryText; }
-         &.right { text-align: right; }
-      }
-   }
-   
-   .btn-manage {
-      background: $primaryGreen; color: $primaryWhite; border: none; padding: 14px; border-radius: 14px;
-      font-size: 1rem; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 8px;
-      cursor: pointer;
-   }
-}
-
-.account-settings-page {
-   min-height: 100vh;
-   background: #F8FAFC;
-   padding-bottom: 80px;
-}
-
-.account-settings-header {
-   background: $primaryGreen;
-   color: $primaryWhite;
-   border-bottom-left-radius: 28px;
-   border-bottom-right-radius: 28px;
-   padding: 28px 24px 30px;
-   box-shadow: 0 12px 28px rgba($primaryGreen, 0.14);
-
-   .header-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-   }
-
-   .back-btn {
-      border: none;
-      background: none;
-      color: $primaryWhite;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0;
-      margin-bottom: 16px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-   }
-
-   .header-copy {
-      h1 {
-         margin: 0 0 8px;
-         font-size: 1.55rem;
-         font-weight: 800;
-         letter-spacing: -0.02em;
+    .st-info {
+      h4 {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: $primaryText;
+        margin-bottom: 2px;
       }
 
       p {
-         margin: 0;
-         max-width: 560px;
-         font-size: 0.92rem;
-         opacity: 0.9;
+        font-size: 0.8125rem;
+        color: $placeholderColor;
+        margin: 0;
       }
-   }
+    }
+
+    .toggle-switch {
+      width: 44px;
+      height: 24px;
+      background: $borderColor;
+      border-radius: 50px;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s ease;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        background: $primaryWhite;
+        border-radius: 50%;
+        transition: 0.2s;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      }
+
+      &.on {
+        background: $primaryGreen;
+
+        &::after {
+          left: 22px;
+        }
+      }
+    }
+  }
+
+  .account-action {
+    background: $surfaceColor;
+    border: 1px solid $borderColorLight;
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    .aa-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: $primaryWhite;
+      border: 1px solid $borderColorLight;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $primaryGreen;
+      flex-shrink: 0;
+    }
+
+    .aa-text {
+      flex-grow: 1;
+
+      h5 {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: $textGray;
+      }
+    }
+
+    .badge-en {
+      background: $secondaryGreen;
+      color: $primaryGreen;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    svg.chevron {
+      color: $placeholderColor;
+    }
+
+    &:hover {
+      background: $borderColorLight;
+      border-color: rgba($primaryGreen, 0.16);
+    }
+
+    &.danger {
+      background: $dangerBg;
+      border-color: $dangerBorder;
+
+      .aa-icon {
+        background: $primaryWhite;
+        color: $danger;
+        border-color: $dangerBorder;
+      }
+
+      .aa-text h5 {
+        color: $danger;
+      }
+
+      svg.chevron {
+        color: lighten($danger, 20%);
+      }
+
+      &:hover {
+        background: darken($dangerBg, 2%);
+      }
+    }
+  }
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  border: none;
+  background: none;
+  color: $danger;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 16px;
+  cursor: pointer;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ─── Premium Card ───────────────────────────────────────────────────────── */
+
+.premium-card {
+  background: $secondaryGreen;
+  border: 2px solid $primaryGreen;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .pc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .pc-main {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+
+      .pc-icon {
+        width: 48px;
+        height: 48px;
+        background: $primaryGreen;
+        color: $primaryWhite;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      .pc-text {
+        h4 {
+          font-size: 1.125rem;
+          font-weight: 800;
+          color: $primaryText;
+        }
+
+        p {
+          font-size: 0.875rem;
+          color: $secondaryText;
+        }
+      }
+    }
+
+    .pc-badge {
+      font-size: 0.7rem;
+      font-weight: 800;
+      background: $primaryGreen;
+      color: $primaryWhite;
+      padding: 4px 10px;
+      border-radius: 50px;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  .pc-meta {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba($primaryGreen, 0.1);
+    padding-top: 16px;
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .label {
+        font-size: 0.75rem;
+        color: $primaryGreen;
+        font-weight: 700;
+        opacity: 0.8;
+      }
+
+      .val {
+        font-size: 0.875rem;
+        font-weight: 800;
+        color: $primaryText;
+      }
+
+      &.right {
+        text-align: right;
+      }
+    }
+  }
+
+  .btn-manage {
+    background: $primaryGreen;
+    color: $primaryWhite;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+}
+
+/* ─── Account Settings Page ──────────────────────────────────────────────── */
+
+.account-settings-page {
+  min-height: 100vh;
+  background: #f4f6f9;
+  padding-bottom: 80px;
+}
+
+.account-settings-header {
+  background: linear-gradient(135deg, lighten($primaryGreen, 8%) 0%, $primaryGreen 100%);
+  color: $primaryWhite;
+  padding: 32px 32px 36px;
+  box-shadow: 0 8px 32px rgba($primaryGreen, 0.18);
+
+  .header-inner {
+    width: 100%;
+  }
+
+  .back-btn {
+    border: none;
+    background: rgba($primaryWhite, 0.15);
+    color: $primaryWhite;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    margin-bottom: 20px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba($primaryWhite, 0.25);
+    }
+  }
+
+  .header-copy {
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      opacity: 0.85;
+      line-height: 1.5;
+    }
+  }
 }
 
 .account-settings-content {
-   max-width: 1100px;
-   margin: 0 auto;
-   padding: 28px 24px 0;
+  padding: 28px 32px 0;
 }
 
 .account-settings-grid {
-   display: grid;
-   grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
-   gap: 24px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
 }
 
 .account-settings-main,
 .account-settings-side {
-   display: flex;
-   flex-direction: column;
-   gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .settings-section-card {
-   background: $primaryWhite;
-   border: 1px solid $borderColorLight;
-   border-radius: 28px;
-   padding: 24px;
-   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
-   margin-bottom: 0;
+  background: $primaryWhite;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.05);
+  margin-bottom: 0;
 }
 
 .account-settings-page {
-   .section-header {
-      margin-bottom: 20px;
-      border-left: none;
-      padding-left: 0;
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid $borderColorLight;
+    border-left: none;
+    padding-left: 0;
 
-      h3 {
-         display: flex;
-         align-items: center;
-         gap: 10px;
-         font-size: 1.1rem;
-         font-weight: 800;
-         color: $primaryText;
-
-         svg {
-            color: $primaryGreen;
-         }
-      }
-   }
-
-   .premium-card {
-      margin-bottom: 0;
-      border-width: 1px;
-      box-shadow: 0 12px 30px rgba(34, 197, 94, 0.08);
-   }
-
-   .settings-list {
-      margin-bottom: 0;
-   }
-
-   .setting-toggle,
-   .account-action {
-      background: $surfaceColor;
-   }
-
-   .setting-toggle:hover,
-   .account-action:hover {
-      background: lighten($surfaceColor, 1%);
-      border-color: rgba($primaryGreen, 0.16);
-   }
-
-   .logout-btn {
-      margin-top: 4px;
-      background: #FFF5F5;
-      border: 1px solid rgba($danger, 0.14);
-      border-radius: 18px;
-      color: $danger;
-      transition: all 0.2s ease;
-
-      &:hover {
-         background: #FEECEC;
-      }
-   }
-}
-
-.settings-help-card {
-   background: linear-gradient(135deg, rgba($primaryGreen, 0.08) 0%, rgba($primaryGreen, 0.14) 100%);
-   border: 1px solid rgba($primaryGreen, 0.14);
-   border-radius: 24px;
-   padding: 24px;
-
-   .help-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
+    h3 {
       display: flex;
       align-items: center;
-      justify-content: center;
-      background: rgba($primaryGreen, 0.12);
-      color: $primaryGreen;
-      margin-bottom: 16px;
-   }
-
-   h4 {
-      margin: 0 0 8px;
-      font-size: 1.1rem;
+      gap: 10px;
+      font-size: 1.05rem;
       font-weight: 800;
       color: $primaryText;
-   }
-
-   p {
       margin: 0;
-      color: $secondaryText;
-      font-size: 0.92rem;
-      line-height: 1.6;
-   }
+
+      svg {
+        color: $primaryGreen;
+      }
+    }
+  }
+
+  .premium-card {
+    margin-bottom: 0;
+    border-width: 1.5px;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.1);
+  }
+
+  .settings-list {
+    margin-bottom: 0;
+  }
+
+  .setting-toggle {
+    background: #fafafa;
+
+    &:hover {
+      background: #f5fbf5;
+      border-color: rgba($primaryGreen, 0.2);
+    }
+  }
+
+  .account-action {
+    background: #fafafa;
+
+    &:hover {
+      background: #f5fbf5;
+      border-color: rgba($primaryGreen, 0.16);
+    }
+  }
+
+  .logout-btn {
+    margin-top: 8px;
+    background: #fff5f5;
+    border: 1px solid rgba($danger, 0.14);
+    border-radius: 16px;
+    color: $danger;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    padding: 14px;
+
+    &:hover {
+      background: #feecec;
+      border-color: rgba($danger, 0.25);
+    }
+  }
 }
 
+/* ─── Help Card ──────────────────────────────────────────────────────────── */
+
+.settings-help-card {
+  background: linear-gradient(135deg, rgba($primaryGreen, 0.07) 0%, rgba($primaryGreen, 0.13) 100%);
+  border: 1px solid rgba($primaryGreen, 0.14);
+  border-radius: 20px;
+  padding: 24px;
+
+  .help-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba($primaryGreen, 0.14);
+    color: $primaryGreen;
+    margin-bottom: 14px;
+  }
+
+  h4 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: $primaryText;
+  }
+
+  p {
+    margin: 0;
+    color: $secondaryText;
+    font-size: 0.875rem;
+    line-height: 1.65;
+  }
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+
 @media (max-width: 1024px) {
-   .account-settings-grid {
-      grid-template-columns: 1fr;
-   }
+  .account-settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .account-settings-content {
+    padding: 24px 24px 0;
+  }
 }
 
 @media (max-width: 768px) {
-   .edit-profile-header,
-   .account-settings-header {
-      padding: 24px 20px 24px;
-   }
+  .edit-profile-header,
+  .account-settings-header {
+    padding: 24px 20px 24px;
+  }
 
-   .account-settings-content {
-      padding: 20px 16px 0;
-   }
+  .edit-profile-form {
+    padding: 20px 16px;
 
-   .settings-section-card {
-      padding: 20px;
-      border-radius: 24px;
-   }
+    .section .form-grid {
+      grid-template-columns: 1fr;
 
-   .account-settings-page .premium-card .pc-meta {
-      flex-direction: column;
-      gap: 12px;
-
-      .meta-item.right {
-         text-align: left;
+      .form-group:has(textarea),
+      .form-group:has(.name-inputs-row) {
+        grid-column: 1;
       }
-   }
+    }
+  }
 
-   .edit-profile-header h1,
-   .account-settings-header .header-copy h1 {
-      font-size: 1.3rem;
-   }
+  .account-settings-content {
+    padding: 20px 16px 0;
+  }
 
-   .edit-profile-header .header-info p,
-   .account-settings-header .header-copy p {
-      font-size: 0.85rem;
-   }
+  .settings-section-card {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .account-settings-page .premium-card .pc-meta {
+    flex-direction: column;
+    gap: 12px;
+
+    .meta-item.right {
+      text-align: left;
+    }
+  }
+
+  .edit-profile-header h1,
+  .account-settings-header .header-copy h1 {
+    font-size: 1.35rem;
+  }
+
+  .account-settings-header .header-copy p {
+    font-size: 0.85rem;
+  }
 }

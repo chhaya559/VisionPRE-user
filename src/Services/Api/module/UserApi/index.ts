@@ -8,12 +8,14 @@ export const userApi = api.injectEndpoints({
         method: 'POST',
         body: payload,
       }),
+      invalidatesTags: ['Profile'],
     }),
     getProfile: builder.query({
       query: () => ({
         url: '/profile',
         method: 'GET',
       }),
+      providesTags: ['Profile'],
     }),
     editProfile: builder.mutation({
       query: (payload) => ({
@@ -21,6 +23,7 @@ export const userApi = api.injectEndpoints({
         method: 'PUT',
         body: payload,
       }),
+      invalidatesTags: ['Profile'],
     }),
     uploadAvatar: builder.mutation({
       query: (payload) => ({
@@ -28,12 +31,19 @@ export const userApi = api.injectEndpoints({
         method: 'POST',
         body: payload,
       }),
+      invalidatesTags: ['Profile'],
     }),
     changePassword: builder.mutation({
       query: (payload) => ({
         url: '/profile/change-password',
         method: 'PUT',
         body: payload,
+      }),
+    }),
+    deleteAccount: builder.mutation({
+      query: () => ({
+        url: '/profile/delete-account',
+        method: 'DELETE',
       }),
     }),
     uploadFile: builder.mutation({
@@ -58,4 +68,5 @@ export const {
   useUploadAvatarMutation,
   useGetProfileQuery,
   useUploadFileMutation,
+  useDeleteAccountMutation
 } = userApi;

@@ -209,6 +209,31 @@
   }
 }
 
+.settings-form-grid {
+  grid-template-columns: 1fr;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.settings-text-action {
+  text-align: center;
+  margin-top: 24px;
+}
+
+.settings-section-block {
+  margin-bottom: 24px;
+}
+
+.settings-section-title {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* Language Selection Styles */
 .search-wrapper {
   position: relative;
@@ -329,6 +354,15 @@
   color: $primaryGreen;
   font-size: 0.875rem;
   font-weight: 500;
+}
+
+.delete-account-box {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.policy-action {
+  margin-top: 40px;
 }
 
 /* Card View for Terms/Privacy */

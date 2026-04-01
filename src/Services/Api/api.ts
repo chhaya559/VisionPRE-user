@@ -28,10 +28,6 @@ const baseQuery = fetchBaseQuery({
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }
-    const language = (getState() as RootState).common.language || 'en';
-    headers.set('X-Language', language);
-    headers.set('Accept-Language', language);
-
     // Fix for ngrok CORS issues: skip the interstitial warning page
     headers.set('ngrok-skip-browser-warning', 'true');
     return headers;
@@ -86,6 +82,7 @@ const baseQueryWithInterceptor: BaseQueryFn<
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithInterceptor,
+  tagTypes: ['Notification', 'Profile', 'Subscription'],
   endpoints: () => ({}),
 });
 

@@ -1,143 +1,184 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import './Dashboard.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faBell,
+  faCalendarDays,
+  faCheckCircle,
+  faCog,
+  faHome,
+  faLayerGroup,
+  faLocationDot,
+  faTrophy,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
 import { useGetProfileQuery } from '../../Services/Api/module/UserApi';
 import {
   useGetGalasQuery,
   useGetMyApplicationsQuery,
 } from '../../Services/Api/module/GalaApi';
+import { useGetNotificationsQuery } from '../../Services/Api/module/NotificationApi';
+import { useWalletContext } from '../../Context/WalletContext';
+import {
+  getGrantApplicationStatusLabel,
+  getGrantApplicationStatusValue,
+  isGrantApprovedStatus,
+  isGrantPendingStatus,
+} from '../../Shared/GrantApplicationStatus';
 
-// Reusable SVG Icons
-function BellIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-    </svg>
-  );
-}
-function UserIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  );
-}
-function CalendarIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-      <line x1="16" y1="2" x2="16" y2="6" />
-      <line x1="8" y1="2" x2="8" y2="6" />
-      <line x1="3" y1="10" x2="21" y2="10" />
-    </svg>
-  );
-}
-function HomeIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-      <polyline points="9 22 9 12 15 12 15 22" />
-    </svg>
-  );
-}
-function TrophyIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M8 21h8m-4-4v4m0-18v3m5 0h-10m12 0a2 2 0 0 1 2 2v2a7 7 0 0 1-14 0v-2a2 2 0 0 1 2-2h10z" />
-    </svg>
-  );
-}
+export type DashboardOutletContext = {
+  profile: any;
+  profileLoading: boolean;
+  profileError: unknown;
+};
 
-function MapPinIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  );
-}
+function DashboardHomeContent({
+  nextGala,
+  totalApps,
+  pendingApps,
+  approvedApps,
+  applications,
+  t,
+}: Readonly<{
+  nextGala: any;
+  totalApps: number;
+  pendingApps: number;
+  approvedApps: number;
+  applications: any[];
+  t: any;
+}>) {
+  const getLocalizedStatus = (app: any) => {
+    const statusLabel = getGrantApplicationStatusLabel(
+      getGrantApplicationStatusValue(app)
+    );
 
-function CheckCircleIcon() {
+    const statusMap: Record<string, string> = {
+      Draft: t('dashboard.status.draft'),
+      Pending: t('dashboard.status.pending'),
+      'In Review': t('dashboard.status.inReview'),
+      Approved: t('dashboard.status.approved'),
+      Rejected: t('dashboard.status.rejected'),
+      Winner: t('dashboard.status.winner'),
+      'Approved For Interview': t('dashboard.status.approvedForInterview'),
+    };
+
+    return {
+      label: statusMap[statusLabel] || statusLabel,
+      className: statusLabel.toLowerCase().replace(/\s+/g, '-'),
+    };
+  };
+
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-      <polyline points="22 4 12 14.01 9 11.01" />
-    </svg>
+    <div className="dashboard-main-column">
+      {nextGala ? (
+        <div className="hero-card gala-card-premium">
+          <div className="gala-badge">✨ {t('dashboard.nextGala')}</div>
+          <h1 className="gala-title">{nextGala.name}</h1>
+          <div className="gala-details">
+            <span>
+              <FontAwesomeIcon icon={faCalendarDays} />{' '}
+              {new Date(nextGala.eventDate).toLocaleDateString('en-GB')}
+            </span>
+            <span>
+              <FontAwesomeIcon icon={faLocationDot} /> {nextGala.city || nextGala.venue || 'TBD'}
+            </span>
+          </div>
+          <Link to={`/dashboard/galas/${nextGala.id}`} className="btn-light">
+            {t('dashboard.viewDetails')} &rarr;
+          </Link>
+        </div>
+      ) : (
+        <div className="hero-card gala-card-premium empty">
+          <h1 className="gala-title">{t('dashboard.stayTuned')}</h1>
+          <p>{t('dashboard.discoverSoon')}</p>
+          <Link to="/dashboard/galas" className="btn-light">
+            {t('dashboard.discoverGalas')} &rarr;
+          </Link>
+        </div>
+      )}
+
+      <section className="status-section-modern">
+        <div className="status-item apps">
+          <div className="label">{t('dashboard.applications')}</div>
+          <div className="value">{totalApps}</div>
+        </div>
+        <div className="status-item pending">
+          <div className="label">{t('dashboard.pending')}</div>
+          <div className="value">{pendingApps}</div>
+        </div>
+        <div className="status-item approved">
+          <div className="label">{t('dashboard.approved')}</div>
+          <div className="value">{approvedApps}</div>
+        </div>
+      </section>
+
+      <section className="recent-activity-modern">
+        <div className="section-header">
+          <h3>{t('dashboard.recentActivity')}</h3>
+          <Link to="/dashboard/grants">{t('dashboard.seeAll')}</Link>
+        </div>
+        <div className="activity-list-modern">
+          {applications.length > 0 ? (
+            applications.slice(0, 3).map((app: any) => {
+              const status = getLocalizedStatus(app);
+              return (
+                <div key={app.id} className="activity-item-premium">
+                  <div className="icon-box">
+                    <FontAwesomeIcon icon={faCheckCircle} />
+                  </div>
+                  <div className="content">
+                    <p>
+                      {t('dashboard.appliedTo')} <strong>{app.grantName || t('dashboard.grant')}</strong>
+                    </p>
+                    <span>
+                      {app.submittedAt
+                        ? new Date(app.submittedAt).toLocaleDateString()
+                        : t('dashboard.recently')}
+                    </span>
+                  </div>
+                  <div className={`status-tag ${status.className}`}>
+                    {status.label}
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p className="empty">{t('dashboard.noRecentActivity')}</p>
+          )}
+        </div>
+      </section>
+    </div>
   );
 }
 
 export default function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation('private');
+  const { account, connectWallet, disconnectWallet, isConnecting } = useWalletContext();
   const isDashboardRoot = location.pathname === '/dashboard';
 
-  const { data: profileResponse } = useGetProfileQuery({});
+  const {
+    data: profileResponse,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useGetProfileQuery(undefined);
   const { data: galasResponse } = useGetGalasQuery({});
   const { data: appsResponse } = useGetMyApplicationsQuery({});
-
-  const profile = (profileResponse as any)?.data || {};
-  const galas = (galasResponse as any)?.data?.items || [];
-  const applications = (appsResponse as any)?.data || appsResponse || [];
+  const { data: notificationsResponse } = useGetNotificationsQuery({});
+  const profile = profileResponse?.data;
+  const galas = galasResponse?.data.items ?? [];
+  const applications = appsResponse?.data ?? [];
+  const notifications = notificationsResponse?.data ?? [];
+  const unreadNotifications = notifications.filter((item: any) => !item.isRead).length;
 
   // Find Next Gala (soonest upcoming)
   const upcomingGalas = galas
-    .filter(
-      (g: any) => (g.status || g.Status) === 2 || (g.status || g.Status) === 1
-    ) // Using 2 for Upcoming based on previous logic
+    .filter((g: any) => g.status === 1 || g.status === 2)
     .sort(
       (a: any, b: any) =>
-        new Date(a.eventDate || 0).getTime() -
-        new Date(b.eventDate || 0).getTime()
+        new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime()
     );
 
   const nextGala = upcomingGalas[0];
@@ -145,21 +186,19 @@ export default function Dashboard() {
   // Calculate Stats
   const pendingApps = Array.isArray(applications)
     ? applications.filter(
-      (a: any) =>
-        (a.status || a.Status) === 'Pending' || (a.status || a.Status) === 1
+      (a: any) => isGrantPendingStatus(getGrantApplicationStatusValue(a))
     ).length
     : 0;
   const approvedApps = Array.isArray(applications)
     ? applications.filter(
-      (a: any) =>
-        (a.status || a.Status) === 'Approved' || (a.status || a.Status) === 2
+      (a: any) => isGrantApprovedStatus(getGrantApplicationStatusValue(a))
     ).length
     : 0;
   const totalApps = Array.isArray(applications) ? applications.length : 0;
 
-  const displayName = profile.firstName || 'User';
+  const displayName = profile?.firstName || 'User';
   const avatarUrl =
-    profile.avatarUrl ||
+    profile?.avatarUrl ||
     `https://ui-avatars.com/api/?name=${displayName}&background=1e293b&color=fff`;
 
   return (
@@ -169,27 +208,7 @@ export default function Dashboard() {
       <aside className="dashboard-sidebar">
         <div className="sidebar-logo">
           <div className="logo-icon-container">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#45cd86" />
-              <path
-                d="M2 17L12 22L22 17"
-                stroke="#45cd86"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M2 12L12 17L22 12"
-                stroke="#45cd86"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <FontAwesomeIcon icon={faLayerGroup} />
           </div>
           <span className="logo-text">Vision PME</span>
         </div>
@@ -200,52 +219,63 @@ export default function Dashboard() {
             className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''
               }`}
           >
-            <HomeIcon /> <span>Dashboard</span>
+            <FontAwesomeIcon icon={faHome} /> <span>{t('dashboard.sidebar.dashboard')}</span>
           </Link>
           <Link
             to="/dashboard/galas"
             className={`nav-item ${location.pathname.includes('/dashboard/galas') ? 'active' : ''
               }`}
           >
-            <CalendarIcon /> <span>Galas</span>
+            <FontAwesomeIcon icon={faCalendarDays} /> <span>{t('dashboard.sidebar.galas')}</span>
           </Link>
           <Link
             to="/dashboard/grants"
             className={`nav-item ${location.pathname.includes('/dashboard/grants') ? 'active' : ''
               }`}
           >
-            <TrophyIcon /> <span>Grants & Applications</span>
+            <FontAwesomeIcon icon={faTrophy} /> <span>{t('dashboard.sidebar.grants')}</span>
           </Link>
           <Link
             to="/dashboard/profile"
             className={`nav-item ${location.pathname.includes('/dashboard/profile') ? 'active' : ''
               }`}
           >
-            <UserIcon /> <span>Account Settings</span>
+            <FontAwesomeIcon icon={faUser} /> <span>{t('dashboard.sidebar.profile')}</span>
           </Link>
         </nav>
 
         <div className="sidebar-footer">
+          {/* Wallet Connection */}
+          <div className="wallet-section">
+            {account ? (
+              <div className="wallet-pill connected" title={account}>
+                <div className="dot" />
+                <span>{`${account.slice(0, 6)}...${account.slice(-4)}`}</span>
+                <button className="disconnect-btn" onClick={disconnectWallet}>✕</button>
+              </div>
+            ) : (
+              <button 
+                className="btn-connect-wallet" 
+                onClick={connectWallet}
+                disabled={isConnecting}
+              >
+                {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+              </button>
+            )}
+          </div>
+
           <div className="user-mini-profile">
             <img src={avatarUrl} alt="Avatar" />
             <div className="user-details">
               <p className="name">{displayName}</p>
-              <p className="email">{profile.email || 'User'}</p>
+              <p className="email">{profile?.email || 'User'}</p>
             </div>
             <Link
               to="/dashboard/profile/settings"
               className="settings-link"
               title="Settings"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="12" cy="12" r="3" />
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-              </svg>
+              <FontAwesomeIcon icon={faCog} />
             </Link>
           </div>
         </div>
@@ -256,9 +286,13 @@ export default function Dashboard() {
         {/* Top Header */}
         <header className="dashboard-header-modern">
           <div className="header-right-actions">
-            <button className="notification-bell">
-              <BellIcon />
-              <span className="dot" />
+            <button
+              className="notification-bell"
+              onClick={() => navigate('/dashboard/notifications')}
+              title="Open notifications"
+            >
+              <FontAwesomeIcon icon={faBell} />
+              {unreadNotifications > 0 && <span className="dot" />}
             </button>
             <div
               className="profile-pill"
@@ -273,99 +307,22 @@ export default function Dashboard() {
         {/* Dashboard Scrollable View */}
         <div className="dashboard-scrollable">
           {isDashboardRoot ? (
-            <div className="dashboard-main-column">
-              {/* Hero Card -> Gala */}
-              {nextGala ? (
-                <div className="hero-card gala-card-premium">
-                  <div className="gala-badge">✨ NEXT GALA</div>
-                  <h1 className="gala-title">{nextGala.name}</h1>
-                  <div className="gala-details">
-                    <span>
-                      <CalendarIcon />{' '}
-                      {new Date(nextGala.eventDate).toLocaleDateString('en-GB')}
-                    </span>
-                    <span>
-                      <MapPinIcon /> {nextGala.city || nextGala.venue || 'TBD'}
-                    </span>
-                  </div>
-                  <Link
-                    to={`/dashboard/galas/${nextGala.id || nextGala.Id}`}
-                    className="btn-light"
-                  >
-                    View Details &rarr;
-                  </Link>
-                </div>
-              ) : (
-                <div className="hero-card gala-card-premium empty">
-                  <h1 className="gala-title">Stay Tuned!</h1>
-                  <p>Discover new opportunities soon.</p>
-                  <Link to="/dashboard/galas" className="btn-light">
-                    Discover Galas &rarr;
-                  </Link>
-                </div>
-              )}
-
-              {/* Status Section */}
-              <section className="status-section-modern">
-                <div className="status-item apps">
-                  <div className="label">Applications</div>
-                  <div className="value">{totalApps}</div>
-                </div>
-                <div className="status-item pending">
-                  <div className="label">Pending</div>
-                  <div className="value">{pendingApps}</div>
-                </div>
-                <div className="status-item approved">
-                  <div className="label">Approved</div>
-                  <div className="value">{approvedApps}</div>
-                </div>
-              </section>
-
-              {/* Recent Activity */}
-              <section className="recent-activity-modern">
-                <div className="section-header">
-                  <h3>Recent Activity</h3>
-                  <Link to="/dashboard/grants">See All</Link>
-                </div>
-                <div className="activity-list-modern">
-                  {applications.length > 0 ? (
-                    applications.slice(0, 3).map((app: any) => {
-                      const statusStr = String(
-                        app.status || 'Pending'
-                      ).toLowerCase();
-                      return (
-                        <div
-                          key={app.id || app.Id}
-                          className="activity-item-premium"
-                        >
-                          <div className="icon-box">
-                            <CheckCircleIcon />
-                          </div>
-                          <div className="content">
-                            <p>
-                              Applied to{' '}
-                              <strong>{app.grantName || 'Grant'}</strong>
-                            </p>
-                            <span>
-                              {app.createdAt
-                                ? new Date(app.createdAt).toLocaleDateString()
-                                : 'Recently'}
-                            </span>
-                          </div>
-                          <div className={`status-tag ${statusStr}`}>
-                            {app.status || 'Pending'}
-                          </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <p className="empty">No recent activity found.</p>
-                  )}
-                </div>
-              </section>
-            </div>
+            <DashboardHomeContent
+              nextGala={nextGala}
+              totalApps={totalApps}
+              pendingApps={pendingApps}
+              approvedApps={approvedApps}
+              applications={applications}
+              t={t}
+            />
           ) : (
-            <Outlet />
+            <Outlet
+              context={{
+                profile,
+                profileLoading,
+                profileError,
+              }}
+            />
           )}
         </div>
       </main>
@@ -377,28 +334,28 @@ export default function Dashboard() {
           className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''
             }`}
         >
-          <HomeIcon /> <span>Home</span>
+          <FontAwesomeIcon icon={faHome} /> <span>{t('dashboard.mobile.home')}</span>
         </Link>
         <Link
           to="/dashboard/galas"
           className={`nav-item ${location.pathname.includes('/dashboard/galas') ? 'active' : ''
             }`}
         >
-          <CalendarIcon /> <span>Galas</span>
+          <FontAwesomeIcon icon={faCalendarDays} /> <span>{t('dashboard.mobile.galas')}</span>
         </Link>
         <Link
           to="/dashboard/grants"
           className={`nav-item ${location.pathname.includes('/dashboard/grants') ? 'active' : ''
             }`}
         >
-          <TrophyIcon /> <span>Grants</span>
+          <FontAwesomeIcon icon={faTrophy} /> <span>{t('dashboard.mobile.grants')}</span>
         </Link>
         <Link
           to="/dashboard/profile"
           className={`nav-item ${location.pathname.includes('/dashboard/profile') ? 'active' : ''
             }`}
         >
-          <UserIcon /> <span>Profile</span>
+          <FontAwesomeIcon icon={faUser} /> <span>{t('dashboard.mobile.profile')}</span>
         </Link>
       </nav>
     </div>

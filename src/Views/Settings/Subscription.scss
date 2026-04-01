@@ -1,0 +1,233 @@
+@import "../../Shared/Colors.scss";
+
+.subscription-banner {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1.5px dashed $borderColor;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  .sb-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba($primaryGreen, 0.1);
+    color: $primaryGreen;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  .sb-content {
+    h4 {
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: $primaryText;
+      margin-bottom: 4px;
+    }
+    p {
+      font-size: 0.875rem;
+      color: $secondaryText;
+      line-height: 1.5;
+    }
+  }
+
+  .btn-subscribe {
+    background: $primaryGreen;
+    color: $primaryWhite;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba($primaryGreen, 0.2);
+
+    &:hover {
+      background: darken($primaryGreen, 5%);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+.subscription-details-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding-bottom: 60px;
+}
+
+.plan-highlight-card {
+  background: #f0fdf4;
+  border: 1px solid rgba($primaryGreen, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+
+  .ph-left {
+    .label {
+      font-size: 0.8125rem;
+      color: $primaryGreen;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: $primaryGreen;
+    }
+  }
+
+  .ph-right {
+    font-size: 0.8125rem;
+    color: $primaryGreen;
+    font-weight: 600;
+  }
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+
+  .info-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+
+    .ii-icon {
+      width: 36px;
+      height: 36px;
+      background: $primaryWhite;
+      border: 1px solid $borderColorLight;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $primaryGreen;
+      flex-shrink: 0;
+    }
+
+    .ii-text {
+      .label {
+        font-size: 0.75rem;
+        color: $placeholderColor;
+        display: block;
+        margin-bottom: 2px;
+      }
+      .val {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: $primaryText;
+      }
+    }
+  }
+}
+
+.benefits-section {
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: $primaryText;
+    margin-bottom: 16px;
+  }
+
+  .benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .benefit-item {
+      background: $primaryWhite;
+      border: 1px solid $borderColorLight;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .bi-icon {
+        width: 40px;
+        height: 40px;
+        background: $secondaryGreen;
+        color: $primaryGreen;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .bi-text {
+        h5 {
+          font-size: 0.9375rem;
+          font-weight: 700;
+          color: $primaryText;
+          margin-bottom: 2px;
+        }
+        p {
+          font-size: 0.8125rem;
+          color: $placeholderColor;
+        }
+      }
+    }
+  }
+}
+
+.cancel-notice {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 32px 0 16px;
+  display: flex;
+  gap: 12px;
+
+  svg {
+    color: #f97316;
+    margin-top: 2px;
+  }
+
+  .cn-text {
+    h5 {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: #9a3412;
+      margin-bottom: 4px;
+    }
+    p {
+      font-size: 0.8125rem;
+      color: #c2410c;
+    }
+  }
+}
+
+.btn-cancel-membership {
+  width: 100%;
+  background: #ef4444;
+  color: $primaryWhite;
+  border: none;
+  padding: 16px;
+  border-radius: 16px;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+
+  &:hover {
+    background: darken(#ef4444, 5%);
+    transform: translateY(-1px);
+  }
+}

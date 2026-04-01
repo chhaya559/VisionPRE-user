@@ -5,6 +5,7 @@ import {
   useGetGalaByIdQuery,
   useApplyGrantMutation,
 } from '../../Services/Api/module/GalaApi';
+import { BASE_URL } from '../../Services/Api/Constants';
 import { useUploadFileMutation } from '../../Services/Api/module/UserApi';
 import { useDropzone } from 'react-dropzone';
 import './GrantApplication.scss';
@@ -127,16 +128,8 @@ export default function GrantApplication() {
 
   if (isFetching) {
     return (
-      <div
-        className="grant-app-container"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-        }}
-      >
-        <div style={{ color: '#94A3B8' }}>{t('grants.application.loading')}</div>
+      <div className="grant-app-container grant-app-state loading">
+        <div className="grant-app-message">{t('grants.application.loading')}</div>
       </div>
     );
   }
@@ -148,14 +141,10 @@ export default function GrantApplication() {
 
   if (!galaData || !grant) {
     return (
-      <div
-        className="grant-app-container"
-        style={{ padding: '2rem', textAlign: 'center' }}
-      >
-        <h2 style={{ color: '#EF4444' }}>{t('grants.application.notFound')}</h2>
+      <div className="grant-app-container grant-app-state error">
+        <h2 className="grant-app-error-title">{t('grants.application.notFound')}</h2>
         <button
-          className="btn-continue"
-          style={{ marginTop: '1rem', width: 'auto', padding: '10px 20px' }}
+          className="btn-continue grant-app-back-btn"
           onClick={() => navigate(-1)}
         >
           {t('grants.application.goBack')}
@@ -181,8 +170,7 @@ export default function GrantApplication() {
     if (!url) return null;
     if (url.startsWith('http')) return url;
     // Assuming relative paths should be prepended with the base origin
-    const base = 'https://incautious-diddly-ermelinda.ngrok-free.dev';
-    return `${base}${url.startsWith('/') ? '' : '/'}${url}`;
+    return `${BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -214,23 +202,10 @@ export default function GrantApplication() {
 
   if (isSuccess) {
     return (
-      <div
-        className="grant-app-container"
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-          textAlign: 'center',
-        }}
-      >
-        <FontAwesomeIcon
-          icon={faCheckCircle}
-          style={{ fontSize: '4rem', color: '#22C55E', marginBottom: '1.5rem' }}
-        />
+      <div className="grant-app-container grant-app-state success">
+        <FontAwesomeIcon icon={faCheckCircle} className="grant-app-success-icon" />
         <h2>{t('grants.application.submitted')}</h2>
-        <p style={{ color: '#64748B', marginTop: '0.5rem' }}>
+        <p className="grant-app-success-copy">
           {t('grants.application.redirecting')}
         </p>
       </div>
@@ -242,10 +217,7 @@ export default function GrantApplication() {
       <header className="grant-app-header">
         <div className="header-shell">
           <div className="back-link" onClick={() => navigate(-1)}>
-            <FontAwesomeIcon
-              icon={faChevronLeft}
-              style={{ marginRight: '8px' }}
-            />
+            <FontAwesomeIcon icon={faChevronLeft} />
             {t('grants.application.back')}
           </div>
           <h1>{t('grants.application.title')}</h1>
@@ -326,7 +298,7 @@ export default function GrantApplication() {
               {t('grants.application.month')}
               <FontAwesomeIcon
                 icon={faChevronLeft}
-                style={{ transform: 'rotate(180deg)' }}
+                className="cal-next-icon"
               />
             </div>
             <div className="cal-grid">
@@ -352,13 +324,7 @@ export default function GrantApplication() {
             </div>
           </div>
 
-          <p
-            style={{
-              fontSize: '0.875rem',
-              fontWeight: 700,
-              marginBottom: '12px',
-            }}
-          >
+          <p className="time-slots-label">
             {t('grants.application.chooseTime')}
           </p>
           <div className="time-slots">
@@ -403,7 +369,7 @@ export default function GrantApplication() {
               <>
                 <FontAwesomeIcon
                   icon={faPaperPlane}
-                  style={{ marginRight: '8px' }}
+                  className="submit-icon"
                 />
                 {t('grants.application.submit')}
               </>

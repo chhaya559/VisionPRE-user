@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './Settings.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 export default function PrivacyPolicy() {
   const navigate = useNavigate();
-  const { t } = useTranslation('terms');
+  const { t } = useTranslation('settings');
 
   return (
     <div className="edit-profile-container">
@@ -12,62 +14,48 @@ export default function PrivacyPolicy() {
         <button
           className="back-btn"
           onClick={() => navigate(-1)}
-          style={{ position: 'static', marginBottom: '16px', padding: 0 }}
         >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            width="20"
-            height="20"
-          >
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-          Back
+          <FontAwesomeIcon icon={faChevronLeft} />
+          {t('privacy.back')}
         </button>
         <div className="header-info">
-          <h1>Privacy Policy</h1>
-          <p>Last updated: March 2024</p>
+          <h1>{t('privacy.title')}</h1>
+          <p>{t('privacy.lastUpdated')}</p>
         </div>
       </header>
 
       <div className="settings-card">
         <div className="policy-card">
-          <h2>Vision PME Privacy Policy</h2>
+          <h2>{t('privacy.content')}</h2>
 
           <div className="policy-section">
-            <h3>{t('information')}</h3>
-            <p>{t('information_str')}</p>
+            <h3>{t('privacy.information')}</h3>
+            <p>{t('privacy.information_str')}</p>
           </div>
 
           <div className="policy-section">
-            <h3>{t('use_info')}</h3>
-            <p>{t('use_infoStr')}</p>
+            <h3>{t('privacy.use_info')}</h3>
+            <p>{t('privacy.use_infoStr')}</p>
           </div>
 
           <div className="policy-section">
-            <h3>{t('sharing')}</h3>
-            <p>{t('sharing_str')}</p>
+            <h3>{t('privacy.sharing')}</h3>
+            <p>{t('privacy.sharing_str')}</p>
           </div>
 
           <div className="policy-section">
-            <h3>{t('security')}</h3>
-            <p>{t('security_str')}</p>
+            <h3>{t('privacy.security')}</h3>
+            <p>{t('privacy.security_str')}</p>
           </div>
 
           <div className="policy-section">
-            <h3>{t('rights')}</h3>
-            <p>{t('rights_str')}</p>
+            <h3>{t('privacy.rights')}</h3>
+            <p>{t('privacy.rights_str')}</p>
           </div>
         </div>
 
-        <button
-          className="btn-save"
-          onClick={() => navigate(-1)}
-          style={{ marginTop: '40px' }}
-        >
-          I Understand
+        <button className="btn-save policy-action" onClick={() => navigate(-1)}>
+          {t('privacy.understand')}
         </button>
       </div>
     </div>
