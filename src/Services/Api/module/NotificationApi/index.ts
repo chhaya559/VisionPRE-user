@@ -25,12 +25,12 @@ export const NotificationApi = api.injectEndpoints({
 
         const listTags = Array.isArray(items)
           ? items
-              .map((item: any) => item?.id || item?.Id || item?._id)
-              .filter(Boolean)
-              .map((id: string | number) => ({
-                type: 'Notification' as const,
-                id,
-              }))
+            .map((item: any) => item?.id || item?.Id || item?._id)
+            .filter(Boolean)
+            .map((id: string | number) => ({
+              type: 'Notification' as const,
+              id,
+            }))
           : [];
 
         return [{ type: 'Notification' as const, id: 'LIST' }, ...listTags];
@@ -65,6 +65,12 @@ export const NotificationApi = api.injectEndpoints({
         { type: 'Notification', id: 'LIST' },
       ],
     }),
+    getAnnouncements: builder.query({
+      query: () => ({
+        url: "/users/announcements",
+        method: "GET"
+      })
+    }),
     readAllNotification: builder.mutation({
       query: () => ({
         url: '/notifications/read-all',
@@ -84,4 +90,5 @@ export const {
   useLazyGetNotificationByIdQuery,
   useReadAllNotificationMutation,
   useReadNotificationByIdMutation,
+  useGetAnnouncementsQuery
 } = NotificationApi;

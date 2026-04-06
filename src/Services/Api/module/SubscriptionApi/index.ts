@@ -1,18 +1,26 @@
 import api from '../../api';
+import { SubscriptionPlan, SubscriptionStatus, SubscriptionBillingCycle } from '../../../../Shared/SubscriptionEnums';
 
 export interface SubscriptionResponse {
-    planName: string;
-    planType: string;
-    price: string;
-    nextBilling: string;
-    startDate: string;
-    paymentMethod: string;
-    status: string;
+    planName: SubscriptionPlan;
+    status: SubscriptionStatus;
+    billingCycle: SubscriptionBillingCycle;
+    autoPayEnabled: boolean;
+    expiryDate: string | null;
+    isTrial: boolean;
+    trialEndsAt: string | null;
     transactionHash?: string;
+    // These might be removed if the API strictly follows the sample, 
+    // but keeping them optional for backward compatibility or future use.
+    planType?: string;
+    price?: string;
+    nextBilling?: string;
+    startDate?: string;
+    paymentMethod?: string;
 }
 
 export interface SubscribePayload {
-    Plan: string;
+    Plan: number;
     BillingCycle: number;
     AutoPayEnabled: boolean;
     TransactionHash: string;

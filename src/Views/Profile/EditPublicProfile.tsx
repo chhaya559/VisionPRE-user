@@ -15,6 +15,7 @@ import {
   useGetProfileQuery,
 } from '../../Services/Api/module/UserApi';
 import { useTranslation } from 'react-i18next';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import { toast } from 'react-toastify';
 
 export default function EditPublicProfile() {
@@ -69,8 +70,43 @@ export default function EditPublicProfile() {
     }
   }, [apiResponse]);
 
-  if (isLoading)
-    return <div className="edit-profile-container edit-profile-loading">{t('editPublic.loading')}</div>;
+  if (isLoading) {
+    return (
+      <div className="edit-profile-container loading-skeleton">
+        <header className="edit-profile-header">
+          <Skeleton variant="text" width="80px" height="24px" />
+          <div className="avatar-edit" style={{ marginTop: '20px' }}>
+            <Skeleton variant="circular" width="80px" height="80px" />
+          </div>
+          <Skeleton variant="text" width="120px" style={{ marginTop: '12px' }} />
+        </header>
+
+        <div className="edit-profile-form" style={{ padding: '20px' }}>
+          <div className="section mb-8">
+            <Skeleton variant="text" width="200px" height="28px" className="mb-6" />
+            <div className="form-grid">
+              <Skeleton variant="text" width="100px" className="mb-2" />
+              <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+                <Skeleton variant="rounded" height="40px" style={{ flex: 1 }} />
+                <Skeleton variant="rounded" height="40px" style={{ flex: 1 }} />
+              </div>
+              <Skeleton variant="text" width="100px" className="mb-2" />
+              <Skeleton variant="rounded" height="40px" />
+            </div>
+          </div>
+
+          <div className="section">
+            <Skeleton variant="text" width="200px" height="28px" className="mb-6" />
+            <div className="form-grid">
+              <Skeleton variant="rounded" height="40px" className="mb-4" />
+              <Skeleton variant="rounded" height="40px" className="mb-4" />
+              <Skeleton variant="rounded" height="100px" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const displayName = formData.firstName || t('editPublic.user');
   const initialLetter = displayName.charAt(0).toUpperCase();

@@ -22,6 +22,8 @@ import {
   isGrantApprovedStatus,
   isGrantPendingStatus,
 } from '../../Shared/GrantApplicationStatus';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+import ListSkeleton from '../../Shared/Components/Skeleton/ListSkeleton';
 
 export default function GrantsList() {
   const navigate = useNavigate();
@@ -74,8 +76,37 @@ export default function GrantsList() {
 
   if (isLoading) {
     return (
-      <div className="grants-hub-view loading">
-        <div className="spinner">{t('grants.list.loading')}</div>
+      <div className="grants-hub-view loading-skeleton">
+        <header className="view-header">
+          <div className="header-content">
+            <Skeleton variant="text" width="250px" height="40px" />
+            <Skeleton variant="text" width="350px" height="20px" />
+          </div>
+          <Skeleton variant="rounded" width="180px" height="48px" />
+        </header>
+
+        <section className="status-section">
+          <Skeleton variant="text" width="150px" height="28px" className="mb-4" />
+          <div className="status-cards-grid">
+            <Skeleton variant="rounded" height="100px" />
+            <Skeleton variant="rounded" height="100px" />
+            <Skeleton variant="rounded" height="100px" />
+          </div>
+        </section>
+
+        <section className="upcoming-galas-section" style={{ marginTop: '40px' }}>
+          <Skeleton variant="text" width="200px" height="28px" className="mb-4" />
+          <div className="gala-group-card" style={{ padding: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+              <div>
+                <Skeleton variant="text" width="180px" height="24px" />
+                <Skeleton variant="text" width="120px" />
+              </div>
+              <Skeleton variant="circular" width="32px" height="32px" />
+            </div>
+            <ListSkeleton count={2} />
+          </div>
+        </section>
       </div>
     );
   }

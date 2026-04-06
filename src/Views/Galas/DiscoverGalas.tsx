@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetGalasQuery } from '../../Services/Api/module/GalaApi';
 import './Galas.scss';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+import GalaCardSkeleton from '../../Shared/Components/Skeleton/GalaCardSkeleton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendar,
@@ -31,14 +33,30 @@ export default function DiscoverGalas() {
 
   if (isLoading) {
     return (
-      <div className="galas-container">
+      <div className="galas-container loading-skeleton">
         <header className="galas-header">
-          <h1>{t('galas.discover.title')}</h1>
-          <p>{t('galas.discover.subtitle')}</p>
+          <Skeleton variant="text" width="120px" height="16px" className="mb-2" />
+          <Skeleton variant="text" width="300px" height="48px" className="mb-4" />
+          <Skeleton variant="text" width="500px" height="24px" />
         </header>
-        <div className="galas-feedback loading">
-          {t('galas.discover.loading')}
+        
+        <div className="galas-filters-bar mb-8">
+          <div className="galas-filters" style={{ display: 'flex', gap: '12px' }}>
+            <Skeleton variant="rounded" width="80px" height="36px" />
+            <Skeleton variant="rounded" width="100px" height="36px" />
+            <Skeleton variant="rounded" width="120px" height="36px" />
+            <Skeleton variant="rounded" width="90px" height="36px" />
+          </div>
         </div>
+
+        <section className="galas-section" style={{ marginTop: '40px' }}>
+          <Skeleton variant="text" width="200px" height="32px" className="mb-6" />
+          <div className="galas-grid-skeleton" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
+            <GalaCardSkeleton />
+            <GalaCardSkeleton />
+            <GalaCardSkeleton />
+          </div>
+        </section>
       </div>
     );
   }

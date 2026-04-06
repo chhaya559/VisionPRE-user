@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { ethers } from 'ethers';
 import GrantPlatformABI from '../../GrantPlatformProxy.json';
+import { ERC20_ABI } from '../Shared/ContractABIs';
 
 interface WalletContextType {
   account: string | null;
@@ -10,6 +11,7 @@ interface WalletContextType {
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
   getContract: () => Promise<ethers.Contract | null>;
+  getTokenContract: (tokenAddress: string) => Promise<ethers.Contract | null>;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -20,7 +22,6 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [error, setError] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
 
-  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS || '0x0000000000000000000000000000000000000000';
 
   const checkIfWalletIsConnected = useCallback(async () => {
     const { ethereum } = window as any;
@@ -69,9 +70,28 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const { ethereum } = window as any;
     if (!ethereum || !account) return null;
 
+    // Use a mapping for the contract address if needed across multiple networks
+    const CONTRACT_MAP: Record<string, string> = {
+      '0x1': import.meta.env.VITE_CONTRACT_ADDRESS, // Use .env default for Mainnet
+      '0x89': '0x0C79C1983ea9C14CfbA5d9A2975695a0EEB73582', // User specified for Polygon
+      '0x13881': '0x0C79C1983ea9C14CfbA5d9A2975695a0EEB73582', // Mumbai
+      '0x13882': '0x0C79C1983ea9C14CfbA5d9A2975695a0EEB73582', // Amoy
+    };
+
+    const activeAddress = CONTRACT_MAP[chainId || ''] || import.meta.env.VITE_CONTRACT_ADDRESS;
+
     const provider = new ethers.BrowserProvider(ethereum);
     const signer = await provider.getSigner();
-    return new ethers.Contract(contractAddress, GrantPlatformABI.abi, signer);
+    return new ethers.Contract(activeAddress, GrantPlatformABI.abi, signer);
+  };
+
+  const getTokenContract = async (tokenAddress: string) => {
+    const { ethereum } = window as any;
+    if (!ethereum || !account) return null;
+
+    const provider = new ethers.BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
+    return new ethers.Contract(tokenAddress, ERC20_ABI, signer);
   };
 
   useEffect(() => {
@@ -104,6 +124,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         connectWallet,
         disconnectWallet,
         getContract,
+        getTokenContract,
       }}
     >
       {children}

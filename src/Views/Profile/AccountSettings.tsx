@@ -21,7 +21,9 @@ import { useLogoutMutation } from '../../Services/Api/module/AuthApi';
 import type { RootState } from '../../Store';
 import { useGetSubscriptionQuery } from '../../Services/Api/module/SubscriptionApi';
 import SubscriptionBanner from '../../Views/Settings/SubscriptionBanner';
+import { SubscriptionPlan, SubscriptionStatus, SubscriptionBillingCycle } from '../../Shared/SubscriptionEnums';
 import { useTranslation } from 'react-i18next';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import './ProfileEdits.scss';
 import '../Settings/Subscription.scss';
 
@@ -58,8 +60,14 @@ export default function AccountSettings() {
   };
 
   const { t } = useTranslation('settings');
-  const { data: subscription, isLoading: isSubscriptionLoading } = useGetSubscriptionQuery(undefined);
-  console.log(subscription, "subscription status");
+  const { data: subscriptionResponse, isLoading: isSubscriptionLoading } = useGetSubscriptionQuery(undefined);
+  const subscription = subscriptionResponse?.data || subscriptionResponse;
+
+  const isActive = subscription?.status === SubscriptionStatus.Active;
+  const planName = subscription?.planName === SubscriptionPlan.Pro ? t('subscription.plans.pro') : t('subscription.plans.free');
+  const planType = subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? t('subscription.billing.yearly') : t('subscription.billing.monthly');
+  const price = subscription?.price || (subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? '99.00' : '9.99');
+  const nextBilling = subscription?.expiryDate ? new Date(subscription.expiryDate).toLocaleDateString() : t('accountSettings.billingDate');
 
   return (
     <div className="account-settings-page">
@@ -80,10 +88,20 @@ export default function AccountSettings() {
         <div className="account-settings-grid">
           <div className="account-settings-main">
             {isSubscriptionLoading ? (
-              <div className="premium-card loading">
-                <p>{t('subscription.loading')}</p>
+              <div className="premium-card loading-skeleton" style={{ padding: '24px' }}>
+                <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+                  <Skeleton variant="circular" width="48px" height="48px" />
+                  <div style={{ flex: 1 }}>
+                    <Skeleton variant="text" width="120px" height="24px" className="mb-2" />
+                    <Skeleton variant="text" width="80px" />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Skeleton variant="text" width="100px" />
+                  <Skeleton variant="text" width="100px" />
+                </div>
               </div>
-            ) : subscription?.data?.status ? (
+            ) : isActive ? (
               <div className="premium-card">
                 <div className="pc-header">
                   <div className="pc-main">
@@ -91,20 +109,22 @@ export default function AccountSettings() {
                       <FontAwesomeIcon icon={faCrown} />
                     </div>
                     <div className="pc-text">
-                      <h4>{subscription.data.planName || t('accountSettings.premiumMember')}</h4>
-                      <p>{subscription.data.planType || t('accountSettings.annualPlan')}</p>
+                      <h4>{planName}</h4>
+                      <p>{planType}</p>
                     </div>
                   </div>
-                  <div className="pc-badge">{t('accountSettings.active')}</div>
+                  <div className={`pc-badge ${!isActive ? 'pc-badge--inactive' : ''}`}>
+                    {isActive ? t('accountSettings.active') : t('subscription.status.inactive')}
+                  </div>
                 </div>
                 <div className="pc-meta">
                   <div className="meta-item">
                     <span className="label">{t('accountSettings.nextBilling')}</span>
-                    <span className="val">{subscription.data.nextBilling || t('accountSettings.billingDate')}</span>
+                    <span className="val">{nextBilling}</span>
                   </div>
                   <div className="meta-item right">
                     <span className="label">{t('accountSettings.amount')}</span>
-                    <span className="val">${subscription.data.price || '99.00'}/year</span>
+                    <span className="val">${price}/{subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? t('subscription.yearlyValue') : t('subscription.monthlyValue')}</span>
                   </div>
                 </div>
                 <button

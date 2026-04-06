@@ -18,8 +18,8 @@ export default function StepDescribe() {
   const schema = yup.object().shape({
     businessDescription: yup
       .string()
-      .required(t('describe_required', 'Please describe your business'))
-      .min(10, t('describe_min', 'Description must be at least 10 characters')),
+      .required(t('describe_required'))
+      .min(10, t('describe_min')),
   });
 
   const navigate = useNavigate();

@@ -349,12 +349,20 @@
         align-items: center;
         justify-content: center;
         svg { width: 20px; color: $primaryGreen; }
+
+        &.announcement-icon {
+          background: rgba($orangeText, 0.1);
+          svg { color: $orangeText; }
+        }
       }
 
       .content {
         flex: 1;
         p { margin: 0 0 4px; font-size: 15px; font-weight: 600; color: $primaryText; }
         span { font-size: 13px; color: $secondaryText; font-weight: 500; }
+        
+        .ann-date { display: block; margin-bottom: 4px; }
+        .ann-desc { font-size: 13px; font-weight: 400; color: $secondaryText; margin-top: 4px; line-height: 1.4; }
       }
 
       .status-tag {

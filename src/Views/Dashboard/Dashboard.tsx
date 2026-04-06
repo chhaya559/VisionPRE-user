@@ -18,7 +18,7 @@ import {
   useGetGalasQuery,
   useGetMyApplicationsQuery,
 } from '../../Services/Api/module/GalaApi';
-import { useGetNotificationsQuery } from '../../Services/Api/module/NotificationApi';
+import { useGetNotificationsQuery, useGetAnnouncementsQuery } from '../../Services/Api/module/NotificationApi';
 import { useWalletContext } from '../../Context/WalletContext';
 import {
   getGrantApplicationStatusLabel,
@@ -26,6 +26,8 @@ import {
   isGrantApprovedStatus,
   isGrantPendingStatus,
 } from '../../Shared/GrantApplicationStatus';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+import ListSkeleton from '../../Shared/Components/Skeleton/ListSkeleton';
 
 export type DashboardOutletContext = {
   profile: any;
@@ -39,14 +41,18 @@ function DashboardHomeContent({
   pendingApps,
   approvedApps,
   applications,
+  announcements,
   t,
+  isLoading,
 }: Readonly<{
   nextGala: any;
   totalApps: number;
   pendingApps: number;
   approvedApps: number;
   applications: any[];
+  announcements: any[];
   t: any;
+  isLoading?: boolean;
 }>) {
   const getLocalizedStatus = (app: any) => {
     const statusLabel = getGrantApplicationStatusLabel(
@@ -71,7 +77,17 @@ function DashboardHomeContent({
 
   return (
     <div className="dashboard-main-column">
-      {nextGala ? (
+      {isLoading ? (
+        <div className="hero-card gala-card-premium skeleton-wrapper">
+          <Skeleton variant="rounded" width="100px" height="24px" className="mb-4" />
+          <Skeleton variant="text" width="80%" height="40px" className="mb-4" />
+          <div style={{ display: 'flex', gap: '20px' }}>
+            <Skeleton variant="text" width="120px" />
+            <Skeleton variant="text" width="120px" />
+          </div>
+          <Skeleton variant="rounded" width="150px" height="40px" style={{ marginTop: '20px' }} />
+        </div>
+      ) : nextGala ? (
         <div className="hero-card gala-card-premium">
           <div className="gala-badge">✨ {t('dashboard.nextGala')}</div>
           <h1 className="gala-title">{nextGala.name}</h1>
@@ -101,15 +117,46 @@ function DashboardHomeContent({
       <section className="status-section-modern">
         <div className="status-item apps">
           <div className="label">{t('dashboard.applications')}</div>
-          <div className="value">{totalApps}</div>
+          <div className="value">{isLoading ? <Skeleton width="40px" height="32px" /> : totalApps}</div>
         </div>
         <div className="status-item pending">
           <div className="label">{t('dashboard.pending')}</div>
-          <div className="value">{pendingApps}</div>
+          <div className="value">{isLoading ? <Skeleton width="40px" height="32px" /> : pendingApps}</div>
         </div>
         <div className="status-item approved">
           <div className="label">{t('dashboard.approved')}</div>
-          <div className="value">{approvedApps}</div>
+          <div className="value">{isLoading ? <Skeleton width="40px" height="32px" /> : approvedApps}</div>
+        </div>
+      </section>
+
+      <section className="recent-activity-modern announcements-section">
+        <div className="section-header">
+          <h3>Recent Announcements</h3>
+          <Link to="/dashboard/notifications">See All</Link>
+        </div>
+        <div className="activity-list-modern">
+          {isLoading ? (
+            <ListSkeleton count={3} />
+          ) : announcements.length > 0 ? (
+            announcements.slice(0, 3).map((ann: any) => (
+              <div key={ann.id || ann.Id} className="activity-item-premium announcement-item">
+                <div className="icon-box announcement-icon">
+                  <FontAwesomeIcon icon={faBell} />
+                </div>
+                <div className="content">
+                  <p>{ann.title || ann.Title}</p>
+                  <span className="ann-date">
+                    {ann.createdAt || ann.CreatedAt 
+                      ? new Date(ann.createdAt || ann.CreatedAt).toLocaleDateString() 
+                      : 'Recently'}
+                  </span>
+                  <p className="ann-desc">{ann.description || ann.Description}</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="empty">No recent announcements</p>
+          )}
         </div>
       </section>
 
@@ -119,7 +166,9 @@ function DashboardHomeContent({
           <Link to="/dashboard/grants">{t('dashboard.seeAll')}</Link>
         </div>
         <div className="activity-list-modern">
-          {applications.length > 0 ? (
+          {isLoading ? (
+            <ListSkeleton count={3} />
+          ) : applications.length > 0 ? (
             applications.slice(0, 3).map((app: any) => {
               const status = getLocalizedStatus(app);
               return (
@@ -164,13 +213,18 @@ export default function Dashboard() {
     isLoading: profileLoading,
     error: profileError,
   } = useGetProfileQuery(undefined);
-  const { data: galasResponse } = useGetGalasQuery({});
-  const { data: appsResponse } = useGetMyApplicationsQuery({});
+  const { data: galasResponse, isLoading: galasLoading } = useGetGalasQuery({});
+  const { data: appsResponse, isLoading: appsLoading } = useGetMyApplicationsQuery({});
   const { data: notificationsResponse } = useGetNotificationsQuery({});
+  const { data: announcementsResponse, isLoading: announcementsLoading } = useGetAnnouncementsQuery(undefined);
+  
+  const isAnyLoading = profileLoading || galasLoading || appsLoading || announcementsLoading;
+
   const profile = profileResponse?.data;
   const galas = galasResponse?.data.items ?? [];
   const applications = appsResponse?.data ?? [];
   const notifications = notificationsResponse?.data ?? [];
+  const announcements = announcementsResponse?.data || announcementsResponse || [];
   const unreadNotifications = notifications.filter((item: any) => !item.isRead).length;
 
   // Find Next Gala (soonest upcoming)
@@ -313,7 +367,9 @@ export default function Dashboard() {
               pendingApps={pendingApps}
               approvedApps={approvedApps}
               applications={applications}
+              announcements={announcements}
               t={t}
+              isLoading={isAnyLoading}
             />
           ) : (
             <Outlet

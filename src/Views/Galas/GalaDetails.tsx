@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetGalaByIdQuery } from '../../Services/Api/module/GalaApi';
 import './GalaDetails.scss';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
@@ -23,16 +24,48 @@ export default function GalaDetails() {
 
   if (isLoading) {
     return (
-      <div
-        className="gala-details-container"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-        }}
-      >
-        <div style={{ color: '#94A3B8' }}>{t('galas.details.loading')}</div>
+      <div className="gala-details-container loading-skeleton">
+        <div className="gala-details-shell">
+          <div className="hero-section" style={{ height: '400px', backgroundColor: '#f3f4f6' }}>
+            <div className="hero-nav" style={{ padding: '20px' }}>
+              <Skeleton variant="circular" width="40px" height="40px" />
+              <div className="right-actions" style={{ display: 'flex', gap: '12px' }}>
+                <Skeleton variant="circular" width="40px" height="40px" />
+                <Skeleton variant="circular" width="40px" height="40px" />
+              </div>
+            </div>
+            <div className="hero-content" style={{ padding: '0 40px 40px' }}>
+              <Skeleton variant="rounded" width="100px" height="24px" className="mb-4" />
+              <Skeleton variant="text" width="60%" height="48px" className="mb-4" />
+              <Skeleton variant="rounded" width="100%" height="60px" />
+            </div>
+          </div>
+
+          <div className="details-content" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '40px', padding: '40px' }}>
+            <div className="details-main">
+              <Skeleton variant="text" width="200px" height="32px" className="mb-6" />
+              <Skeleton variant="text" width="100%" />
+              <Skeleton variant="text" width="100%" />
+              <Skeleton variant="text" width="80%" className="mb-8" />
+
+              <div className="stats-cards" style={{ display: 'flex', gap: '20px', marginTop: '40px' }}>
+                <Skeleton variant="rounded" height="120px" style={{ flex: 1 }} />
+                <Skeleton variant="rounded" height="120px" style={{ flex: 1 }} />
+                <Skeleton variant="rounded" height="120px" style={{ flex: 1 }} />
+              </div>
+            </div>
+
+            <div className="details-sidebar">
+              <div className="info-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <Skeleton variant="rounded" height="70px" />
+                <Skeleton variant="rounded" height="70px" />
+                <Skeleton variant="rounded" height="70px" />
+                <Skeleton variant="rounded" height="70px" />
+              </div>
+              <Skeleton variant="rounded" width="100%" height="56px" style={{ marginTop: '32px' }} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

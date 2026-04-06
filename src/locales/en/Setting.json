@@ -249,7 +249,20 @@
     "cancelSuccess": "Subscription cancelled successfully.",
     "cancelError": "Failed to cancel subscription.",
     "connectWallet": "Please connect your wallet to cancel the subscription.",
-    "confirmCancel": "Are you sure you want to cancel your subscription? You will lose access to all premium features immediately."
+        "confirmCancel": "Are you sure you want to cancel your subscription? You will lose access to all premium features immediately.",
+    "plans": {
+      "free": "Free",
+      "pro": "Pro"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "billing": {
+      "none": "None",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    }
   },
   "subscriptionBanner": {
     "title": "Unlock Premium Features",

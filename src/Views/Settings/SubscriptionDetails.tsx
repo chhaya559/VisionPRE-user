@@ -10,27 +10,37 @@ import {
   faBolt,
   faBellSlash,
   faTriangleExclamation,
+  faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { useGetSubscriptionQuery, useCancelSubscriptionMutation } from '../../Services/Api/module/SubscriptionApi';
 import { useWallet } from '../../hooks/useWallet';
+import { SubscriptionPlan, SubscriptionStatus, SubscriptionBillingCycle } from '../../Shared/SubscriptionEnums';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import './Subscription.scss';
 
 export default function SubscriptionDetails() {
   const { t } = useTranslation('settings');
   const navigate = useNavigate();
   const { account } = useWallet();
-  const { data: subscription, isLoading } = useGetSubscriptionQuery(undefined);
+  const { data: subscriptionResponse, isLoading } = useGetSubscriptionQuery(undefined);
   const [cancelSubscription, { isLoading: isCancelling }] = useCancelSubscriptionMutation();
+
+  const subscription = subscriptionResponse?.data || subscriptionResponse;
 
   const handleCancel = async () => {
     if (!account) {
-      alert(t('subscription.connectWallet'));
+      toast.error(t('subscription.connectWallet'));
       return;
     }
 
     if (window.confirm(t('subscription.confirmCancel'))) {
-      const activeHash = subscription?.transactionHash || localStorage.getItem('active_subscription_hash') || ('0x' + 'f'.repeat(64));
+      const activeHash = subscription?.transactionHash;
+
+      if (!activeHash) {
+        toast.error(t('subscription.noTransactionFound'));
+        return;
+      }
 
       try {
         await cancelSubscription({
@@ -41,14 +51,62 @@ export default function SubscriptionDetails() {
         navigate(-1);
       } catch (err: any) {
         console.error('Cancellation error:', err);
-        toast.error(t('subscription.cancelError'), { position: 'top-right' });
       }
     }
   };
 
   if (isLoading) {
-    return <div className="loading">{t('subscription.loading')}</div>;
+    return (
+      <div className="subscription-details-page loading-skeleton">
+        <header className="account-settings-header">
+          <div className="header-inner">
+            <Skeleton variant="text" width="60px" height="24px" />
+            <div className="header-copy">
+              <Skeleton variant="text" width="200px" height="32px" className="mb-2" />
+              <Skeleton variant="text" width="300px" height="16px" />
+            </div>
+          </div>
+        </header>
+
+        <div className="account-settings-content" style={{ padding: '24px' }}>
+          <Skeleton variant="rounded" width="100px" height="24px" className="mb-6" />
+          <div className="plan-info-header mb-8">
+            <Skeleton variant="text" width="150px" height="32px" className="mb-2" />
+            <Skeleton variant="text" width="100px" />
+          </div>
+
+          <div className="plan-highlight-card mb-8">
+            <Skeleton variant="rectangular" height="80px" />
+          </div>
+
+          <div className="info-list mb-8">
+            <Skeleton variant="rounded" height="60px" className="mb-4" />
+            <Skeleton variant="rounded" height="60px" className="mb-4" />
+            <Skeleton variant="rounded" height="60px" />
+          </div>
+
+          <div className="benefits-section">
+            <Skeleton variant="text" width="150px" height="28px" className="mb-6" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <Skeleton variant="rounded" height="70px" />
+              <Skeleton variant="rounded" height="70px" />
+              <Skeleton variant="rounded" height="70px" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
+
+  const planName = subscription?.planName === SubscriptionPlan.Pro ? t('subscription.plans.pro') : t('subscription.plans.free');
+  const planType = subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? t('subscription.billing.yearly') : t('subscription.billing.monthly');
+  const statusLabel = subscription?.status === SubscriptionStatus.Active ? t('subscription.status.active') : t('subscription.status.inactive');
+  const isActive = subscription?.status === SubscriptionStatus.Active;
+  
+  const price = subscription?.price || (subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? '99.00' : '9.99');
+  const nextBilling = subscription?.expiryDate ? new Date(subscription.expiryDate).toLocaleDateString() : t('subscription.notAvailable');
+  const paymentMethod = subscription?.paymentMethod || t('subscription.wallet');
+  const startDate = subscription?.startDate ? new Date(subscription.startDate).toLocaleDateString() : t('subscription.notAvailable');
 
   return (
     <div className="subscription-details-page">
@@ -67,19 +125,19 @@ export default function SubscriptionDetails() {
 
       <div className="account-settings-content">
         <div className="account-settings-main">
-          <div className="pc-badge">
-            <FontAwesomeIcon icon={faCircleCheck} /> {t('subscription.active')}
+          <div className={`pc-badge ${!isActive ? 'pc-badge--inactive' : ''}`}>
+            <FontAwesomeIcon icon={isActive ? faCircleCheck : faCircleXmark} /> {statusLabel}
           </div>
 
           <div className="plan-info-header">
-            <h2>{subscription?.planName || 'Vision PME Passeport'}</h2>
-            <p>{subscription?.planType || 'Annual Subscription'}</p>
+            <h2>{planName}</h2>
+            <p>{planType}</p>
           </div>
 
           <div className="plan-highlight-card">
             <div className="ph-left">
               <span className="label">{t('subscription.currentPlan')}</span>
-              <span className="val">${subscription?.price || '150.00'}{t('subscription.yearly')}</span>
+              <span className="val">${price}{subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? t('subscription.yearly') : t('subscription.monthly')}</span>
             </div>
             <div className="ph-right">
               {t('subscription.savings')}
@@ -93,7 +151,7 @@ export default function SubscriptionDetails() {
               </div>
               <div className="ii-text">
                 <span className="label">{t('subscription.nextBilling')}</span>
-                <span className="val">{subscription?.nextBilling || 'February 28, 2025'}</span>
+                <span className="val">{nextBilling}</span>
               </div>
             </div>
             <div className="info-item">
@@ -102,7 +160,7 @@ export default function SubscriptionDetails() {
               </div>
               <div className="ii-text">
                 <span className="label">{t('subscription.paymentMethod')}</span>
-                <span className="val">{subscription?.paymentMethod || 'Visa **** 4242'}</span>
+                <span className="val">{paymentMethod}</span>
               </div>
             </div>
             <div className="info-item">
@@ -111,7 +169,7 @@ export default function SubscriptionDetails() {
               </div>
               <div className="ii-text">
                 <span className="label">{t('subscription.startedOn')}</span>
-                <span className="val">{subscription?.startDate || 'February 28, 2024'}</span>
+                <span className="val">{startDate}</span>
               </div>
             </div>
           </div>

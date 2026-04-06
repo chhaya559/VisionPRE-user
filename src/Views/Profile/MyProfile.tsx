@@ -45,13 +45,10 @@ export default function MyProfile() {
             <FontAwesomeIcon icon={faExclamationTriangle} />
           </div>
           <h2 className="my-profile-error-title">
-            {t('myProfile.error', 'Something went wrong')}
+            {t('myProfile.error')}
           </h2>
           <p className="my-profile-error-desc">
-            {t(
-              'myProfile.errorDescription',
-              "We couldn't load your profile. This might be due to a connection issue."
-            )}
+            {t('myProfile.errorDescription')}
           </p>
           <div className="my-profile-error-actions">
             <button
@@ -59,7 +56,7 @@ export default function MyProfile() {
               onClick={() => window.location.reload()}
             >
               <FontAwesomeIcon icon={faRedo} />
-              {t('myProfile.tryAgain', 'Try Again')}
+              {t('myProfile.tryAgain')}
             </button>
           </div>
         </div>
@@ -75,7 +72,7 @@ export default function MyProfile() {
   const bio =
     profileData.businessDescription ||
     profileData.BusinessDescription ||
-    t('myProfile.noBio', 'No bio available.');
+    t('myProfile.noBio');
   const initials = firstName.charAt(0).toUpperCase();
 
   return (

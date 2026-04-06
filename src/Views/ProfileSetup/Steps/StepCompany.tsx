@@ -18,7 +18,7 @@ export default function StepCompany() {
   const schema = yup.object().shape({
     companyName: yup
       .string()
-      .required(t('company_required', 'Company name is required')),
+      .required(t('company_required')),
   });
 
   const navigate = useNavigate();
