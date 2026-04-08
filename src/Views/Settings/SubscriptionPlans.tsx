@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -36,8 +37,9 @@ export default function SubscriptionPlans() {
     getTokenContract,
   } = useWalletContext();
   const { data: plansResponse, isLoading, error } = useGetPlansQuery(undefined);
-  const [subscribeMutation, { isLoading: isSubscribing }] =
-    useSubscribeMutation();
+  const [subscribeMutation] = useSubscribeMutation();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processStatus, setProcessStatus] = useState('');
   const plans = plansResponse?.data?.items || plansResponse?.data || [];
 
   const handleSubscribe = async (planId: string, e: React.MouseEvent) => {
@@ -75,9 +77,12 @@ export default function SubscriptionPlans() {
 
     try {
       // 1. Get Contract
+      setIsProcessing(true);
+      setProcessStatus(t('subscription.processing.initializing'));
       const contract = await getContract();
       if (!contract) {
         toast.error(t('subscription.contractError'));
+        setIsProcessing(false);
         return;
       }
 
@@ -107,17 +112,12 @@ export default function SubscriptionPlans() {
 
       const USDC_ADDRESS =
         USDC_MAP[chainId || ''] || '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359';
-      console.log(
-        'Using USDC Address:',
-        USDC_ADDRESS,
-        'for Chain ID:',
-        chainId
-      );
-
+      setProcessStatus(t('subscription.processing.checkingToken'));
       const tokenContract = await getTokenContract(USDC_ADDRESS);
 
       if (!tokenContract) {
         toast.error(t('subscription.errors.contractError'));
+        setIsProcessing(false);
         return;
       }
 
@@ -147,6 +147,7 @@ export default function SubscriptionPlans() {
         )} sUSD, Available: ${ethers.formatUnits(balance, decimals)} sUSD`;
         console.error(errorMsg);
         toast.error(errorMsg);
+        setIsProcessing(false);
         return;
       }
 
@@ -156,7 +157,7 @@ export default function SubscriptionPlans() {
 
       if (allowance < amountInUnits) {
         console.log('Requesting USDC Approval...');
-        toast.info(t('subscription.approving'));
+        setProcessStatus(t('subscription.processing.approving'));
         const approveTx = await tokenContract.approve(
           contractAddress,
           ethers.MaxUint256
@@ -164,7 +165,6 @@ export default function SubscriptionPlans() {
         console.log('Approval Transaction Sent:', approveTx.hash);
         await approveTx.wait();
         console.log('Approval Confirmed');
-        toast.success(t('subscription.approved'));
 
         // Add a small delay to ensure MetaMask is ready for the next popup
         console.log('Waiting 500ms for wallet readiness...');
@@ -173,11 +173,11 @@ export default function SubscriptionPlans() {
 
       // Step 2: Subscribe
       console.log('Requesting Subscription Signature for Plan ID:', planId);
-      toast.info(t('subscription.confirmInWallet'));
+      setProcessStatus(t('subscription.processing.confirming'));
       const tx = await contract.subscribe(planId);
       console.log('Subscription Transaction Sent:', tx.hash);
 
-      toast.info(t('subscription.processingTx'));
+      setProcessStatus(t('subscription.processing.processing'));
       const receipt = await tx.wait();
       const realHash = receipt.hash || tx.hash;
       console.log('Subscription Confirmed! Receipt:', receipt);
@@ -185,11 +185,7 @@ export default function SubscriptionPlans() {
       console.log('Transaction Confirmed:', realHash);
 
       // 3. Sync with Backend
-      console.log('Syncing subscription with backend...', {
-        planId,
-        transactionHash: realHash,
-      });
-
+      setProcessStatus(t('subscription.processing.syncing'));
       const response = await subscribeMutation({
         planId,
         autoPayEnabled: true,
@@ -200,14 +196,17 @@ export default function SubscriptionPlans() {
       if (response.success) {
         localStorage.setItem('active_subscription_hash', realHash);
         toast.success(response.message || t('subscription.success'));
+        setIsProcessing(false);
         navigate('/dashboard/profile/settings');
       } else {
         console.error('Backend subscription sync failed:', response);
         toast.error(
           response.message || 'Backend sync failed. Please contact support.'
         );
+        setIsProcessing(false);
       }
     } catch (err: any) {
+      setIsProcessing(false);
       console.group('Subscription Error Details');
       console.error('Error Object:', err);
       if (err?.data) console.error('Error Data:', err.data);
@@ -349,10 +348,10 @@ export default function SubscriptionPlans() {
                   <button
                     className="sp-plan-card__btn"
                     type="button"
-                    disabled={isSubscribing}
+                    disabled={isProcessing}
                     onClick={(e) => handleSubscribe(id, e)}
                   >
-                    {isSubscribing
+                    {isProcessing
                       ? t('accountSettings.updating')
                       : t('subscriptionPlans.subscribe')}
                   </button>
@@ -368,6 +367,28 @@ export default function SubscriptionPlans() {
           {t('subscriptionPlans.securePayment')}
         </p>
       </div>
+
+      {/* ── Processing Modal ── */}
+      {isProcessing && (
+        <div className="sp-overlay">
+          <div className="sp-overlay__content">
+            <div className="sp-overlay__loader">
+              <div className="sp-overlay__spinner" />
+              <div className="sp-overlay__crown-inner">
+                <FontAwesomeIcon icon={faCrown} />
+              </div>
+            </div>
+            <h2 className="sp-overlay__title">
+              {t('subscription.processing.title')}
+            </h2>
+            <p className="sp-overlay__text">{processStatus}</p>
+            <div className="sp-overlay__security">
+              <FontAwesomeIcon icon={faShield} />
+              <span>{t('subscription.processing.secureNote')}</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

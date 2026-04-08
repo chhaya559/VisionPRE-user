@@ -1,5 +1,4 @@
 import api from '../../api';
-import { Plan } from '../../../../Shared/Types';
 
 export interface SubscriptionResponse {
   planName: number;

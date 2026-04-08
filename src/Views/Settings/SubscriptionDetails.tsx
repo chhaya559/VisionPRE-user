@@ -57,7 +57,7 @@ export default function SubscriptionDetails() {
       // 3. Sync with Backend
       await cancelSubscription({
         transactionHash: txHash,
-        walletAddress: account,
+        walletAddress: account || '',
       }).unwrap();
 
       toast.success(t('subscription.cancelSuccess'));

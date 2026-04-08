@@ -10,7 +10,7 @@ export const NotificationApi = api.injectEndpoints({
         body,
       }),
     }),
-    getNotifications: builder.query({
+    getNotifications: builder.query<any, any>({
       query: () => ({
         url: '/notifications',
         method: 'GET',
@@ -67,7 +67,7 @@ export const NotificationApi = api.injectEndpoints({
         { type: 'Notification', id: 'LIST' },
       ],
     }),
-    getAnnouncements: builder.query({
+    getAnnouncements: builder.query<any, void>({
       query: () => ({
         url: '/users/announcements',
         method: 'GET',

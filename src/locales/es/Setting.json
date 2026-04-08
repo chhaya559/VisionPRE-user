@@ -271,6 +271,16 @@
       "active": "Activo",
       "inactive": "Inactivo"
     },
+    "processing": {
+      "title": "Compra en proceso",
+      "initializing": "Iniciando pasarela de pago...",
+      "checkingToken": "Comprobando compatibilidad de token...",
+      "approving": "Solicitando aprobación de gasto en tu billetera...",
+      "confirming": "Esperando confirmación de compra...",
+      "processing": "Verificando transacción en la blockchain...",
+      "syncing": "Finalizando tu acceso premium...",
+      "secureNote": "Tu conexión está cifrada y es segura"
+    },
     "billing": {
       "none": "Ninguno",
       "monthly": "Mensual",
