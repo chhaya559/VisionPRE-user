@@ -22,8 +22,6 @@ import {
   isGrantApprovedStatus,
   isGrantPendingStatus,
 } from '../../Shared/GrantApplicationStatus';
-import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
-import ListSkeleton from '../../Shared/Components/Skeleton/ListSkeleton';
 
 export default function GrantsList() {
   const navigate = useNavigate();
@@ -39,74 +37,59 @@ export default function GrantsList() {
   // Group applications by Gala
   const groupedApps = Array.isArray(applications)
     ? applications.reduce((acc: any, app: any) => {
-      const galaId = app.galaId || app.GalaId || 'unknown';
-      if (!acc[galaId]) acc[galaId] = [];
-      acc[galaId].push(app);
-      return acc;
-    }, {})
+        const galaId = app.galaId || app.GalaId || 'unknown';
+        if (!acc[galaId]) acc[galaId] = [];
+        acc[galaId].push(app);
+        return acc;
+      }, {})
     : {};
 
   // Stats
   const pendingCount = Array.isArray(applications)
-    ? applications.filter(
-      (a: any) => isGrantPendingStatus(getGrantApplicationStatusValue(a))
-    ).length
+    ? applications.filter((a: any) =>
+        isGrantPendingStatus(getGrantApplicationStatusValue(a))
+      ).length
     : 0;
   const approvedCount = Array.isArray(applications)
-    ? applications.filter(
-      (a: any) => isGrantApprovedStatus(getGrantApplicationStatusValue(a))
-    ).length
+    ? applications.filter((a: any) =>
+        isGrantApprovedStatus(getGrantApplicationStatusValue(a))
+      ).length
     : 0;
   const rejectedCount = Array.isArray(applications)
     ? applications.filter(
-      (a: any) =>
-        getGrantApplicationStatusValue(a) === GrantApplicationStatus.Rejected
-    ).length
+        (a: any) =>
+          getGrantApplicationStatusValue(a) === GrantApplicationStatus.Rejected
+      ).length
     : 0;
 
   const getStatusBadge = (status: any) => {
     const normalizedStatus = Number(status);
 
     if (isGrantApprovedStatus(normalizedStatus))
-      return <span className="status-badge approved">{t('grants.list.approved')}</span>;
+      return (
+        <span className="status-badge approved">
+          {t('grants.list.approved')}
+        </span>
+      );
     if (normalizedStatus === GrantApplicationStatus.Rejected)
-      return <span className="status-badge rejected">{t('grants.list.rejected')}</span>;
-    return <span className="status-badge pending">{t('grants.list.pending')}</span>;
+      return (
+        <span className="status-badge rejected">
+          {t('grants.list.rejected')}
+        </span>
+      );
+    return (
+      <span className="status-badge pending">{t('grants.list.pending')}</span>
+    );
   };
 
   if (isLoading) {
     return (
-      <div className="grants-hub-view loading-skeleton">
+      <div className="grants-hub-view loading-state">
         <header className="view-header">
           <div className="header-content">
-            <Skeleton variant="text" width="250px" height="40px" />
-            <Skeleton variant="text" width="350px" height="20px" />
+            <h1>Loading applications...</h1>
           </div>
-          <Skeleton variant="rounded" width="180px" height="48px" />
         </header>
-
-        <section className="status-section">
-          <Skeleton variant="text" width="150px" height="28px" className="mb-4" />
-          <div className="status-cards-grid">
-            <Skeleton variant="rounded" height="100px" />
-            <Skeleton variant="rounded" height="100px" />
-            <Skeleton variant="rounded" height="100px" />
-          </div>
-        </section>
-
-        <section className="upcoming-galas-section" style={{ marginTop: '40px' }}>
-          <Skeleton variant="text" width="200px" height="28px" className="mb-4" />
-          <div className="gala-group-card" style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <div>
-                <Skeleton variant="text" width="180px" height="24px" />
-                <Skeleton variant="text" width="120px" />
-              </div>
-              <Skeleton variant="circular" width="32px" height="32px" />
-            </div>
-            <ListSkeleton count={2} />
-          </div>
-        </section>
       </div>
     );
   }
@@ -119,6 +102,7 @@ export default function GrantsList() {
           <p>{t('grants.list.trackDescription')}</p>
         </div>
         <button
+          type="button"
           className="btn-discover"
           onClick={() => navigate('/dashboard/galas')}
         >
@@ -195,9 +179,9 @@ export default function GrantsList() {
                         {t('grants.list.on')}{' '}
                         {gala.eventDate
                           ? new Date(gala.eventDate).toLocaleDateString(
-                            'en-US',
-                            { month: 'long', day: 'numeric', year: 'numeric' }
-                          )
+                              'en-US',
+                              { month: 'long', day: 'numeric', year: 'numeric' }
+                            )
                           : t('grants.list.tbd')}
                       </span>
                     </div>

@@ -99,7 +99,12 @@
     "growBusiness": "Hacer crecer mi negocio",
     "attendGalas": "Asistir a galas",
     "saveChanges": "Guardar cambios",
-    "user": "Usuario"
+    "user": "Usuario",
+    "uploading": "Subiendo...",
+    "uploadSuccess": "¡Avatar subido!",
+    "uploadFailed": "Error al subir la imagen.",
+    "removePhoto": "Eliminar foto",
+    "updateSuccess": "¡Perfil actualizado con éxito!"
   },
   "myProfile": {
     "loading": "Cargando perfil...",
@@ -230,9 +235,6 @@
     "subDescription": "Administra tu membresía premium",
     "active": "ACTIVO",
     "currentPlan": "Plan actual",
-    "yearly": "/año",
-    "savings": "Ahorra un 30% vs mensual",
-    "nextBilling": "Próxima fecha de facturación",
     "paymentMethod": "Método de pago",
     "startedOn": "Iniciado el",
     "benefits": "Tus beneficios Premium",
@@ -244,12 +246,52 @@
     "adFreeDesc": "Sin interrupciones mientras trabajas",
     "thinkingCancel": "¿Pensando en cancelar?",
     "loseAccess": "Perderás el acceso a todas las funciones premium de inmediato.",
+    "noWallet": "Billetera no encontrada. Por favor, instala MetaMask.",
+    "contractError": "Fallo al conectar con el contrato.",
+    "checkingBalance": "Comprobando saldo de USDC...",
+    "insufficientBalance": "Saldo de USDC insuficiente para este plan.",
+    "checkingAllowance": "Comprobando autorización...",
+    "approving": "Aprobando USDC...",
+    "approved": "¡USDC aprobado con éxito!",
+    "confirmInWallet": "Por favor, confirma la transacción en tu billetera.",
+    "confirmCancelInWallet": "Por favor, confirma la cancelación en tu billetera.",
+    "processingTx": "Procesando transacción...",
+    "success": "¡Suscripción exitosa!",
+    "wrongNetwork": "Estás en la red incorrecta. Por favor, cambia a Sepolia o Ethereum Mainnet.",
+    "connectWallet": "Por favor, conecta tu billetera.",
+    "connectWalletPrompt": "Por favor, conecta tu billetera para proceder.",
+    "errors": {
+      "contractError": "Contrato de token no encontrado."
+    },
+    "plans": {
+      "free": "Gratis",
+      "pro": "Pro"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "billing": {
+      "none": "Ninguno",
+      "monthly": "Mensual",
+      "yearly": "Anual"
+    },
+    "savings": "Ahorra un 30% vs mensual",
+    "nextBilling": "Próxima fecha de facturación",
     "cancelMembership": "Cancelar suscripción",
+    "subscriptionCanceled": "Suscripción cancelada",
+    "cancelledNotice": "Tu suscripción ha sido cancelada. Pasarás al plan Gratuito después de que termine tu periodo de facturación actual el {{date}}.",
+    "repurchaseNotice": "Después de esto, deberás volver a comprar un plan para seguir disfrutando de los beneficios premium.",
     "cancelling": "Cancelando...",
     "cancelSuccess": "Suscripción cancelada exitosamente.",
-    "cancelError": "Error al cancelar la suscripción.",
-    "connectWallet": "Por favor conecta tu billetera para cancelar la suscripción.",
-    "confirmCancel": "¿Estás seguro de que deseas cancelar tu suscripción? Perderás el acceso a todas las funciones premium de inmediato."
+    "yearly": "/año",
+    "monthly": "/mes",
+    "yearlyValue": "año",
+    "monthlyValue": "mes",
+    "notAvailable": "n/a",
+    "wallet": "Billetera cripto",
+    "noTransactionFound": "No se encontró el hash de la transacción para esta suscripción",
+    "confirmCancel": "¿Estás seguro de que deseas cancelar? Esto terminará tus beneficios premium de inmediato."
   },
   "subscriptionBanner": {
     "title": "Desbloquea las funciones Premium",
@@ -275,6 +317,10 @@
     "perMonth": "Solo",
     "perMonthSuffix": "/mes",
     "perYearSuffix": "/año",
+    "annual": "Anual",
+    "monthly": "Mensual",
+    "choosePlan": "Elige tu plan",
+    "securePayment": "Pago Seguro",
     "trialFooter": "Prueba gratuita de 7 días",
     "billedAnnually": "Facturado anualmente",
     "cancelAnytime": "Cancela en cualquier momento",

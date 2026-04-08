@@ -75,8 +75,14 @@
             "location": "Ort",
             "attendees": "Teilnehmer",
             "entrepreneurs": "Unternehmer",
-            "inGrants": "in Förderungen",
-            "applyToGrant": "Für Förderung bewerben"
+            "inGrants": "in Zuschüssen",
+            "applyToGrant": "Für ein Stipendium bewerben",
+            "ticketRequired": "Ticket Erforderlich",
+            "mustBuyTicket": "Sie müssen ein Ticket für diese Gala kaufen, bevor Sie sich für ein Stipendium bewerben können.",
+            "buyTicketAmount": "Ticket kaufen - {{price}}$",
+            "buyTicketAmountShort": "Ticket kaufen ({{price}}$)",
+            "buyTicketNow": "Jetzt Ticket kaufen - {{price}}$",
+            "processing": "Wird bearbeitet..."
         },
         "grants": {
             "loading": "Förderungen werden geladen...",

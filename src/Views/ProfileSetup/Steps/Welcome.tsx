@@ -64,6 +64,7 @@ export default function Welcome() {
       </div>
 
       <button
+        type="button"
         className="btn-continue"
         onClick={() => navigate('/setup/ready')}
         disabled={isLoading}

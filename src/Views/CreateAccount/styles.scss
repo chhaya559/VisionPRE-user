@@ -282,23 +282,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.google-icon {
-  height: 28px;
-  width: 28px;
-
-  &:focus {
-    outline: none;
-    border: 1px solid $primaryGreen;
-  }
-}
-.apple-icon {
-  font-size: x-large;
-
-  &:focus {
-    outline: none;
-    border: 1px solid $primaryText;
-  }
-}
 .btn-social {
   display: flex;
   align-items: center;
@@ -312,10 +295,17 @@
   font-weight: 600;
   color: $primaryText;
   cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
 
   &:hover {
     background: $secondaryGreen;
     border-color: $primaryGreen;
+  }
+
+  &:focus,
+  &:active {
+    outline: none;
+    box-shadow: none;
   }
 
   &:active {
@@ -330,6 +320,28 @@
     &:hover {
       background: $secondaryText;
       border-color: $primaryText;
+    }
+  }
+
+  .google-icon {
+    height: 22px;
+    width: 22px;
+    object-fit: contain;
+  }
+
+  .apple-icon {
+    font-size: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .google-icon,
+  .apple-icon {
+    &:focus {
+      outline: none;
+      border: none;
     }
   }
 }

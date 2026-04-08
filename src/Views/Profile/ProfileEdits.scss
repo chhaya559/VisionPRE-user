@@ -108,6 +108,25 @@
     cursor: pointer;
     color: $primaryWhite;
   }
+
+  .avatar-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+
+    .remove-photo {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba($primaryWhite, 0.8);
+      cursor: pointer;
+      text-decoration: underline;
+
+      &:hover {
+        color: $primaryWhite;
+      }
+    }
+  }
 }
 
 /* Secondary header variant (Business Profile edit) */

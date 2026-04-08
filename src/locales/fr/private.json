@@ -76,7 +76,13 @@
       "attendees": "Participants",
       "entrepreneurs": "entrepreneurs",
       "inGrants": "en subventions",
-      "applyToGrant": "Postuler à une subvention"
+      "applyToGrant": "Postuler à une subvention",
+      "ticketRequired": "Billet Requis",
+      "mustBuyTicket": "Vous devez acheter un billet pour ce gala avant de pouvoir postuler à une subvention.",
+      "buyTicketAmount": "Acheter un billet - {{price}}$",
+      "buyTicketAmountShort": "Acheter un billet ({{price}}$)",
+      "buyTicketNow": "Acheter un billet maintenant - {{price}}$",
+      "processing": "Traitement..."
     },
     "grants": {
       "loading": "Chargement des subventions...",

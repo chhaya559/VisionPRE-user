@@ -1,4 +1,5 @@
 import api from '../../api';
+import { NotificationItem } from '../../../../Shared/Types';
 
 export const NotificationApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -14,7 +15,7 @@ export const NotificationApi = api.injectEndpoints({
         url: '/notifications',
         method: 'GET',
       }),
-      providesTags: (result) => {
+      providesTags: (result: unknown) => {
         const items =
           (result as any)?.data?.items ||
           (result as any)?.data?.notifications ||
@@ -25,12 +26,15 @@ export const NotificationApi = api.injectEndpoints({
 
         const listTags = Array.isArray(items)
           ? items
-            .map((item: any) => item?.id || item?.Id || item?._id)
-            .filter(Boolean)
-            .map((id: string | number) => ({
-              type: 'Notification' as const,
-              id,
-            }))
+              .map(
+                (item: NotificationItem | any) =>
+                  item?.id || item?.Id || item?._id
+              )
+              .filter(Boolean)
+              .map((id: string | number) => ({
+                type: 'Notification' as const,
+                id,
+              }))
           : [];
 
         return [{ type: 'Notification' as const, id: 'LIST' }, ...listTags];
@@ -41,9 +45,7 @@ export const NotificationApi = api.injectEndpoints({
         url: `/notifications/${id}`,
         method: 'GET',
       }),
-      providesTags: (_result, _error, { id }) => [
-        { type: 'Notification', id },
-      ],
+      providesTags: (_result, _error, { id }) => [{ type: 'Notification', id }],
     }),
     deleteNotification: builder.mutation({
       query: ({ id }) => ({
@@ -67,9 +69,9 @@ export const NotificationApi = api.injectEndpoints({
     }),
     getAnnouncements: builder.query({
       query: () => ({
-        url: "/users/announcements",
-        method: "GET"
-      })
+        url: '/users/announcements',
+        method: 'GET',
+      }),
     }),
     readAllNotification: builder.mutation({
       query: () => ({
@@ -90,5 +92,5 @@ export const {
   useLazyGetNotificationByIdQuery,
   useReadAllNotificationMutation,
   useReadNotificationByIdMutation,
-  useGetAnnouncementsQuery
+  useGetAnnouncementsQuery,
 } = NotificationApi;

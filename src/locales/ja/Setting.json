@@ -99,7 +99,12 @@
     "growBusiness": "ビジネスを成長させる",
     "attendGalas": "ガラに参加する",
     "saveChanges": "変更を保存",
-    "user": "ユーザー"
+    "user": "ユーザー",
+    "uploading": "アップロード中...",
+    "uploadSuccess": "アバターをアップロードしました！",
+    "uploadFailed": "画像のアップロードに失敗しました。",
+    "removePhoto": "写真を削除",
+    "updateSuccess": "プロファイルが正常に更新されました！"
   },
   "myProfile": {
     "loading": "プロファイルを読み込んでいます...",
@@ -249,7 +254,22 @@
     "cancelSuccess": "サブスクリプションが正常にキャンセルされました。",
     "cancelError": "サブスクリプションのキャンセルに失敗しました。",
     "connectWallet": "サブスクリプションをキャンセルするにはウォレットを接続してください。",
-    "confirmCancel": "本当にサブスクリプションをキャンセルしますか？すべてのプレミアム機能へのアクセスが直ちに失われます。"
+    "confirmCancel": "本当にサブスクリプションをキャンセルしますか？すべてのプレミアム機能へのアクセスが直ちに失われます。",
+    "noWallet": "ウォレットが見つかりません。MetaMaskをインストールしてください。",
+    "contractError": "コントラクトへの接続に失敗しました。",
+    "checkingBalance": "USDC残高を確認中...",
+    "insufficientBalance": "このプランに必要なUSDC残高が不足しています。",
+    "checkingAllowance": "承認状況を確認中...",
+    "approving": "USDCを承認中...",
+    "approved": "USDCの承認に成功しました！",
+    "confirmInWallet": "ウォレットでサブスクリプションを確定してください。",
+    "processingTx": "トランザクションを処理中...",
+    "success": "サブスクリプションが完了しました！",
+    "wrongNetwork": "ネットワークが正しくありません。SepoliaまたはEthereum Mainnetに切り替えてください。",
+    "connectWalletPrompt": "続行するにはウォレットを接続してください。",
+    "errors": {
+      "contractError": "トークンコントラクトが見つかりません。"
+    }
   },
   "subscriptionBanner": {
     "title": "プレミアム機能をアンロック",

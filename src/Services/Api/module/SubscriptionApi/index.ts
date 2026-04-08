@@ -1,94 +1,92 @@
 import api from '../../api';
-import { SubscriptionPlan, SubscriptionStatus, SubscriptionBillingCycle } from '../../../../Shared/SubscriptionEnums';
+import { Plan } from '../../../../Shared/Types';
 
 export interface SubscriptionResponse {
-    planName: SubscriptionPlan;
-    status: SubscriptionStatus;
-    billingCycle: SubscriptionBillingCycle;
-    autoPayEnabled: boolean;
-    expiryDate: string | null;
-    isTrial: boolean;
-    trialEndsAt: string | null;
-    transactionHash?: string;
-    // These might be removed if the API strictly follows the sample, 
-    // but keeping them optional for backward compatibility or future use.
-    planType?: string;
-    price?: string;
-    nextBilling?: string;
-    startDate?: string;
-    paymentMethod?: string;
+  planName: number;
+  subscriptionPlan: string;
+  status: number;
+  subscriptionStatus: string;
+  billingCycle: number;
+  price: number;
+  currency: string;
+  autoPayEnabled: boolean;
+  expiryDate: string | null;
+  isTrial: boolean;
+  trialEndsAt: string | null;
+  transactionHash?: string;
+  startDate?: string;
+  paymentMethod?: string;
+  isCancelled?: boolean;
 }
 
 export interface SubscribePayload {
-    Plan: number;
-    BillingCycle: number;
-    AutoPayEnabled: boolean;
-    TransactionHash: string;
-    WalletAddress: string;
-    ExpiresAt: string;
+  planId: string;
+  autoPayEnabled: boolean;
+  walletAddress: string;
+  transactionHash: string;
 }
 
 export interface CancelPayload {
-    TransactionHash: string;
-    WalletAddress: string;
+  transactionHash: string;
+  walletAddress: string;
 }
 
 export const SubscriptionApi = api.injectEndpoints({
-    endpoints: (builder) => ({
-        getSubscription: builder.query({
-            query: () => ({
-                url: '/profile/subscription',
-                method: 'GET',
-            }),
-            providesTags: ['Subscription'],
-        }),
-        subscribe: builder.mutation({
-            query: (payload) => ({
-                url: '/profile/subscription/subscribe',
-                method: 'POST',
-                body: { command: payload },
-            }),
-            invalidatesTags: ['Subscription'],
-        }),
-        cancelSubscription: builder.mutation({
-            query: (payload) => ({
-                url: '/profile/subscription/cancel',
-                method: 'DELETE',
-                body: payload,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }),
-            invalidatesTags: ['Subscription'],
-        }),
-        renewSubscription: builder.mutation({
-            query: () => ({
-                url: '/profile/subscription/renew',
-                method: 'POST',
-            })
-        }),
-        updateSubscription: builder.mutation({
-            query: (payload) => ({
-                url: '/profile/subscription/update',
-                method: 'PUT',
-                body: { command: payload },
-            })
-        }),
-        getPlans: builder.query({
-            query: () => ({
-                url: "/user/plans",
-                method: "GET",
-            })
-        })
+  endpoints: (builder) => ({
+    getSubscription: builder.query({
+      query: () => ({
+        url: '/profile/subscription',
+        method: 'GET',
+      }),
+      providesTags: ['Subscription'],
     }),
-    overrideExisting: false,
+    subscribe: builder.mutation({
+      query: (payload: SubscribePayload) => ({
+        url: '/profile/subscription/subscribe',
+        method: 'POST',
+        body: payload,
+      }),
+      invalidatesTags: ['Subscription'],
+    }),
+    cancelSubscription: builder.mutation({
+      query: (payload: CancelPayload) => ({
+        url: '/profile/subscription/cancel',
+        method: 'DELETE',
+        body: payload,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
+      invalidatesTags: ['Subscription'],
+    }),
+    renewSubscription: builder.mutation({
+      query: () => ({
+        url: '/profile/subscription/renew',
+        method: 'POST',
+      }),
+    }),
+    updateSubscription: builder.mutation({
+      query: (payload: any) => ({
+        url: '/profile/subscription/update',
+        method: 'PUT',
+        body: { command: payload },
+      }),
+    }),
+    getPlans: builder.query({
+      query: () => ({
+        url: '/user/plans',
+        method: 'GET',
+      }),
+    }),
+  }),
+  overrideExisting: false,
 });
 
 export const {
-    useCancelSubscriptionMutation,
-    useGetPlansQuery,
-    useGetSubscriptionQuery,
-    useRenewSubscriptionMutation,
-    useSubscribeMutation,
-    useUpdateSubscriptionMutation
+  useCancelSubscriptionMutation,
+  useGetPlansQuery,
+  useGetSubscriptionQuery,
+  useRenewSubscriptionMutation,
+  useSubscribeMutation,
+  useUpdateSubscriptionMutation,
 } = SubscriptionApi;

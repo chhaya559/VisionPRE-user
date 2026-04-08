@@ -23,6 +23,7 @@ export default function EmailVerification() {
         <p className="instruction-text">{t('email_verify_str1')}</p>
 
         <button
+          type="button"
           className="btn-primary"
           onClick={() => window.open('https://mail.google.com', '_blank')}
         >

@@ -19,6 +19,7 @@ import {
 } from 'react-icons/fi';
 import {
   useDeleteNotificationMutation,
+  useGetAnnouncementsQuery,
   useGetNotificationByIdQuery,
   useGetNotificationsQuery,
   useReadAllNotificationMutation,
@@ -51,10 +52,15 @@ const getCollection = (payload: any): any[] => {
 };
 
 const getDetailPayload = (payload: any) =>
-  payload?.data?.item || payload?.data?.notification || payload?.data || payload;
+  payload?.data?.item ||
+  payload?.data?.notification ||
+  payload?.data ||
+  payload;
 
 const toNotificationItem = (item: any, index: number): NotificationItem => {
-  const id = String(item?.id || item?.Id || item?._id || `notification-${index}`);
+  const id = String(
+    item?.id || item?.Id || item?._id || `notification-${index}`
+  );
   const title =
     item?.title ||
     item?.Title ||
@@ -114,8 +120,14 @@ const getRelativeTime = (value: string | undefined, t: any) => {
   const diffDays = Math.floor(diffHours / 24);
 
   if (diffMinutes < 1) return t('relativeTime.justNow');
-  if (diffMinutes < 60) return `${diffMinutes} ${t(diffMinutes > 1 ? 'relativeTime.minutes' : 'relativeTime.minute')}`;
-  if (diffHours < 24) return `${diffHours} ${t(diffHours > 1 ? 'relativeTime.hours' : 'relativeTime.hour')}`;
+  if (diffMinutes < 60)
+    return `${diffMinutes} ${t(
+      diffMinutes > 1 ? 'relativeTime.minutes' : 'relativeTime.minute'
+    )}`;
+  if (diffHours < 24)
+    return `${diffHours} ${t(
+      diffHours > 1 ? 'relativeTime.hours' : 'relativeTime.hour'
+    )}`;
   if (diffDays === 1) return t('relativeTime.yesterday');
   if (diffDays < 7) return `${diffDays} ${t('relativeTime.days')}`;
 
@@ -134,15 +146,27 @@ const getSectionLabel = (value: string | undefined, t: any) => {
 
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const targetDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const diffDays = Math.floor((today.getTime() - targetDay.getTime()) / (1000 * 60 * 60 * 24));
+  const targetDay = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+  const diffDays = Math.floor(
+    (today.getTime() - targetDay.getTime()) / (1000 * 60 * 60 * 24)
+  );
 
   if (diffDays <= 0) return t('groups.today');
   if (diffDays < 7) return t('groups.thisWeek');
   return t('groups.earlier');
 };
 
-const NotificationTypeIcon = ({ category, title }: { category: string; title: string }) => {
+function NotificationTypeIcon({
+  category,
+  title,
+}: {
+  category: string;
+  title: string;
+}) {
   const hint = `${category} ${title}`.toLowerCase();
 
   if (hint.includes('approved') || hint.includes('success')) {
@@ -159,47 +183,83 @@ const NotificationTypeIcon = ({ category, title }: { category: string; title: st
   }
 
   return <FiBell />;
-};
+}
 
 export default function Notifications() {
   const { t } = useTranslation('notifications');
   const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'notifications' | 'announcements'>(
+    'notifications'
+  );
   const {
     data: notificationsResponse,
-    isLoading,
-    isFetching,
-    error,
-    refetch,
+    isLoading: isLoadingNotifs,
+    isFetching: isFetchingNotifs,
+    error: errorNotifs,
+    refetch: refetchNotifs,
   } = useGetNotificationsQuery({});
-  const [markAllRead, { isLoading: isMarkingAllRead }] = useReadAllNotificationMutation();
-  const [markOneRead, { isLoading: isMarkingOneRead }] = useReadNotificationByIdMutation();
-  const [deleteNotification, { isLoading: isDeleting }] = useDeleteNotificationMutation();
 
-  const notifications = useMemo(
+  const {
+    data: announcementsResponse,
+    isLoading: isLoadingAnn,
+    isFetching: isFetchingAnn,
+    error: errorAnn,
+    refetch: refetchAnn,
+  } = useGetAnnouncementsQuery(undefined);
+
+  const [markAllRead, { isLoading: isMarkingAllRead }] =
+    useReadAllNotificationMutation();
+  const [markOneRead, { isLoading: isMarkingOneRead }] =
+    useReadNotificationByIdMutation();
+  const [deleteNotification, { isLoading: isDeleting }] =
+    useDeleteNotificationMutation();
+
+  const rawNotifications = useMemo(
     () => getCollection(notificationsResponse).map(toNotificationItem),
     [notificationsResponse]
   );
 
-  const selectedNotification = notifications.find((item) => item.id === selectedId) || null;
+  const rawAnnouncements = useMemo(() => {
+    const list = getCollection(announcementsResponse);
+    return list.map((item: any, idx: number) => ({
+      ...toNotificationItem(item, idx),
+      category: 'announcement',
+      isRead: true,
+    }));
+  }, [announcementsResponse]);
+
+  const notifications =
+    activeTab === 'notifications' ? rawNotifications : rawAnnouncements;
+  const isLoading =
+    activeTab === 'notifications' ? isLoadingNotifs : isLoadingAnn;
+  const isFetching =
+    activeTab === 'notifications' ? isFetchingNotifs : isFetchingAnn;
+  const error = activeTab === 'notifications' ? errorNotifs : errorAnn;
+  const refetch = activeTab === 'notifications' ? refetchNotifs : refetchAnn;
+
+  const selectedNotification =
+    notifications.find((item) => item.id === selectedId) || null;
 
   const { data: notificationDetailResponse, isFetching: isDetailLoading } =
     useGetNotificationByIdQuery(
-      { id: selectedId },
+      { id: activeTab === 'notifications' ? selectedId : undefined },
       {
-        skip: !selectedId,
+        skip: !selectedId || activeTab !== 'notifications',
       }
     );
 
-  const detailPayload = selectedId ? getDetailPayload(notificationDetailResponse) : null;
+  const detailPayload = selectedId
+    ? getDetailPayload(notificationDetailResponse)
+    : null;
   const hasNotifications = notifications.length > 0;
-  const unreadCount = notifications.filter((item) => !item.isRead).length;
+  const unreadCount = rawNotifications.filter((item) => !item.isRead).length;
 
   const groupedNotifications = useMemo(() => {
     const groups: Record<string, NotificationItem[]> = {
-      Today: [],
-      'This Week': [],
-      Earlier: [],
+      [t('groups.today')]: [],
+      [t('groups.thisWeek')]: [],
+      [t('groups.earlier')]: [],
     };
 
     notifications.forEach((item) => {
@@ -207,12 +267,12 @@ export default function Notifications() {
     });
 
     return Object.entries(groups).filter(([, items]) => items.length > 0);
-  }, [notifications]);
+  }, [notifications, t]);
 
   const openNotification = async (item: NotificationItem) => {
     setSelectedId(item.id);
 
-    if (!item.isRead) {
+    if (activeTab === 'notifications' && !item.isRead) {
       try {
         await markOneRead({ id: item.id }).unwrap();
       } catch {
@@ -262,18 +322,50 @@ export default function Notifications() {
 
   return (
     <div className="notifications-page">
-      <div className={`notifications-shell ${!hasNotifications ? 'empty-view' : ''}`}>
+      <div
+        className={`notifications-shell ${
+          !hasNotifications ? 'empty-view' : ''
+        }`}
+      >
         <section className="notifications-main-card">
           <header className="notifications-hero">
             <div className="notifications-hero-top">
-              <button className="icon-button ghost" onClick={() => navigate(-1)}>
+              <button
+                type="button"
+                className="icon-button ghost"
+                onClick={() => navigate(-1)}
+              >
                 <FiChevronLeft />
               </button>
               <div className="notifications-hero-copy">
-                <h1>{t('title')}</h1>
-                <p>{t('subtitle')}</p>
+                <div className="hero-tabs">
+                  <h1
+                    className={activeTab === 'notifications' ? 'active' : ''}
+                    onClick={() => {
+                      setActiveTab('notifications');
+                      setSelectedId(null);
+                    }}
+                  >
+                    {t('tabs.notifications')}
+                  </h1>
+                  <h1
+                    className={activeTab === 'announcements' ? 'active' : ''}
+                    onClick={() => {
+                      setActiveTab('announcements');
+                      setSelectedId(null);
+                    }}
+                  >
+                    {t('tabs.announcements')}
+                  </h1>
+                </div>
+                <p>
+                  {activeTab === 'notifications'
+                    ? t('subtitle')
+                    : t('announcements.subtitle')}
+                </p>
               </div>
               <button
+                type="button"
                 className="icon-button ghost"
                 onClick={() => navigate('/dashboard/profile/settings')}
                 title="Open settings"
@@ -285,24 +377,38 @@ export default function Notifications() {
             <div className="notifications-toolbar">
               <div className="notification-stats">
                 <div className="stat-pill">
+                  <FiInbox className="stat-icon-mini" />
                   <span className="stat-value">{notifications.length}</span>
                   <span className="stat-label">{t('total')}</span>
                 </div>
-                <div className={`stat-pill ${unreadCount > 0 ? 'highlight' : ''}`}>
+                <div
+                  className={`stat-pill ${unreadCount > 0 ? 'highlight' : ''}`}
+                >
+                  <FiBell className="stat-icon-mini" />
                   <span className="stat-value">{unreadCount}</span>
                   <span className="stat-label">{t('unread')}</span>
                 </div>
               </div>
 
               <div className="notification-actions">
-                <button className="secondary-action" onClick={() => refetch()}>
+                <button
+                  type="button"
+                  className="secondary-action"
+                  onClick={() => refetch()}
+                >
                   <FiRefreshCw />
                   {t('refresh')}
                 </button>
                 <button
+                  type="button"
                   className="primary-action"
                   onClick={handleMarkAllRead}
-                  disabled={!hasNotifications || unreadCount === 0 || isMarkingAllRead}
+                  disabled={
+                    activeTab !== 'notifications' ||
+                    !hasNotifications ||
+                    unreadCount === 0 ||
+                    isMarkingAllRead
+                  }
                 >
                   <FiEye />
                   {t('markAllRead')}
@@ -325,7 +431,11 @@ export default function Notifications() {
                 </div>
                 <h2>{t('errorTitle')}</h2>
                 <p>{t('errorDesc')}</p>
-                <button className="primary-action" onClick={() => refetch()}>
+                <button
+                  type="button"
+                  className="primary-action"
+                  onClick={() => refetch()}
+                >
                   <FiRefreshCw />
                   {t('tryAgain')}
                 </button>
@@ -335,15 +445,26 @@ export default function Notifications() {
                 <div className="state-icon">
                   <FiInbox />
                 </div>
-                <h2>{t('noNotifications')}</h2>
-                <p>{t('noNotificationsDesc')}</p>
-                <button
-                  className="primary-action"
-                  onClick={() => navigate('/dashboard/galas')}
-                >
-                  {t('exploreGalas')}
-                  <FiArrowRight />
-                </button>
+                <h2>
+                  {activeTab === 'notifications'
+                    ? t('noNotifications')
+                    : t('announcements.noAnnouncements')}
+                </h2>
+                <p>
+                  {activeTab === 'notifications'
+                    ? t('noNotificationsDesc')
+                    : t('announcements.noAnnouncementsDesc')}
+                </p>
+                {activeTab === 'notifications' && (
+                  <button
+                    type="button"
+                    className="primary-action"
+                    onClick={() => navigate('/dashboard/galas')}
+                  >
+                    {t('exploreGalas')}
+                    <FiArrowRight />
+                  </button>
+                )}
               </div>
             ) : (
               <div className="notifications-list-wrap">
@@ -354,34 +475,47 @@ export default function Notifications() {
                       {items.map((item) => (
                         <article
                           key={item.id}
-                          className={`notification-row ${item.isRead ? 'read' : 'unread'} ${selectedId === item.id ? 'selected' : ''
-                            }`}
+                          className={`notification-row ${
+                            item.isRead ? 'read' : 'unread'
+                          } ${selectedId === item.id ? 'selected' : ''}`}
                           onClick={() => openNotification(item)}
                         >
-                          <div className={`notification-icon ${item.isRead ? '' : 'active'}`}>
-                            <NotificationTypeIcon category={item.category} title={item.title} />
+                          <div
+                            className={`notification-icon ${
+                              item.isRead ? '' : 'active'
+                            }`}
+                          >
+                            <NotificationTypeIcon
+                              category={item.category}
+                              title={item.title}
+                            />
                           </div>
 
                           <div className="notification-copy">
                             <div className="notification-copy-top">
                               <h3>{item.title}</h3>
-                              {!item.isRead && <span className="notification-dot" />}
+                              {!item.isRead && (
+                                <span className="notification-dot" />
+                              )}
                             </div>
                             <p>{item.message || t('noDetails')}</p>
                             <span>{getRelativeTime(item.createdAt, t)}</span>
                           </div>
 
-                          <button
-                            className="row-delete"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              handleDelete(item.id);
-                            }}
-                            disabled={isDeleting}
-                            title="Delete notification"
-                          >
-                            <FiTrash2 />
-                          </button>
+                          {activeTab === 'notifications' && (
+                            <button
+                              type="button"
+                              className="row-delete"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleDelete(item.id);
+                              }}
+                              disabled={isDeleting}
+                              title="Delete notification"
+                            >
+                              <FiTrash2 />
+                            </button>
+                          )}
                         </article>
                       ))}
                     </div>
@@ -393,13 +527,19 @@ export default function Notifications() {
         </section>
 
         {hasNotifications && (
-          <aside className={`notifications-detail-card ${selectedId ? 'open' : ''}`}>
+          <aside
+            className={`notifications-detail-card ${selectedId ? 'open' : ''}`}
+          >
             <div className="detail-card-header">
               <div>
                 <h2>{t('detailTitle')}</h2>
                 <p>{t('detailSubtitle')}</p>
               </div>
-              <button className="icon-button subtle" onClick={() => setSelectedId(null)}>
+              <button
+                type="button"
+                className="icon-button subtle"
+                onClick={() => setSelectedId(null)}
+              >
                 <FiX />
               </button>
             </div>
@@ -419,11 +559,17 @@ export default function Notifications() {
                     category={selectedNotification?.category || 'general'}
                     title={detailTitle}
                   />
-                  <span>{selectedNotification?.isRead ? t('statusRead') : t('statusNew')}</span>
+                  <span>
+                    {selectedNotification?.isRead
+                      ? t('statusRead')
+                      : t('statusNew')}
+                  </span>
                 </div>
 
                 <h3>{detailTitle}</h3>
-                <div className="detail-time">{getRelativeTime(detailCreatedAt, t)}</div>
+                <div className="detail-time">
+                  {getRelativeTime(detailCreatedAt, t)}
+                </div>
 
                 <div className="detail-message">
                   {isDetailLoading ? (
@@ -436,7 +582,11 @@ export default function Notifications() {
                 <div className="detail-meta">
                   <div className="meta-row">
                     <span>{t('statusLabel')}</span>
-                    <strong>{selectedNotification?.isRead ? t('statusRead') : t('unread')}</strong>
+                    <strong>
+                      {selectedNotification?.isRead
+                        ? t('statusRead')
+                        : t('unread')}
+                    </strong>
                   </div>
                   <div className="meta-row">
                     <span>{t('dateLabel')}</span>
@@ -449,14 +599,17 @@ export default function Notifications() {
                 </div>
 
                 <div className="detail-actions">
-                  <button
-                    className="secondary-action danger"
-                    onClick={() => selectedId && handleDelete(selectedId)}
-                    disabled={isDeleting}
-                  >
-                    <FiTrash2 />
-                    {t('delete')}
-                  </button>
+                  {activeTab === 'notifications' && (
+                    <button
+                      type="button"
+                      className="secondary-action danger"
+                      onClick={() => selectedId && handleDelete(selectedId)}
+                      disabled={isDeleting}
+                    >
+                      <FiTrash2 />
+                      {t('delete')}
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -464,7 +617,9 @@ export default function Notifications() {
         )}
       </div>
 
-      {(isMarkingOneRead || isDeleting) && <div className="notifications-floating-status">{t('updating')}</div>}
+      {(isMarkingOneRead || isDeleting) && (
+        <div className="notifications-floating-status">{t('updating')}</div>
+      )}
     </div>
   );
 }

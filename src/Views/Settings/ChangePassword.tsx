@@ -79,10 +79,7 @@ export default function ChangePassword() {
   return (
     <div className="edit-profile-container">
       <header className="edit-profile-header secondary">
-        <button
-          className="back-btn"
-          onClick={() => navigate(-1)}
-        >
+        <button type="button" className="back-btn" onClick={() => navigate(-1)}>
           <FontAwesomeIcon icon={faChevronLeft} />
           {t('changePassword.back')}
         </button>
@@ -114,7 +111,9 @@ export default function ChangePassword() {
                 </button>
               </div>
               {errors.currentPassword && (
-                <span className="error-text">{errors.currentPassword.message}</span>
+                <span className="error-text">
+                  {errors.currentPassword.message}
+                </span>
               )}
             </div>
 
@@ -185,16 +184,14 @@ export default function ChangePassword() {
                 </button>
               </div>
               {errors.confirmPassword && (
-                <span className="error-text">{errors.confirmPassword.message}</span>
+                <span className="error-text">
+                  {errors.confirmPassword.message}
+                </span>
               )}
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="btn-save"
-            disabled={isLoading}
-          >
+          <button type="submit" className="btn-save" disabled={isLoading}>
             {isLoading
               ? t('changePassword.updating')
               : t('changePassword.update')}

@@ -76,7 +76,13 @@
       "attendees": "Partecipanti",
       "entrepreneurs": "imprenditori",
       "inGrants": "in sovvenzioni",
-      "applyToGrant": "Candidati a una sovvenzione"
+      "applyToGrant": "Richiedi una sovvenzione",
+      "ticketRequired": "Biglietto Richiesto",
+      "mustBuyTicket": "È necessario acquistare un biglietto per questo gala prima di poter richiedere una sovvenzione.",
+      "buyTicketAmount": "Acquista biglietto - {{price}}$",
+      "buyTicketAmountShort": "Acquista biglietto ({{price}}$)",
+      "buyTicketNow": "Acquista biglietto ora - {{price}}$",
+      "processing": "In corso..."
     },
     "grants": {
       "loading": "Caricamento delle sovvenzioni...",

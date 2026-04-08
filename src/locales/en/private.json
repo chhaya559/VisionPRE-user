@@ -9,11 +9,13 @@
     "pending": "Pending",
     "approved": "Approved",
     "recentActivity": "Recent Activity",
+    "recentAnnouncements": "Recent Announcements",
     "seeAll": "See All",
     "appliedTo": "Applied to",
     "grant": "Grant",
     "recently": "Recently",
     "noRecentActivity": "No recent activity found.",
+    "noRecentAnnouncements": "No recent announcements.",
     "status": {
       "draft": "Draft",
       "pending": "Pending",
@@ -76,7 +78,13 @@
       "attendees": "Attendees",
       "entrepreneurs": "entrepreneurs",
       "inGrants": "in Grants",
-      "applyToGrant": "Apply to a Grant"
+      "applyToGrant": "Apply to a Grant",
+      "ticketRequired": "Ticket Required",
+      "mustBuyTicket": "You must purchase a ticket to this gala before you can apply for a grant.",
+      "buyTicketAmount": "Buy Ticket - ${{price}}",
+      "buyTicketAmountShort": "Buy Ticket (${{price}})",
+      "buyTicketNow": "Buy Ticket Now - ${{price}}",
+      "processing": "Processing..."
     },
     "grants": {
       "loading": "Loading grants...",

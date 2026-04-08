@@ -13,21 +13,24 @@ import {
   faTrophy,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import { useGetProfileQuery } from '../../Services/Api/module/UserApi';
 import {
   useGetGalasQuery,
   useGetMyApplicationsQuery,
 } from '../../Services/Api/module/GalaApi';
-import { useGetNotificationsQuery, useGetAnnouncementsQuery } from '../../Services/Api/module/NotificationApi';
+import {
+  useGetNotificationsQuery,
+  useGetAnnouncementsQuery,
+} from '../../Services/Api/module/NotificationApi';
 import { useWalletContext } from '../../Context/WalletContext';
+import { ensureAbsoluteUrl } from '../../Shared/Utils';
 import {
   getGrantApplicationStatusLabel,
   getGrantApplicationStatusValue,
   isGrantApprovedStatus,
   isGrantPendingStatus,
 } from '../../Shared/GrantApplicationStatus';
-import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
-import ListSkeleton from '../../Shared/Components/Skeleton/ListSkeleton';
 
 export type DashboardOutletContext = {
   profile: any;
@@ -43,7 +46,9 @@ function DashboardHomeContent({
   applications,
   announcements,
   t,
-  isLoading,
+  appsLoading,
+  announcementsLoading,
+  galasLoading,
 }: Readonly<{
   nextGala: any;
   totalApps: number;
@@ -52,7 +57,9 @@ function DashboardHomeContent({
   applications: any[];
   announcements: any[];
   t: any;
-  isLoading?: boolean;
+  appsLoading?: boolean;
+  announcementsLoading?: boolean;
+  galasLoading?: boolean;
 }>) {
   const getLocalizedStatus = (app: any) => {
     const statusLabel = getGrantApplicationStatusLabel(
@@ -77,18 +84,28 @@ function DashboardHomeContent({
 
   return (
     <div className="dashboard-main-column">
-      {isLoading ? (
-        <div className="hero-card gala-card-premium skeleton-wrapper">
-          <Skeleton variant="rounded" width="100px" height="24px" className="mb-4" />
-          <Skeleton variant="text" width="80%" height="40px" className="mb-4" />
-          <div style={{ display: 'flex', gap: '20px' }}>
-            <Skeleton variant="text" width="120px" />
-            <Skeleton variant="text" width="120px" />
+      {galasLoading ? (
+        <div className="gala-card-premium">
+          <Skeleton
+            variant="rect"
+            height={32}
+            width="100px"
+            className="gala-badge"
+          />
+          <Skeleton
+            variant="text"
+            height={48}
+            width="60%"
+            className="gala-title"
+          />
+          <div className="gala-details">
+            <Skeleton variant="text" width={120} />
+            <Skeleton variant="text" width={120} />
           </div>
-          <Skeleton variant="rounded" width="150px" height="40px" style={{ marginTop: '20px' }} />
+          <Skeleton variant="rect" width={160} height={48} />
         </div>
       ) : nextGala ? (
-        <div className="hero-card gala-card-premium">
+        <div className=" gala-card-premium">
           <div className="gala-badge">✨ {t('dashboard.nextGala')}</div>
           <h1 className="gala-title">{nextGala.name}</h1>
           <div className="gala-details">
@@ -97,7 +114,8 @@ function DashboardHomeContent({
               {new Date(nextGala.eventDate).toLocaleDateString('en-GB')}
             </span>
             <span>
-              <FontAwesomeIcon icon={faLocationDot} /> {nextGala.city || nextGala.venue || 'TBD'}
+              <FontAwesomeIcon icon={faLocationDot} />{' '}
+              {nextGala.city || nextGala.venue || 'TBD'}
             </span>
           </div>
           <Link to={`/dashboard/galas/${nextGala.id}`} className="btn-light">
@@ -117,45 +135,74 @@ function DashboardHomeContent({
       <section className="status-section-modern">
         <div className="status-item apps">
           <div className="label">{t('dashboard.applications')}</div>
-          <div className="value">{isLoading ? <Skeleton width="40px" height="32px" /> : totalApps}</div>
+          <div className="value">
+            {appsLoading ? <Skeleton width={40} height={32} /> : totalApps}
+          </div>
         </div>
         <div className="status-item pending">
           <div className="label">{t('dashboard.pending')}</div>
-          <div className="value">{isLoading ? <Skeleton width="40px" height="32px" /> : pendingApps}</div>
+          <div className="value">
+            {appsLoading ? <Skeleton width={40} height={32} /> : pendingApps}
+          </div>
         </div>
         <div className="status-item approved">
           <div className="label">{t('dashboard.approved')}</div>
-          <div className="value">{isLoading ? <Skeleton width="40px" height="32px" /> : approvedApps}</div>
+          <div className="value">
+            {appsLoading ? <Skeleton width={40} height={32} /> : approvedApps}
+          </div>
         </div>
       </section>
 
       <section className="recent-activity-modern announcements-section">
         <div className="section-header">
-          <h3>Recent Announcements</h3>
-          <Link to="/dashboard/notifications">See All</Link>
+          <h3>{t('dashboard.recentAnnouncements')}</h3>
+          {announcements.length > 0 && (
+            <Link to="/dashboard/notifications">{t('dashboard.seeAll')}</Link>
+          )}
         </div>
         <div className="activity-list-modern">
-          {isLoading ? (
-            <ListSkeleton count={3} />
+          {announcementsLoading ? (
+            [1, 2, 3].map((i) => (
+              <div key={i} className="activity-item-premium">
+                <Skeleton
+                  variant="rect"
+                  width={44}
+                  height={44}
+                  className="icon-box loading"
+                />
+                <div className="content">
+                  <Skeleton width="40%" height={20} />
+                  <Skeleton width="20%" height={14} />
+                  <Skeleton width="90%" height={14} />
+                </div>
+              </div>
+            ))
           ) : announcements.length > 0 ? (
             announcements.slice(0, 3).map((ann: any) => (
-              <div key={ann.id || ann.Id} className="activity-item-premium announcement-item">
+              <div
+                key={ann.id || ann.Id}
+                className="activity-item-premium announcement-item"
+              >
                 <div className="icon-box announcement-icon">
                   <FontAwesomeIcon icon={faBell} />
                 </div>
                 <div className="content">
                   <p>{ann.title || ann.Title}</p>
                   <span className="ann-date">
-                    {ann.createdAt || ann.CreatedAt 
-                      ? new Date(ann.createdAt || ann.CreatedAt).toLocaleDateString() 
+                    {ann.createdAt || ann.CreatedAt
+                      ? new Date(
+                          ann.createdAt || ann.CreatedAt
+                        ).toLocaleDateString()
                       : 'Recently'}
                   </span>
-                  <p className="ann-desc">{ann.description || ann.Description}</p>
+                  <p className="ann-desc">
+                    {ann.description || ann.Description}
+                  </p>
                 </div>
               </div>
             ))
           ) : (
-            <p className="empty">No recent announcements</p>
+            <p className="empty">{t('dashboard.noRecentAnnouncements')}</p>
           )}
         </div>
       </section>
@@ -163,11 +210,27 @@ function DashboardHomeContent({
       <section className="recent-activity-modern">
         <div className="section-header">
           <h3>{t('dashboard.recentActivity')}</h3>
-          <Link to="/dashboard/grants">{t('dashboard.seeAll')}</Link>
+          {applications.length > 0 && (
+            <Link to="/dashboard/grants">{t('dashboard.seeAll')}</Link>
+          )}
         </div>
         <div className="activity-list-modern">
-          {isLoading ? (
-            <ListSkeleton count={3} />
+          {appsLoading ? (
+            [1, 2, 3].map((i) => (
+              <div key={i} className="activity-item-premium">
+                <Skeleton
+                  variant="rect"
+                  width={44}
+                  height={44}
+                  className="icon-box loading"
+                />
+                <div className="content">
+                  <Skeleton width="60%" height={20} />
+                  <Skeleton width="30%" height={14} />
+                </div>
+                <Skeleton variant="rect" width={80} height={24} />
+              </div>
+            ))
           ) : applications.length > 0 ? (
             applications.slice(0, 3).map((app: any) => {
               const status = getLocalizedStatus(app);
@@ -178,7 +241,8 @@ function DashboardHomeContent({
                   </div>
                   <div className="content">
                     <p>
-                      {t('dashboard.appliedTo')} <strong>{app.grantName || t('dashboard.grant')}</strong>
+                      {t('dashboard.appliedTo')}{' '}
+                      <strong>{app.grantName || t('dashboard.grant')}</strong>
                     </p>
                     <span>
                       {app.submittedAt
@@ -205,7 +269,8 @@ export default function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation('private');
-  const { account, connectWallet, disconnectWallet, isConnecting } = useWalletContext();
+  const { account, connectWallet, disconnectWallet, isConnecting } =
+    useWalletContext();
   const isDashboardRoot = location.pathname === '/dashboard';
 
   const {
@@ -214,20 +279,22 @@ export default function Dashboard() {
     error: profileError,
   } = useGetProfileQuery(undefined);
   const { data: galasResponse, isLoading: galasLoading } = useGetGalasQuery({});
-  const { data: appsResponse, isLoading: appsLoading } = useGetMyApplicationsQuery({});
+  const { data: appsResponse, isLoading: appsLoading } =
+    useGetMyApplicationsQuery({});
   const { data: notificationsResponse } = useGetNotificationsQuery({});
-  const { data: announcementsResponse, isLoading: announcementsLoading } = useGetAnnouncementsQuery(undefined);
-  
-  const isAnyLoading = profileLoading || galasLoading || appsLoading || announcementsLoading;
+  const { data: announcementsResponse, isLoading: announcementsLoading } =
+    useGetAnnouncementsQuery(undefined);
 
   const profile = profileResponse?.data;
   const galas = galasResponse?.data.items ?? [];
   const applications = appsResponse?.data ?? [];
   const notifications = notificationsResponse?.data ?? [];
-  const announcements = announcementsResponse?.data || announcementsResponse || [];
-  const unreadNotifications = notifications.filter((item: any) => !item.isRead).length;
+  const announcements = announcementsResponse?.data ?? [];
+  const unreadNotifications = notifications.filter(
+    (item: any) => !item.isRead
+  ).length;
 
-  // Find Next Gala (soonest upcoming)
+  // Find Next Gala
   const upcomingGalas = galas
     .filter((g: any) => g.status === 1 || g.status === 2)
     .sort(
@@ -239,25 +306,24 @@ export default function Dashboard() {
 
   // Calculate Stats
   const pendingApps = Array.isArray(applications)
-    ? applications.filter(
-      (a: any) => isGrantPendingStatus(getGrantApplicationStatusValue(a))
-    ).length
+    ? applications.filter((a) =>
+        isGrantPendingStatus(getGrantApplicationStatusValue(a))
+      ).length
     : 0;
   const approvedApps = Array.isArray(applications)
-    ? applications.filter(
-      (a: any) => isGrantApprovedStatus(getGrantApplicationStatusValue(a))
-    ).length
+    ? applications.filter((a) =>
+        isGrantApprovedStatus(getGrantApplicationStatusValue(a))
+      ).length
     : 0;
   const totalApps = Array.isArray(applications) ? applications.length : 0;
 
   const displayName = profile?.firstName || 'User';
   const avatarUrl =
-    profile?.avatarUrl ||
+    ensureAbsoluteUrl(profile?.avatarUrl) ||
     `https://ui-avatars.com/api/?name=${displayName}&background=1e293b&color=fff`;
 
   return (
     <div className="dashboard-layout">
-      {/* Sidebar Navigation for Desktop (Replaces Mobile Bottom Nav) */}
       {/* Sidebar Navigation for Desktop */}
       <aside className="dashboard-sidebar">
         <div className="sidebar-logo">
@@ -270,31 +336,39 @@ export default function Dashboard() {
         <nav className="sidebar-nav">
           <Link
             to="/dashboard"
-            className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''
-              }`}
+            className={`nav-item ${
+              location.pathname === '/dashboard' ? 'active' : ''
+            }`}
           >
-            <FontAwesomeIcon icon={faHome} /> <span>{t('dashboard.sidebar.dashboard')}</span>
+            <FontAwesomeIcon icon={faHome} />{' '}
+            <span>{t('dashboard.sidebar.dashboard')}</span>
           </Link>
           <Link
             to="/dashboard/galas"
-            className={`nav-item ${location.pathname.includes('/dashboard/galas') ? 'active' : ''
-              }`}
+            className={`nav-item ${
+              location.pathname.includes('/dashboard/galas') ? 'active' : ''
+            }`}
           >
-            <FontAwesomeIcon icon={faCalendarDays} /> <span>{t('dashboard.sidebar.galas')}</span>
+            <FontAwesomeIcon icon={faCalendarDays} />{' '}
+            <span>{t('dashboard.sidebar.galas')}</span>
           </Link>
           <Link
             to="/dashboard/grants"
-            className={`nav-item ${location.pathname.includes('/dashboard/grants') ? 'active' : ''
-              }`}
+            className={`nav-item ${
+              location.pathname.includes('/dashboard/grants') ? 'active' : ''
+            }`}
           >
-            <FontAwesomeIcon icon={faTrophy} /> <span>{t('dashboard.sidebar.grants')}</span>
+            <FontAwesomeIcon icon={faTrophy} />{' '}
+            <span>{t('dashboard.sidebar.grants')}</span>
           </Link>
           <Link
             to="/dashboard/profile"
-            className={`nav-item ${location.pathname.includes('/dashboard/profile') ? 'active' : ''
-              }`}
+            className={`nav-item ${
+              location.pathname.includes('/dashboard/profile') ? 'active' : ''
+            }`}
           >
-            <FontAwesomeIcon icon={faUser} /> <span>{t('dashboard.sidebar.profile')}</span>
+            <FontAwesomeIcon icon={faUser} />{' '}
+            <span>{t('dashboard.sidebar.profile')}</span>
           </Link>
         </nav>
 
@@ -305,11 +379,18 @@ export default function Dashboard() {
               <div className="wallet-pill connected" title={account}>
                 <div className="dot" />
                 <span>{`${account.slice(0, 6)}...${account.slice(-4)}`}</span>
-                <button className="disconnect-btn" onClick={disconnectWallet}>✕</button>
+                <button
+                  type="button"
+                  className="disconnect-btn"
+                  onClick={disconnectWallet}
+                >
+                  ✕
+                </button>
               </div>
             ) : (
-              <button 
-                className="btn-connect-wallet" 
+              <button
+                type="button"
+                className="btn-connect-wallet"
                 onClick={connectWallet}
                 disabled={isConnecting}
               >
@@ -341,6 +422,7 @@ export default function Dashboard() {
         <header className="dashboard-header-modern">
           <div className="header-right-actions">
             <button
+              type="button"
               className="notification-bell"
               onClick={() => navigate('/dashboard/notifications')}
               title="Open notifications"
@@ -369,7 +451,9 @@ export default function Dashboard() {
               applications={applications}
               announcements={announcements}
               t={t}
-              isLoading={isAnyLoading}
+              appsLoading={appsLoading}
+              announcementsLoading={announcementsLoading}
+              galasLoading={galasLoading}
             />
           ) : (
             <Outlet
@@ -387,31 +471,39 @@ export default function Dashboard() {
       <nav className="mobile-bottom-nav">
         <Link
           to="/dashboard"
-          className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''
-            }`}
+          className={`nav-item ${
+            location.pathname === '/dashboard' ? 'active' : ''
+          }`}
         >
-          <FontAwesomeIcon icon={faHome} /> <span>{t('dashboard.mobile.home')}</span>
+          <FontAwesomeIcon icon={faHome} />{' '}
+          <span>{t('dashboard.mobile.home')}</span>
         </Link>
         <Link
           to="/dashboard/galas"
-          className={`nav-item ${location.pathname.includes('/dashboard/galas') ? 'active' : ''
-            }`}
+          className={`nav-item ${
+            location.pathname.includes('/dashboard/galas') ? 'active' : ''
+          }`}
         >
-          <FontAwesomeIcon icon={faCalendarDays} /> <span>{t('dashboard.mobile.galas')}</span>
+          <FontAwesomeIcon icon={faCalendarDays} />{' '}
+          <span>{t('dashboard.mobile.galas')}</span>
         </Link>
         <Link
           to="/dashboard/grants"
-          className={`nav-item ${location.pathname.includes('/dashboard/grants') ? 'active' : ''
-            }`}
+          className={`nav-item ${
+            location.pathname.includes('/dashboard/grants') ? 'active' : ''
+          }`}
         >
-          <FontAwesomeIcon icon={faTrophy} /> <span>{t('dashboard.mobile.grants')}</span>
+          <FontAwesomeIcon icon={faTrophy} />{' '}
+          <span>{t('dashboard.mobile.grants')}</span>
         </Link>
         <Link
           to="/dashboard/profile"
-          className={`nav-item ${location.pathname.includes('/dashboard/profile') ? 'active' : ''
-            }`}
+          className={`nav-item ${
+            location.pathname.includes('/dashboard/profile') ? 'active' : ''
+          }`}
         >
-          <FontAwesomeIcon icon={faUser} /> <span>{t('dashboard.mobile.profile')}</span>
+          <FontAwesomeIcon icon={faUser} />{' '}
+          <span>{t('dashboard.mobile.profile')}</span>
         </Link>
       </nav>
     </div>

@@ -99,7 +99,12 @@
     "growBusiness": "Développer mon entreprise",
     "attendGalas": "Assister aux galas",
     "saveChanges": "Enregistrer les modifications",
-    "user": "Utilisateur"
+    "user": "Utilisateur",
+    "uploading": "Téléchargement...",
+    "uploadSuccess": "Avatar téléchargé!",
+    "uploadFailed": "Échec du téléchargement de l'image.",
+    "removePhoto": "Supprimer la photo",
+    "updateSuccess": "Profil mis à jour avec succès!"
   },
   "myProfile": {
     "loading": "Chargement du profil...",
@@ -249,7 +254,22 @@
     "cancelSuccess": "Abonnement annulé avec succès.",
     "cancelError": "Échec de l'annulation de l'abonnement.",
     "connectWallet": "Veuillez connecter votre portefeuille pour annuler l'abonnement.",
-    "confirmCancel": "Êtes-vous sûr de vouloir annuler votre abonnement ? Vous perdrez immédiatement l'accès à toutes les fonctionnalités premium."
+    "confirmCancel": "Êtes-vous sûr de vouloir annuler votre abonnement ? Vous perdrez immédiatement l'accès à toutes les fonctionnalités premium.",
+    "noWallet": "Portefeuille non trouvé. Veuillez installer MetaMask.",
+    "contractError": "Échec de la connexion au contrat.",
+    "checkingBalance": "Vérification du solde USDC...",
+    "insufficientBalance": "Solde USDC insuffisant pour ce forfait.",
+    "checkingAllowance": "Vérification de l'autorisation...",
+    "approving": "Approbation de l'USDC...",
+    "approved": "USDC approuvé avec succès !",
+    "confirmInWallet": "Veuillez confirmer l'abonnement dans votre portefeuille.",
+    "processingTx": "Traitement de la transaction...",
+    "success": "Abonnement réussi !",
+    "wrongNetwork": "Vous êtes sur le mauvais réseau. Veuillez passer à Sepolia ou Ethereum Mainnet.",
+    "connectWalletPrompt": "Veuillez connecter votre portefeuille pour continuer.",
+    "errors": {
+      "contractError": "Contrat de jeton non trouvé."
+    }
   },
   "subscriptionBanner": {
     "title": "Débloquez les fonctionnalités Premium",

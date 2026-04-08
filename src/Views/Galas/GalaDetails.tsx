@@ -1,8 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useGetGalaByIdQuery } from '../../Services/Api/module/GalaApi';
+import {
+  useGetGalaByIdQuery,
+  usePurchaseTicketMutation,
+} from '../../Services/Api/module/GalaApi';
 import './GalaDetails.scss';
-import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
@@ -14,57 +16,39 @@ import {
   faTrophy,
   faStar,
   faArrowRight,
+  faCreditCard,
 } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 
 export default function GalaDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation('private');
-  const { data: apiResponse, isLoading, error } = useGetGalaByIdQuery(id || '');
+  const {
+    data: apiResponse,
+    isLoading,
+    error,
+    refetch,
+  } = useGetGalaByIdQuery(id || '');
+  const [purchaseTicket, { isLoading: isPurchasing }] =
+    usePurchaseTicketMutation();
 
   if (isLoading) {
     return (
-      <div className="gala-details-container loading-skeleton">
+      <div className="gala-details-container loading-state">
         <div className="gala-details-shell">
-          <div className="hero-section" style={{ height: '400px', backgroundColor: '#f3f4f6' }}>
-            <div className="hero-nav" style={{ padding: '20px' }}>
-              <Skeleton variant="circular" width="40px" height="40px" />
-              <div className="right-actions" style={{ display: 'flex', gap: '12px' }}>
-                <Skeleton variant="circular" width="40px" height="40px" />
-                <Skeleton variant="circular" width="40px" height="40px" />
-              </div>
-            </div>
-            <div className="hero-content" style={{ padding: '0 40px 40px' }}>
-              <Skeleton variant="rounded" width="100px" height="24px" className="mb-4" />
-              <Skeleton variant="text" width="60%" height="48px" className="mb-4" />
-              <Skeleton variant="rounded" width="100%" height="60px" />
-            </div>
-          </div>
-
-          <div className="details-content" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '40px', padding: '40px' }}>
-            <div className="details-main">
-              <Skeleton variant="text" width="200px" height="32px" className="mb-6" />
-              <Skeleton variant="text" width="100%" />
-              <Skeleton variant="text" width="100%" />
-              <Skeleton variant="text" width="80%" className="mb-8" />
-
-              <div className="stats-cards" style={{ display: 'flex', gap: '20px', marginTop: '40px' }}>
-                <Skeleton variant="rounded" height="120px" style={{ flex: 1 }} />
-                <Skeleton variant="rounded" height="120px" style={{ flex: 1 }} />
-                <Skeleton variant="rounded" height="120px" style={{ flex: 1 }} />
-              </div>
-            </div>
-
-            <div className="details-sidebar">
-              <div className="info-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <Skeleton variant="rounded" height="70px" />
-                <Skeleton variant="rounded" height="70px" />
-                <Skeleton variant="rounded" height="70px" />
-                <Skeleton variant="rounded" height="70px" />
-              </div>
-              <Skeleton variant="rounded" width="100%" height="56px" style={{ marginTop: '32px' }} />
-            </div>
-          </div>
+          <header
+            className="hero-section"
+            style={{
+              height: '200px',
+              backgroundColor: '#f3f4f6',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <p>Loading gala details...</p>
+          </header>
         </div>
       </div>
     );
@@ -78,6 +62,7 @@ export default function GalaDetails() {
       >
         <h2 style={{ color: '#EF4444' }}>{t('galas.details.notFound')}</h2>
         <button
+          type="button"
           className="btn-continue"
           style={{ marginTop: '1rem', width: 'auto', padding: '10px 20px' }}
           onClick={() => navigate('/dashboard/galas')}
@@ -90,6 +75,8 @@ export default function GalaDetails() {
 
   const galaData = (apiResponse as any)?.data || apiResponse || {};
   const title = galaData.name;
+  const isRegistered = galaData.isRegistered || false;
+  const ticketPrice = galaData.ticket_price || 0;
 
   const getStatusLabel = (s: any) => {
     if (typeof s === 'string') return s;
@@ -124,10 +111,25 @@ export default function GalaDetails() {
     return num >= 1000 ? `$${(num / 1000).toFixed(0)}K` : `$${num}`;
   };
 
+  const handlePurchase = async () => {
+    try {
+      await purchaseTicket({ galaId: id }).unwrap();
+      toast.success(
+        t('galas.details.purchaseSuccess') || 'Ticket purchased successfully!'
+      );
+      refetch();
+    } catch (err: any) {
+      toast.error(err?.data?.message || 'Failed to purchase ticket.');
+    }
+  };
+
+  const handleApplyClick = () => {
+    navigate(`/dashboard/galas/${id}/grants`);
+  };
+
   return (
     <div className="gala-details-container">
       <div className="gala-details-shell">
-
         {/* ── LEFT: Hero image, fills full height of right col ── */}
         <div
           className="hero-section"
@@ -141,14 +143,18 @@ export default function GalaDetails() {
           <div className="hero-overlay" />
 
           <div className="hero-nav">
-            <button className="icon-btn-round" onClick={() => navigate(-1)}>
+            <button
+              type="button"
+              className="icon-btn-round"
+              onClick={() => navigate(-1)}
+            >
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
             <div className="right-actions">
-              <button className="icon-btn-round">
+              <button type="button" className="icon-btn-round">
                 <FontAwesomeIcon icon={faShareAlt} />
               </button>
-              <button className="icon-btn-round">
+              <button type="button" className="icon-btn-round">
                 <FontAwesomeIcon icon={faBookmark} />
               </button>
             </div>
@@ -168,7 +174,6 @@ export default function GalaDetails() {
 
         {/* ── RIGHT: all details stacked ── */}
         <div className="details-content">
-
           {/* Main content: about + program + stats */}
           <div className="details-main">
             <div className="about-section">
@@ -224,7 +229,9 @@ export default function GalaDetails() {
                 </div>
                 <div className="info-text">
                   <span className="label">{t('galas.details.dateTime')}</span>
-                  <span className="val">{date} • {time}</span>
+                  <span className="val">
+                    {date} • {time}
+                  </span>
                 </div>
               </div>
               <div className="info-item">
@@ -238,11 +245,13 @@ export default function GalaDetails() {
               </div>
               <div className="info-item">
                 <div className="info-icon green-bg">
-                  <FontAwesomeIcon icon={faUsers} />
+                  <FontAwesomeIcon icon={faCreditCard} />
                 </div>
                 <div className="info-text">
-                  <span className="label">{t('galas.details.attendees')}</span>
-                  <span className="val">{attendees} {t('galas.details.entrepreneurs')}</span>
+                  <span className="label">
+                    {t('galas.details.ticketPrice') || 'Ticket Price'}
+                  </span>
+                  <span className="val">${ticketPrice}</span>
                 </div>
               </div>
               <div className="info-item">
@@ -258,29 +267,69 @@ export default function GalaDetails() {
               </div>
             </div>
 
+            {!isRegistered && (
+              <button
+                type="button"
+                className={`btn-purchase-ticket ${
+                  isPurchasing ? 'loading' : ''
+                }`}
+                disabled={isPurchasing || galaData.status > 2}
+                onClick={handlePurchase}
+              >
+                {isPurchasing
+                  ? t('galas.details.processing') || 'Processing...'
+                  : t('galas.details.buyTicketAmount', { price: ticketPrice })}
+              </button>
+            )}
+
             <button
-              className={`btn-apply-grant inline ${galaData.status > 2 ? 'disabled' : ''}`}
+              type="button"
+              className={`btn-apply-grant inline ${
+                galaData.status > 2 ? 'disabled' : ''
+              }`}
               disabled={galaData.status > 2}
-              onClick={() => navigate(`/dashboard/galas/${id}/grants`)}
+              onClick={handleApplyClick}
             >
-              {galaData.status > 2 ? t('galas.details.pastEvent') : t('galas.details.applyToGrant')}
-              <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '8px' }} />
+              {galaData.status > 2
+                ? t('galas.details.pastEvent')
+                : t('galas.details.applyToGrant')}
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                style={{ marginLeft: '8px' }}
+              />
             </button>
           </div>
-
         </div>
         {/* end .details-content */}
-
       </div>
       {/* end .gala-details-shell */}
 
       <div className="bottom-sticky-bar">
+        {!isRegistered && (
+          <button
+            type="button"
+            className="btn-purchase-ticket"
+            disabled={isPurchasing || galaData.status > 2}
+            onClick={handlePurchase}
+            style={{ marginRight: '12px', flex: 1 }}
+          >
+            {isPurchasing
+              ? '...'
+              : t('galas.details.buyTicketAmountShort', {
+                  price: ticketPrice,
+                }) || `Buy Ticket ($${ticketPrice})`}
+          </button>
+        )}
         <button
+          type="button"
           className={`btn-apply-grant ${galaData.status > 2 ? 'disabled' : ''}`}
           disabled={galaData.status > 2}
-          onClick={() => navigate(`/dashboard/galas/${id}/grants`)}
+          onClick={handleApplyClick}
+          style={{ flex: 2 }}
         >
-          {galaData.status > 2 ? t('galas.details.pastEvent') : t('galas.details.applyToGrant')}
+          {galaData.status > 2
+            ? t('galas.details.pastEvent')
+            : t('galas.details.applyToGrant')}
           <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '8px' }} />
         </button>
       </div>

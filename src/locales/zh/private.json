@@ -9,11 +9,13 @@
     "pending": "待处理",
     "approved": "已批准",
     "recentActivity": "最近活动",
+    "recentAnnouncements": "最近公告",
     "seeAll": "查看全部",
     "appliedTo": "已申请",
     "grant": "资助",
     "recently": "最近",
     "noRecentActivity": "暂无最近活动。",
+    "noRecentAnnouncements": "暂无最近公告。",
     "status": {
       "draft": "草稿",
       "pending": "待处理",
@@ -75,8 +77,14 @@
       "location": "地点",
       "attendees": "参与人数",
       "entrepreneurs": "企业家",
-      "inGrants": "资助总额",
-      "applyToGrant": "申请资助"
+      "inGrants": "的资助",
+      "applyToGrant": "申请资助",
+      "ticketRequired": "需要门票",
+      "mustBuyTicket": "在申请资助之前，您必须购买此晚会的门票。",
+      "buyTicketAmount": "购买门票 - {{price}}美元",
+      "buyTicketAmountShort": "购买门票 ({{price}}美元)",
+      "buyTicketNow": "现在购买门票 - {{price}}美元",
+      "processing": "处理中..."
     },
     "grants": {
       "loading": "正在加载资助...",

@@ -8,12 +8,14 @@
     "applications": "Solicitudes",
     "pending": "Pendiente",
     "approved": "Aprobado",
-    "recentActivity": "Actividad reciente",
-    "seeAll": "Ver todo",
+    "recentActivity": "Actividad Reciente",
+    "recentAnnouncements": "Anuncios Recientes",
+    "seeAll": "Ver Todo",
     "appliedTo": "Aplicado a",
-    "grant": "Subvención",
+    "grant": "Beca",
     "recently": "Recientemente",
     "noRecentActivity": "No se encontró actividad reciente.",
+    "noRecentAnnouncements": "No hay anuncios recientes.",
     "status": {
       "draft": "Borrador",
       "pending": "Pendiente",
@@ -76,7 +78,13 @@
       "attendees": "Asistentes",
       "entrepreneurs": "emprendedores",
       "inGrants": "en subvenciones",
-      "applyToGrant": "Aplicar a una subvención"
+      "applyToGrant": "Solicitar una subvención",
+      "ticketRequired": "Boleto Requerido",
+      "mustBuyTicket": "Debe comprar un boleto para este gala antes de poder solicitar una subvención.",
+      "buyTicketAmount": "Comprar boleto - {{price}}$",
+      "buyTicketAmountShort": "Comprar boleto ({{price}}$)",
+      "buyTicketNow": "Comprar boleto ahora - {{price}}$",
+      "processing": "Procesando..."
     },
     "grants": {
       "loading": "Cargando subvenciones...",

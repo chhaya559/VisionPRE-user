@@ -99,7 +99,12 @@
     "growBusiness": "Grow my business",
     "attendGalas": "Attend galas",
     "saveChanges": "Save Changes",
-    "user": "User"
+    "user": "User",
+    "uploading": "Uploading...",
+    "uploadSuccess": "Avatar uploaded!",
+    "uploadFailed": "Failed to upload image.",
+    "removePhoto": "Remove Photo",
+    "updateSuccess": "Profile updated successfully!"
   },
   "myProfile": {
     "loading": "Loading profile...",
@@ -230,9 +235,6 @@
     "subDescription": "Manage your premium membership",
     "active": "ACTIVE",
     "currentPlan": "Current Plan",
-    "yearly": "/year",
-    "savings": "Saves you 30% vs monthly",
-    "nextBilling": "Next billing date",
     "paymentMethod": "Payment method",
     "startedOn": "Started on",
     "benefits": "Your Premium Benefits",
@@ -244,12 +246,23 @@
     "adFreeDesc": "No interruptions while you work",
     "thinkingCancel": "Thinking of canceling?",
     "loseAccess": "You'll lose access to all premium features immediately.",
-    "cancelMembership": "Cancel Subscription",
-    "cancelling": "Cancelling...",
-    "cancelSuccess": "Subscription cancelled successfully.",
-    "cancelError": "Failed to cancel subscription.",
-    "connectWallet": "Please connect your wallet to cancel the subscription.",
-        "confirmCancel": "Are you sure you want to cancel your subscription? You will lose access to all premium features immediately.",
+    "noWallet": "Wallet not found. Please install MetaMask.",
+    "contractError": "Failed to connect to the contract.",
+    "checkingBalance": "Checking USDC balance...",
+    "insufficientBalance": "Insufficient USDC balance for this plan.",
+    "checkingAllowance": "Checking allowance...",
+    "approving": "Approving USDC...",
+    "approved": "USDC approved successfully!",
+    "confirmInWallet": "Please confirm the transaction in your wallet.",
+    "confirmCancelInWallet": "Please confirm the cancellation in your wallet.",
+    "processingTx": "Processing transaction...",
+    "success": "Subscription successful!",
+    "wrongNetwork": "You are on the wrong network. Please switch to Sepolia or Ethereum Mainnet.",
+    "connectWallet": "Please connect your wallet.",
+    "connectWalletPrompt": "Please connect your wallet to proceed.",
+    "errors": {
+      "contractError": "Token contract not found."
+    },
     "plans": {
       "free": "Free",
       "pro": "Pro"
@@ -262,7 +275,23 @@
       "none": "None",
       "monthly": "Monthly",
       "yearly": "Yearly"
-    }
+    },
+    "savings": "Saves you 30% vs monthly",
+    "nextBilling": "Next billing date",
+    "cancelMembership": "Cancel Subscription",
+    "subscriptionCanceled": "Subscription Canceled",
+    "cancelledNotice": "Your subscription has been canceled. You will move to the Free plan after your current billing period ends on {{date}}.",
+    "repurchaseNotice": "After this, you will need to repurchase a plan to continue enjoying premium benefits.",
+    "cancelling": "Cancelling...",
+    "cancelSuccess": "Subscription cancelled successfully.",
+    "yearly": "/year",
+    "monthly": "/month",
+    "yearlyValue": "year",
+    "monthlyValue": "month",
+    "notAvailable": "n/a",
+    "wallet": "Crypto Wallet",
+    "noTransactionFound": "No active transaction hash found for this subscription",
+    "confirmCancel": "Are you sure you want to cancel? This will end your premium benefits immediately."
   },
   "subscriptionBanner": {
     "title": "Unlock Premium Features",
@@ -270,7 +299,7 @@
     "button": "Subscribe Now"
   },
   "subscriptionPlans": {
-    "title": "Vision PME Passeport",
+    "title": "Vision PME Passport",
     "subtitle": "Unlock all features and opportunities",
     "limitedOffer": "LIMITED OFFER",
     "trialTitle": "Start your 7-day free trial",
@@ -286,12 +315,16 @@
     "monthlyPlan": "Monthly",
     "save30": "Save 30%",
     "perMonth": "Just",
-    "perMonthSuffix": "/month",
-    "perYearSuffix": "/year",
+    "perMonthSuffix": "/mo",
+    "perYearSuffix": "/yr",
+    "annual": "Annual",
+    "monthly": "Monthly",
+    "choosePlan": "Choose your plan",
     "trialFooter": "7-day free trial",
     "billedAnnually": "Billed annually",
     "cancelAnytime": "Cancel anytime",
     "subscribe": "Subscribe Now",
+    "securePayment": "Secure Payment",
     "loading": "Fetching plans...",
     "error": "Failed to load plans."
   }

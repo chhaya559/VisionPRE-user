@@ -12,11 +12,14 @@ import {
   faBell,
   faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import { useGetPlansQuery, useSubscribeMutation } from '../../Services/Api/module/SubscriptionApi';
-import { useWalletContext } from '../../Context/WalletContext';
-import { SubscriptionPlan, SubscriptionBillingCycle } from '../../Shared/SubscriptionEnums';
 import { toast } from 'react-toastify';
-import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+import {
+  useGetPlansQuery,
+  useSubscribeMutation,
+} from '../../Services/Api/module/SubscriptionApi';
+import { useWalletContext } from '../../Context/WalletContext';
+
+import { mapWeb3Error } from '../../Shared/Web3Utils';
 import './SubscriptionPlans.scss';
 
 const FEATURE_ICONS = [faCheck, faBolt, faUsers, faBell, faEyeSlash];
@@ -24,17 +27,37 @@ const FEATURE_ICONS = [faCheck, faBolt, faUsers, faBell, faEyeSlash];
 export default function SubscriptionPlans() {
   const navigate = useNavigate();
   const { t } = useTranslation('settings');
-  const { account, chainId, connectWallet, getContract, getTokenContract } = useWalletContext();
+  const {
+    account,
+    chainId,
+    connectWallet,
+    switchChain,
+    getContract,
+    getTokenContract,
+  } = useWalletContext();
   const { data: plansResponse, isLoading, error } = useGetPlansQuery(undefined);
-  const [subscribeMutation, { isLoading: isSubscribing }] = useSubscribeMutation();
+  const [subscribeMutation, { isLoading: isSubscribing }] =
+    useSubscribeMutation();
   const plans = plansResponse?.data?.items || plansResponse?.data || [];
 
-  const handleSubscribe = async (planId: number, e: React.MouseEvent) => {
+  const handleSubscribe = async (planId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     console.log('Current Chain ID:', chainId);
 
-    if (chainId && chainId !== '0x89' && chainId !== '0x13882' && chainId !== '0x1') {
+    if (
+      chainId &&
+      chainId !== '0xaa36a7' &&
+      chainId !== '0x1' &&
+      chainId !== '0x13881' &&
+      chainId !== '0x13882'
+    ) {
       toast.warning(t('subscription.wrongNetwork'));
+      try {
+        await switchChain('0x13882'); // Try Amoy by default if on wrong network
+      } catch (err) {
+        console.error('Failed to switch network:', err);
+      }
+      return; // BLOCK execution
     }
 
     if (!account) {
@@ -58,23 +81,39 @@ export default function SubscriptionPlans() {
         return;
       }
 
-      // 2. Execute Blockchain Transaction
-      const selectedPlan = plans.find((p: any) => p.id === planId || p.Id === planId);
-      const priceValue = selectedPlan?.price || (planId === SubscriptionPlan.Pro ? '19.99' : '0');
-      const isYearly = selectedPlan?.billingCycle === SubscriptionBillingCycle.Yearly || selectedPlan?.name?.toLowerCase().includes('year');
+      // 2. Map UUID to Numeric ID for Smart Contract
+      const selectedPlan = plans.find(
+        (p: any) => p.id === planId || p.Id === planId
+      );
+
+      console.log('Selected Plan Metadata:', selectedPlan);
+
+      // Determine the numeric ID the contract expects (1 for Free, 2 for Pro)
+      const numericPlanId = selectedPlan?.planCode || 2; // Default to Pro if not specified
+
+      console.log('Resolved numericPlanId:', numericPlanId);
+
+      const priceValue =
+        selectedPlan?.price || (numericPlanId === 2 ? '19.99' : '0');
 
       // Network-specific USDC Addresses
       const USDC_MAP: Record<string, string> = {
+        '0xaa36a7': '0xba89d4B0513eAdA62671f5db8D6Fef498Ff63331', // Updated to sUSD for Sepolia
         '0x1': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // Ethereum Mainnet
         '0x89': '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359', // Polygon Mainnet (Native)
-        '0x13881': '0x073B9E81ec8386B9d702Ae10C000DDA7A73A0b3a', // Mumbai Testnet
-        '0x13882': '0x073B9E81ec8386B9d702Ae10C000DDA7A73A0b3a', // Amoy Testnet
-        '0xaa36a7': '0x073B9E81ec8386B9d702Ae10C000DDA7A73A0b3a', // Sepolia Testnet
+        '0x13881': '0xba89d4B0513eAdA62671f5db8D6Fef498Ff63331', // Updated to sUSD for Mumbai
+        '0x13882': '0xba89d4B0513eAdA62671f5db8D6Fef498Ff63331', // Updated to sUSD for Amoy
       };
 
-      const USDC_ADDRESS = USDC_MAP[chainId || ''] || '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359';
-      console.log('Using USDC Address:', USDC_ADDRESS, 'for Chain ID:', chainId);
-      
+      const USDC_ADDRESS =
+        USDC_MAP[chainId || ''] || '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359';
+      console.log(
+        'Using USDC Address:',
+        USDC_ADDRESS,
+        'for Chain ID:',
+        chainId
+      );
+
       const tokenContract = await getTokenContract(USDC_ADDRESS);
 
       if (!tokenContract) {
@@ -82,101 +121,113 @@ export default function SubscriptionPlans() {
         return;
       }
 
-      const amountInUnits = ethers.parseUnits(priceValue.toString(), 6);
+      const decimals = await tokenContract.decimals();
+      const amountInUnits = ethers.parseUnits(priceValue.toString(), decimals);
       const contractAddress = await contract.getAddress();
 
+      // Step 0: Information Logging (No blocking)
+      const balance = await tokenContract.balanceOf(account);
+      console.log('Subscription Context:', {
+        Account: account,
+        ChainId: chainId,
+        USDC_Address: USDC_ADDRESS,
+        Contract_Address: contractAddress,
+        PlanId: planId,
+        NumericPlanId: numericPlanId,
+        Price: priceValue,
+        Decimals: decimals.toString(),
+        AmountInUnits: amountInUnits.toString(),
+        CurrentBalance: balance.toString(),
+      });
+
+      if (balance < amountInUnits) {
+        const errorMsg = `Insufficient balance. Required: ${ethers.formatUnits(
+          amountInUnits,
+          decimals
+        )} sUSD, Available: ${ethers.formatUnits(balance, decimals)} sUSD`;
+        console.error(errorMsg);
+        toast.error(errorMsg);
+        return;
+      }
+
       // Step 1: Check Allowance
-      toast.info(t('subscription.checkingAllowance'));
       const allowance = await tokenContract.allowance(account, contractAddress);
+      console.log('Current Allowance:', allowance.toString());
 
       if (allowance < amountInUnits) {
+        console.log('Requesting USDC Approval...');
         toast.info(t('subscription.approving'));
-        const approveTx = await tokenContract.approve(contractAddress, amountInUnits);
+        const approveTx = await tokenContract.approve(
+          contractAddress,
+          ethers.MaxUint256
+        );
+        console.log('Approval Transaction Sent:', approveTx.hash);
         await approveTx.wait();
+        console.log('Approval Confirmed');
         toast.success(t('subscription.approved'));
+
+        // Add a small delay to ensure MetaMask is ready for the next popup
+        console.log('Waiting 500ms for wallet readiness...');
+        await new Promise((resolve) => setTimeout(resolve, 500));
       }
 
       // Step 2: Subscribe
+      console.log('Requesting Subscription Signature for Plan ID:', planId);
       toast.info(t('subscription.confirmInWallet'));
       const tx = await contract.subscribe(planId);
+      console.log('Subscription Transaction Sent:', tx.hash);
 
       toast.info(t('subscription.processingTx'));
       const receipt = await tx.wait();
       const realHash = receipt.hash || tx.hash;
+      console.log('Subscription Confirmed! Receipt:', receipt);
+
+      console.log('Transaction Confirmed:', realHash);
 
       // 3. Sync with Backend
+      console.log('Syncing subscription with backend...', {
+        planId,
+        transactionHash: realHash,
+      });
+
       const response = await subscribeMutation({
-        Plan: Number(planId),
-        BillingCycle: isYearly ? SubscriptionBillingCycle.Yearly : SubscriptionBillingCycle.Monthly,
-        AutoPayEnabled: true,
-        TransactionHash: realHash,
-        WalletAddress: account || '',
-        ExpiresAt: new Date(Date.now() + (isYearly ? 365 : 30) * 24 * 60 * 60 * 1000).toISOString(),
+        planId,
+        autoPayEnabled: true,
+        transactionHash: realHash,
+        walletAddress: account || '',
       }).unwrap();
 
       if (response.success) {
         localStorage.setItem('active_subscription_hash', realHash);
         toast.success(response.message || t('subscription.success'));
         navigate('/dashboard/profile/settings');
+      } else {
+        console.error('Backend subscription sync failed:', response);
+        toast.error(
+          response.message || 'Backend sync failed. Please contact support.'
+        );
       }
     } catch (err: any) {
-      console.error('Subscription error:', err);
-      const errorMsg = err?.reason || err?.message || t('subscription.errorOccurred');
+      console.group('Subscription Error Details');
+      console.error('Error Object:', err);
+      if (err?.data) console.error('Error Data:', err.data);
+      if (err?.error) console.error('Error context:', err.error);
+      if (err?.transaction)
+        console.error('Failed Transaction:', err.transaction);
+      console.groupEnd();
+
+      const errorMsg = mapWeb3Error(err);
       toast.error(errorMsg);
     }
   };
 
   if (isLoading) {
     return (
-      <div className="sp-page loading-skeleton">
-        {/* ── Hero Skeleton ── */}
+      <div className="sp-page loading-state">
         <header className="sp-hero">
           <div className="sp-hero__bg-shape" />
-          <div className="sp-hero__crown">
-            <Skeleton variant="circular" width="48px" height="48px" />
-          </div>
-          <Skeleton variant="text" width="300px" height="48px" className="mb-4" />
-          <Skeleton variant="text" width="400px" height="24px" />
+          <h1 className="sp-hero__title">Loading Plans...</h1>
         </header>
-
-        <div className="sp-content" style={{ padding: '40px 20px' }}>
-          {/* Features Skeleton */}
-          <section className="sp-features">
-            <Skeleton variant="text" width="150px" height="24px" className="mb-6" />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <Skeleton variant="text" width="80%" />
-              <Skeleton variant="text" width="75%" />
-              <Skeleton variant="text" width="70%" />
-            </div>
-          </section>
-
-          {/* Plans Skeleton */}
-          <section className="sp-plans" style={{ marginTop: '40px' }}>
-            <Skeleton variant="text" width="150px" height="24px" className="mb-6" />
-            <div className="sp-plans__grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-              <div className="sp-plan-card" style={{ padding: '32px' }}>
-                <Skeleton variant="text" width="60px" height="24px" className="mb-4" />
-                <Skeleton variant="text" width="120px" height="48px" className="mb-6" />
-                <div style={{ gap: '12px', display: 'flex', flexDirection: 'column' }}>
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                </div>
-                <Skeleton variant="rounded" width="100%" height="48px" style={{ marginTop: '32px' }} />
-              </div>
-              <div className="sp-plan-card" style={{ padding: '32px' }}>
-                <Skeleton variant="text" width="60px" height="24px" className="mb-4" />
-                <Skeleton variant="text" width="120px" height="48px" className="mb-6" />
-                <div style={{ gap: '12px', display: 'flex', flexDirection: 'column' }}>
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                </div>
-                <Skeleton variant="rounded" width="100%" height="48px" style={{ marginTop: '32px' }} />
-              </div>
-            </div>
-          </section>
-        </div>
       </div>
     );
   }
@@ -191,7 +242,13 @@ export default function SubscriptionPlans() {
     );
   }
 
-  const featureKeys = ['feature1', 'feature2', 'feature3', 'feature4', 'feature5'];
+  const featureKeys = [
+    'feature1',
+    'feature2',
+    'feature3',
+    'feature4',
+    'feature5',
+  ];
   const featureDefaults = [
     'Unlimited grant applications',
     'Priority event registration',
@@ -205,7 +262,12 @@ export default function SubscriptionPlans() {
       {/* ── Hero ── */}
       <header className="sp-hero">
         <div className="sp-hero__bg-shape" />
-        <button className="sp-hero__close" onClick={() => navigate(-1)} aria-label="Close">
+        <button
+          className="sp-hero__close"
+          type="button"
+          onClick={() => navigate(-1)}
+          aria-label="Close"
+        >
           <FontAwesomeIcon icon={faXmark} />
         </button>
         <div className="sp-hero__crown">
@@ -213,19 +275,15 @@ export default function SubscriptionPlans() {
         </div>
         <h1 className="sp-hero__title">{t('subscriptionPlans.title')}</h1>
         <p className="sp-hero__sub">{t('subscriptionPlans.subtitle')}</p>
-
-        <div className="sp-trial-chip">
-          <span className="sp-trial-chip__dot" />
-          {t('subscriptionPlans.trialTitle')}
-        </div>
       </header>
 
       {/* ── Content ── */}
       <div className="sp-content">
-
         {/* Features */}
         <section className="sp-features">
-          <p className="sp-section-label">{t('subscriptionPlans.whatsIncluded')}</p>
+          <p className="sp-section-label">
+            {t('subscriptionPlans.whatsIncluded')}
+          </p>
           <ul className="sp-features__list">
             {featureKeys.map((key, i) => (
               <li key={key} className="sp-features__item">
@@ -240,32 +298,34 @@ export default function SubscriptionPlans() {
 
         {/* Plans */}
         <section className="sp-plans">
-          <p className="sp-section-label">{t('subscriptionPlans.choosePlan')}</p>
+          <p className="sp-section-label">
+            {t('subscriptionPlans.choosePlan')}
+          </p>
           <div className="sp-plans__grid">
             {plans.map((plan: any) => {
-              const id = plan.id ?? plan.Id;
-              const isYearly =
-                plan.billingCycle === SubscriptionBillingCycle.Yearly || plan.name?.toLowerCase().includes('year');
+              const { id } = plan;
+              const isYearly = plan.billingCycle === 2;
+              const { isPopular } = plan;
               const price = plan.price ?? 0;
-              const monthlyEquiv = isYearly ? (price / 12).toFixed(2) : null;
+              const planName =
+                plan.displayName || (isYearly ? 'Pro Yearly' : 'Pro Monthly');
+              const features = plan.features || [];
 
               return (
                 <div
                   key={id}
-                  className={`sp-plan-card ${isYearly ? 'sp-plan-card--featured' : ''}`}
+                  className={`sp-plan-card ${
+                    isYearly ? 'sp-plan-card--featured' : ''
+                  }`}
                 >
-                  {isYearly && (
+                  {isPopular && (
                     <div className="sp-plan-card__badge">
                       {t('subscriptionPlans.mostPopular')}
                     </div>
                   )}
 
                   <div className="sp-plan-card__head">
-                    <div className="sp-plan-card__cycle">
-                      {isYearly
-                        ? t('subscriptionPlans.annual')
-                        : t('subscriptionPlans.monthly')}
-                    </div>
+                    <div className="sp-plan-card__cycle">{planName}</div>
                     <div className="sp-plan-card__price-row">
                       <span className="sp-plan-card__currency">$</span>
                       <span className="sp-plan-card__amount">{price}</span>
@@ -274,39 +334,21 @@ export default function SubscriptionPlans() {
                           ? t('subscriptionPlans.perYearSuffix')
                           : t('subscriptionPlans.perMonthSuffix')}
                       </span>
-                      {isYearly && (
-                        <span className="sp-plan-card__save">
-                          {t('subscriptionPlans.save30')}
-                        </span>
-                      )}
                     </div>
-                    {monthlyEquiv && (
-                      <p className="sp-plan-card__hint">
-                        ${monthlyEquiv}
-                        {t('subscriptionPlans.perMonthSuffix')} &mdash; billed annually
-                      </p>
-                    )}
                   </div>
 
                   <ul className="sp-plan-card__perks">
-                    <li>
-                      <FontAwesomeIcon icon={faShield} />
-                      {t('subscriptionPlans.trialFooter')}
-                    </li>
-                    <li>
-                      <FontAwesomeIcon icon={faCheck} />
-                      {isYearly
-                        ? t('subscriptionPlans.billedAnnually')
-                        : t('subscriptionPlans.monthlyPlan')}
-                    </li>
-                    <li>
-                      <FontAwesomeIcon icon={faCheck} />
-                      {t('subscriptionPlans.cancelAnytime')}
-                    </li>
+                    {features.map((feature: string, idx: number) => (
+                      <li key={idx}>
+                        <FontAwesomeIcon icon={faCheck} />
+                        {feature}
+                      </li>
+                    ))}
                   </ul>
 
                   <button
                     className="sp-plan-card__btn"
+                    type="button"
                     disabled={isSubscribing}
                     onClick={(e) => handleSubscribe(id, e)}
                   >

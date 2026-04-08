@@ -31,10 +31,7 @@ export default function DeleteAccount() {
   return (
     <div className="edit-profile-container">
       <header className="edit-profile-header secondary">
-        <button
-          className="back-btn"
-          onClick={() => navigate(-1)}
-        >
+        <button type="button" className="back-btn" onClick={() => navigate(-1)}>
           <FontAwesomeIcon icon={faChevronLeft} />
           {t('deleteAccount.back')}
         </button>
@@ -71,10 +68,14 @@ export default function DeleteAccount() {
             </ul>
           </div>
 
-          <button className="btn-delete" onClick={handleDelete}>
+          <button type="button" className="btn-delete" onClick={handleDelete}>
             {t('deleteAccount.delete')}
           </button>
-          <button className="btn-cancel" onClick={() => navigate(-1)}>
+          <button
+            type="button"
+            className="btn-cancel"
+            onClick={() => navigate(-1)}
+          >
             {t('deleteAccount.cancel')}
           </button>
         </div>

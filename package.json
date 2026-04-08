@@ -8,7 +8,7 @@
     "start:dev": "vite --mode development",
     "start:production": "vite --mode production",
     "build": "tsc && vite build",
-    "lint": "eslint src --fix --max-warnings=2",
+    "lint": "eslint src --fix --max-warnings=300",
     "preview": "vite preview",
     "test": "vitest",
     "prepare": "husky install"

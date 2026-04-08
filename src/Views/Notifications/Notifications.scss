@@ -32,9 +32,22 @@
 }
 
 .notifications-hero {
-  padding: 28px 28px 24px;
-  background: linear-gradient(135deg, #45cd86 0%, #2ebd72 100%);
+  padding: 32px 32px 28px;
+  background: linear-gradient(135deg, #45cd86 0%, #2ebd72 50%, #27ae60 100%);
+  position: relative;
+  overflow: hidden;
   color: $primaryWhite;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
 }
 
 .notifications-hero-top {
@@ -45,11 +58,48 @@
 }
 
 .notifications-hero-copy {
-  h1 {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
+  .hero-tabs {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 8px;
+
+    h1 {
+      margin: 0;
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      padding-bottom: 6px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 4px;
+        background: $primaryWhite;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      &.active {
+        color: $primaryWhite;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+
+        &::after {
+          width: 100%;
+        }
+      }
+
+      &:hover:not(.active) {
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
   }
 
   p {
@@ -58,6 +108,7 @@
     font-size: 0.98rem;
   }
 }
+
 
 .notifications-toolbar {
   margin-top: 22px;
@@ -78,16 +129,31 @@
 
 .stat-pill {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
-  border-radius: 999px;
-  padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  align-items: center;
+  gap: 10px;
+  border-radius: 16px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
 
   &.highlight {
-    background: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
   }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+  }
+}
+
+.stat-icon-mini {
+  font-size: 1rem;
+  opacity: 0.7;
 }
 
 .stat-value {
@@ -180,23 +246,52 @@
 .notification-row {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 16px;
+  gap: 18px;
   align-items: center;
-  padding: 18px 28px;
+  padding: 20px 28px;
   border-top: 1px solid $borderColorLight;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 0;
+    background: $primaryGreen;
+    border-radius: 0 4px 4px 0;
+    transition: height 0.3s ease;
+  }
 
   &:hover {
-    background: #f8fcfa;
+    background: #fbfdfc;
+    padding-left: 32px;
   }
 
   &.unread {
-    background: rgba(69, 205, 134, 0.12);
+    background: rgba(69, 205, 134, 0.04);
+    
+    &::before {
+      height: 70%;
+    }
+
+    h3 {
+      font-weight: 800;
+    }
   }
 
   &.selected {
-    background: rgba(69, 205, 134, 0.18);
+    background: rgba(69, 205, 134, 0.08);
+    border-left: 4px solid $primaryGreen;
+    padding-left: 32px;
+    
+    &::before {
+      display: none;
+    }
   }
 }
 
@@ -236,6 +331,7 @@
     color: $textGray;
     line-height: 1.5;
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;

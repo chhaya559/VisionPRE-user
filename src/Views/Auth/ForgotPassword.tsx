@@ -103,6 +103,7 @@ export default function ForgotPassword() {
             </div>
             <p>{t('check_inbox_msg')}</p>
             <button
+              type="button"
               className="btn-primary"
               onClick={() => {
                 setShowModal(false);

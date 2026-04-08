@@ -122,7 +122,7 @@
     .ii-text {
       .label {
         font-size: 0.75rem;
-        color: $placeholderColor;
+        color: $secondaryText;
         display: block;
         margin-bottom: 2px;
       }
@@ -132,6 +132,45 @@
         color: $primaryText;
       }
     }
+  }
+}
+
+.plan-info-header {
+  margin-bottom: 24px;
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $primaryText;
+    margin-bottom: 4px;
+  }
+  p {
+    font-size: 1rem;
+    color: $textGray;
+    font-weight: 600;
+  }
+}
+
+.pc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba($primaryGreen, 0.1);
+  color: $primaryGreen;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+
+  svg {
+    font-size: 0.875rem;
+  }
+
+  &--inactive {
+    background: rgba($danger, 0.1);
+    color: $danger;
   }
 }
 
@@ -207,21 +246,37 @@
       margin-bottom: 4px;
     }
     p {
+      margin: 0;
       font-size: 0.8125rem;
-      color: #c2410c;
+      color: $secondaryText;
+    }
+  }
+
+  &.cancelled-state {
+    background: #fff7ed;
+    border-color: #fed7aa;
+
+    svg {
+      color: #f97316;
+    }
+
+    .repurchase-note {
+      margin-top: 12px;
+      font-weight: 600;
+      color: $primaryText;
     }
   }
 }
 
 .btn-cancel-membership {
   width: 100%;
-  background: #ef4444;
-  color: $primaryWhite;
-  border: none;
   padding: 16px;
+  background: #ef4444;
+  color: white;
+  border: none;
   border-radius: 16px;
-  font-size: 1.0625rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
@@ -229,5 +284,77 @@
   &:hover {
     background: darken(#ef4444, 5%);
     transform: translateY(-1px);
+  }
+
+  &.btn-disabled-faded {
+    background: $borderColorLight;
+    color: $secondaryText;
+    opacity: 0.7;
+    cursor: not-allowed;
+    box-shadow: none;
+
+    &:hover {
+      transform: none;
+      background: $borderColorLight;
+    }
+  }
+}
+
+.confirmation-modal {
+  text-align: center;
+  padding: 8px 0;
+
+  .cm-icon {
+    font-size: 2.5rem;
+    color: #f97316;
+    margin-bottom: 16px;
+  }
+
+  .cm-text {
+    font-size: 1rem;
+    color: $secondaryText;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .cm-actions {
+    display: flex;
+    gap: 12px;
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &.btn-cancel {
+        background: $borderColorLight;
+        color: $secondaryText;
+        border: 1px solid $borderColor;
+
+        &:hover {
+          background: $borderColor;
+        }
+      }
+
+      &.btn-confirm {
+        background: #ef4444;
+        color: white;
+        border: none;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+
+        &:hover {
+          background: darken(#ef4444, 5%);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
   }
 }

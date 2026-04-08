@@ -27,6 +27,13 @@ export const GalaApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+    purchaseTicket: builder.mutation({
+      query: (payload) => ({
+        url: `/user/gala/purchase`,
+        method: 'POST',
+        body: payload,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -36,4 +43,5 @@ export const {
   useGetGalaByIdQuery,
   useGetMyApplicationsQuery,
   useApplyGrantMutation,
+  usePurchaseTicketMutation,
 } = GalaApi;

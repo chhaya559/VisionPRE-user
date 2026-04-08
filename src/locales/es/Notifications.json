@@ -44,5 +44,15 @@
         "hour": "hace una hora",
         "hours": "hace unas horas",
         "days": "hace unos días"
+    },
+    "tabs": {
+        "notifications": "Notificaciones",
+        "announcements": "Anuncios"
+    },
+    "announcements": {
+        "title": "Anuncios",
+        "subtitle": "Mantente al día con las noticias globales y las actualizaciones de la plataforma",
+        "noAnnouncements": "Aún no hay anuncios",
+        "noAnnouncementsDesc": "Vuelve más tarde para ver actualizaciones importantes de la plataforma."
     }
 }

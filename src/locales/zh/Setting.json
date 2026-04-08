@@ -99,7 +99,12 @@
     "growBusiness": "发展我的业务",
     "attendGalas": "参加晚会",
     "saveChanges": "保存更改",
-    "user": "用户"
+    "user": "用户",
+    "uploading": "上传中...",
+    "uploadSuccess": "头像上传成功！",
+    "uploadFailed": "图片上传失败。",
+    "removePhoto": "移除照片",
+    "updateSuccess": "个人资料更新成功！"
   },
   "myProfile": {
     "loading": "正在加载个人资料...",
@@ -230,9 +235,6 @@
     "subDescription": "管理您的高级会员资格",
     "active": "活跃",
     "currentPlan": "当前计划",
-    "yearly": "/年",
-    "savings": "比月付节省30%",
-    "nextBilling": "下次账单日期",
     "paymentMethod": "支付方式",
     "startedOn": "开始于",
     "benefits": "您的高级权益",
@@ -244,12 +246,49 @@
     "adFreeDesc": "工作时不受干扰",
     "thinkingCancel": "考虑取消？",
     "loseAccess": "您将立即失去对所有高级功能的访问权限。",
+    "noWallet": "未找到钱包。请安装 MetaMask。",
+    "contractError": "连接合约失败。",
+    "checkingBalance": "正在检查 USDC 余额...",
+    "insufficientBalance": "该计划的 USDC 余额不足。",
+    "checkingAllowance": "正在检查授权...",
+    "approving": "正在批准 USDC...",
+    "approved": "USDC 批准成功！",
+    "confirmInWallet": "请在钱包中确认交易。",
+    "confirmCancelInWallet": "请在钱包中确认取消。",
+    "processingTx": "正在处理交易...",
+    "success": "订阅成功！",
+    "wrongNetwork": "您处于错误的网络中。请切换到 Sepolia 或 Ethereum Mainnet。",
+    "connectWallet": "请连接您的钱包。",
+    "connectWalletPrompt": "请连接您的钱包以继续。",
+    "plans": {
+      "free": "免费",
+      "pro": "专业版"
+    },
+    "status": {
+      "active": "活跃",
+      "inactive": "未激活"
+    },
+    "billing": {
+      "none": "无",
+      "monthly": "按月",
+      "yearly": "按年"
+    },
+    "savings": "比月付节省30%",
+    "nextBilling": "下次账单日期",
     "cancelMembership": "取消订阅",
+    "subscriptionCanceled": "订阅已取消",
+    "cancelledNotice": "您的订阅已被取消。在您的当前计费周期于 {{date}} 结束后，您将转为免费计划。",
+    "repurchaseNotice": "之后，如果您希望继续享受高级福利，您将需要重新购买计划。",
     "cancelling": "正在取消...",
     "cancelSuccess": "订阅已成功取消。",
-    "cancelError": "取消订阅失败。",
-    "connectWallet": "请连接您的钱包以取消订阅。",
-    "confirmCancel": "您确定要取消订阅吗？您将立即失去对所有高级功能的访问权限。"
+    "yearly": "/年",
+    "monthly": "/月",
+    "yearlyValue": "年",
+    "monthlyValue": "月",
+    "notAvailable": "暂无",
+    "wallet": "加密钱包",
+    "noTransactionFound": "未找到此订阅的活动交易哈希",
+    "confirmCancel": "您确定要取消吗？这将立即终止您的高级权益。"
   },
   "subscriptionBanner": {
     "title": "解锁高级功能",
@@ -275,10 +314,14 @@
     "perMonth": "仅需",
     "perMonthSuffix": "/月",
     "perYearSuffix": "/年",
+    "annual": "年度",
+    "monthly": "月度",
+    "choosePlan": "选择您的计划",
     "trialFooter": "7天免费试用",
     "billedAnnually": "按年计费",
     "cancelAnytime": "随时取消",
     "subscribe": "立即订阅",
+    "securePayment": "安全支付",
     "loading": "正在获取计划...",
     "error": "加载计划失败。"
   }

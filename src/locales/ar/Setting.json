@@ -99,7 +99,12 @@
     "growBusiness": "تنمية أعمالي",
     "attendGalas": "حضور الحفلات",
     "saveChanges": "حفظ التغييرات",
-    "user": "مستخدم"
+    "user": "مستخدم",
+    "uploading": "جاري الرفع...",
+    "uploadSuccess": "تم رفع الصورة الرمزية!",
+    "uploadFailed": "فشل رفع الصورة.",
+    "removePhoto": "إزالة الصورة",
+    "updateSuccess": "تم تحديث الملف الشخصي بنجاح!"
   },
   "myProfile": {
     "loading": "جارٍ تحميل الملف الشخصي...",
@@ -249,7 +254,22 @@
     "cancelSuccess": "تم إلغاء الاشتراك بنجاح.",
     "cancelError": "فشل إلغاء الاشتراك.",
     "connectWallet": "يرجى ربط محفظتك لإلغاء الاشتراك.",
-    "confirmCancel": "هل أنت متأكد من أنك تريد إلغاء اشتراكك؟ ستفقد الوصول إلى جميع الميزات المميزة فوراً."
+    "confirmCancel": "هل أنت متأكد من أنك تريد إلغاء اشتراكك؟ ستفقد الوصول إلى جميع الميزات المميزة فوراً.",
+    "noWallet": "لم يتم العثور على محفظة. يرجى تثبيت MetaMask.",
+    "contractError": "فشل الاتصال بالعقد.",
+    "checkingBalance": "جارٍ التحقق من رصيد USDC...",
+    "insufficientBalance": "رصيد USDC غير كافٍ لهذه الخطة.",
+    "checkingAllowance": "جارٍ التحقق من التفويض...",
+    "approving": "جارٍ الموافقة على USDC...",
+    "approved": "تمت الموافقة على USDC بنجاح!",
+    "confirmInWallet": "يرجى تأكيد الاشتراك في محفظتك.",
+    "processingTx": "جارٍ معالجة المعاملة...",
+    "success": "تم الاشتراك بنجاح!",
+    "wrongNetwork": "أنت على الشبكة الخاطئة. يرجى التبديل إلى Sepolia أو Ethereum Mainnet.",
+    "connectWalletPrompt": "يرجى ربط محفظتك للمتابعة.",
+    "errors": {
+      "contractError": "لم يتم العثور على عقد الرمز المميز."
+    }
   },
   "subscriptionBanner": {
     "title": "افتح الميزات المميزة",

@@ -75,8 +75,14 @@
       "location": "Localização",
       "attendees": "Participantes",
       "entrepreneurs": "empreendedores",
-      "inGrants": "em subsídios",
-      "applyToGrant": "Candidatar-se a um subsídio"
+      "inGrants": "em bolsas",
+      "applyToGrant": "Inscrever-se para uma bolsa",
+      "ticketRequired": "Bilhete Necessário",
+      "mustBuyTicket": "Você deve comprar um bilhete para este gala antes de poder se inscrever para uma bolsa.",
+      "buyTicketAmount": "Comprar bilhete - {{price}}$",
+      "buyTicketAmountShort": "Comprar bilhete ({{price}}$)",
+      "buyTicketNow": "Comprar bilhete agora - {{price}}$",
+      "processing": "Processando..."
     },
     "grants": {
       "loading": "A carregar subsídios...",

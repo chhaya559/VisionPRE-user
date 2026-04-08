@@ -64,7 +64,10 @@ export const PRIVATE_ROUTES: Array<CustomRouter> = [
       { path: 'profile/settings/terms', element: <TermsAndConditions /> },
       { path: 'profile/settings/privacy', element: <PrivacyPolicy /> },
       { path: 'profile/settings/delete-account', element: <DeleteAccount /> },
-      { path: 'profile/settings/subscription', element: <SubscriptionDetails /> },
+      {
+        path: 'profile/settings/subscription',
+        element: <SubscriptionDetails />,
+      },
       { path: 'profile/settings/plans', element: <SubscriptionPlans /> },
     ],
   },

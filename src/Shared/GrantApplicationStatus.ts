@@ -8,8 +8,8 @@ export enum GrantApplicationStatus {
   ApprovedForInterview = 7,
 }
 
-export const getGrantApplicationStatusValue = (application: any) =>
-  Number(application?.status ?? application?.Status);
+export const getGrantApplicationStatusValue = (application: { status: any }) =>
+  Number(application?.status);
 
 export const getGrantApplicationStatusLabel = (status: any) => {
   if (typeof status === 'string') {
@@ -44,7 +44,6 @@ export const isGrantApprovedStatus = (status: number) =>
   ].includes(status);
 
 export const isGrantPendingStatus = (status: number) =>
-  [
-    GrantApplicationStatus.Pending,
-    GrantApplicationStatus.InReview,
-  ].includes(status);
+  [GrantApplicationStatus.Pending, GrantApplicationStatus.InReview].includes(
+    status
+  );

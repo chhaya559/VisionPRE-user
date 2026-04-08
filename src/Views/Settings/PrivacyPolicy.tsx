@@ -11,10 +11,7 @@ export default function PrivacyPolicy() {
   return (
     <div className="edit-profile-container">
       <header className="edit-profile-header secondary">
-        <button
-          className="back-btn"
-          onClick={() => navigate(-1)}
-        >
+        <button type="button" className="back-btn" onClick={() => navigate(-1)}>
           <FontAwesomeIcon icon={faChevronLeft} />
           {t('privacy.back')}
         </button>
@@ -54,7 +51,11 @@ export default function PrivacyPolicy() {
           </div>
         </div>
 
-        <button className="btn-save policy-action" onClick={() => navigate(-1)}>
+        <button
+          type="button"
+          className="btn-save policy-action"
+          onClick={() => navigate(-1)}
+        >
           {t('privacy.understand')}
         </button>
       </div>

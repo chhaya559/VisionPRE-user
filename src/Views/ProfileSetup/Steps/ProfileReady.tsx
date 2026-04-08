@@ -5,8 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRocket, faStar } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { logout, setAuthData } from '../../../Store/Common';
 import { useProfileOnboardingMutation } from '../../../Services/Api/module/UserApi';
-import { setAuthData } from '../../../Store/Common';
 
 export default function ProfileReady() {
   const { t } = useTranslation('profile');
@@ -36,10 +37,9 @@ export default function ProfileReady() {
       navigate('/dashboard', { replace: true });
     } catch (error: any) {
       console.log('Onboarding error:', error);
-      console.log(
-        'Onboarding error details:',
-        JSON.stringify(error?.data, null, 2)
-      );
+      toast.error('Session error or account not found. Please login again.');
+      dispatch(logout());
+      navigate('/login', { replace: true });
     }
   };
 
@@ -79,6 +79,7 @@ export default function ProfileReady() {
       </div>
 
       <button
+        type="button"
         className="btn-continue"
         onClick={handleSubmit}
         disabled={isLoading}

@@ -75,8 +75,14 @@
       "location": "場所",
       "attendees": "参加者数",
       "entrepreneurs": "起業家",
-      "inGrants": "助成金として",
-      "applyToGrant": "助成金に応募する"
+      "inGrants": "の助成金",
+      "applyToGrant": "助成金に申し込む",
+      "ticketRequired": "チケットが必要です",
+      "mustBuyTicket": "助成金を申請する前に、このガラへのチケットを購入する必要があります。",
+      "buyTicketAmount": "チケットを購入 - {{price}}$",
+      "buyTicketAmountShort": "チケットを購入 ({{price}}$)",
+      "buyTicketNow": "今すぐチケットを購入 - {{price}}$",
+      "processing": "処理中..."
     },
     "grants": {
       "loading": "助成金を読み込み中...",

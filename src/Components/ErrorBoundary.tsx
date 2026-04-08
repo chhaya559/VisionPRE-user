@@ -40,6 +40,7 @@ export default function ErrorBoundary() {
         {errorMessage}
       </p>
       <button
+        type="button"
         onClick={() => (window.location.href = '/')}
         style={{
           padding: '10px 24px',

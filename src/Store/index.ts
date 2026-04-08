@@ -12,7 +12,7 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { api } from '../Services/Api/api';
+import api from '../Services/Api/api';
 import common from './Common';
 import loader from './Loader';
 

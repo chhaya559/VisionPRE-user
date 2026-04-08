@@ -76,7 +76,13 @@
       "attendees": "الحضور",
       "entrepreneurs": "رواد الأعمال",
       "inGrants": "في المنح",
-      "applyToGrant": "التقديم على منحة"
+      "applyToGrant": "التقدم بطلب للحصول على منحة",
+      "ticketRequired": "التذكرة مطلوبة",
+      "mustBuyTicket": "يجب عليك شراء تذكرة لهذا الحفل قبل أن تتمكن من التقدم بطلب للحصول على منحة.",
+      "buyTicketAmount": "شراء تذكرة - {{price}}$",
+      "buyTicketAmountShort": "شراء تذكرة ({{price}}$)",
+      "buyTicketNow": "اشتري التذكرة الآن - {{price}}$",
+      "processing": "جاري المعالجة..."
     },
     "grants": {
       "loading": "جارٍ تحميل المنح...",

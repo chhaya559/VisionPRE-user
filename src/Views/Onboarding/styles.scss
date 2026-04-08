@@ -118,17 +118,23 @@
   }
 
   .btn-skip {
-    background: transparent;
+    background-color: $primaryGreen;
     border: none;
-    color: $secondaryText;
+    color: $primaryWhite;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    padding: 8px;
+    padding: 12px 32px;
+    border-radius: 50px;
+    transition: transform 0.2s, opacity 0.2s;
 
     &:focus {
-      outline: $primaryGreen;
-      border: 1px solid $primaryGreen;
+      outline: none;
+    }
+
+    &:active {
+      transform: scale(0.98);
+      opacity: 0.9;
     }
   }
 

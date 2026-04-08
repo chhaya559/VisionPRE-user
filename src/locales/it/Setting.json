@@ -99,7 +99,12 @@
     "growBusiness": "Far crescere la mia attività",
     "attendGalas": "Partecipare ai gala",
     "saveChanges": "Salva modifiche",
-    "user": "Utente"
+    "user": "Utente",
+    "uploading": "Caricamento...",
+    "uploadSuccess": "Avatar caricato!",
+    "uploadFailed": "Caricamento dell'immagine fallito.",
+    "removePhoto": "Rimuovi foto",
+    "updateSuccess": "Profilo aggiornato con successo!"
   },
   "myProfile": {
     "loading": "Caricamento profilo...",
@@ -249,7 +254,22 @@
     "cancelSuccess": "Abbonamento annullato con successo.",
     "cancelError": "Impossibile annullare l'abbonamento.",
     "connectWallet": "Connetti il tuo wallet per annullare l'abbonamento.",
-    "confirmCancel": "Sei sicuro di voler annullare il tuo abbonamento? Perderai immediatamente l'accesso a tutte le funzionalità premium."
+    "confirmCancel": "Sei sicuro di voler annullare il tuo abbonamento? Perderai immediatamente l'accesso a tutte le funzionalità premium.",
+    "noWallet": "Portafoglio non trovato. Per favore installa MetaMask.",
+    "contractError": "Connessione al contratto fallita.",
+    "checkingBalance": "Verifica del saldo USDC...",
+    "insufficientBalance": "Saldo USDC insufficiente per questo piano.",
+    "checkingAllowance": "Verifica dell'autorizzazione...",
+    "approving": "Approvazione USDC...",
+    "approved": "USDC approvato con successo!",
+    "confirmInWallet": "Per favore conferma l'abbonamento nel tuo portafoglio.",
+    "processingTx": "Elaborazione della transazione...",
+    "success": "Abbonamento riuscito!",
+    "wrongNetwork": "Sei sulla rete sbagliata. Per favore passa a Sepolia o Ethereum Mainnet.",
+    "connectWalletPrompt": "Connetti il tuo wallet per procedere.",
+    "errors": {
+      "contractError": "Contratto del token non trovato."
+    }
   },
   "subscriptionBanner": {
     "title": "Sblocca le funzionalità Premium",

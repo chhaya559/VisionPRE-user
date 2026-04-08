@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,106 +14,111 @@ import {
   faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import { useGetSubscriptionQuery, useCancelSubscriptionMutation } from '../../Services/Api/module/SubscriptionApi';
-import { useWallet } from '../../hooks/useWallet';
-import { SubscriptionPlan, SubscriptionStatus, SubscriptionBillingCycle } from '../../Shared/SubscriptionEnums';
-import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+import {
+  useGetSubscriptionQuery,
+  useCancelSubscriptionMutation,
+} from '../../Services/Api/module/SubscriptionApi';
+
+import { useWalletContext } from '../../Context/WalletContext';
+import { mapWeb3Error } from '../../Shared/Web3Utils';
+import Modal from '../../Shared/Components/Modal';
 import './Subscription.scss';
 
 export default function SubscriptionDetails() {
   const { t } = useTranslation('settings');
   const navigate = useNavigate();
-  const { account } = useWallet();
-  const { data: subscriptionResponse, isLoading } = useGetSubscriptionQuery(undefined);
-  const [cancelSubscription, { isLoading: isCancelling }] = useCancelSubscriptionMutation();
+  const { account, getContract } = useWalletContext();
+  const { data: subscriptionResponse, isLoading } =
+    useGetSubscriptionQuery(undefined);
+  const [cancelSubscription, { isLoading: isCancelling }] =
+    useCancelSubscriptionMutation();
 
   const subscription = subscriptionResponse?.data || subscriptionResponse;
 
-  const handleCancel = async () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const performCancellation = async () => {
+    setShowModal(false);
+    try {
+      // 1. Get Contract from WalletContext
+      const contract = await getContract();
+      if (!contract) {
+        toast.error(t('subscription.contractError'));
+        return;
+      }
+
+      // 2. Call Blockchain
+      toast.info(t('subscription.confirmCancelInWallet'));
+      const tx = await contract.cancelSubscription();
+      toast.info(t('subscription.processingTx'));
+      const receipt = await tx.wait();
+      const txHash = receipt.hash || tx.hash;
+
+      // 3. Sync with Backend
+      await cancelSubscription({
+        transactionHash: txHash,
+        walletAddress: account,
+      }).unwrap();
+
+      toast.success(t('subscription.cancelSuccess'));
+      navigate(-1);
+    } catch (err: any) {
+      console.error('Cancellation error:', err);
+      const errorMsg = mapWeb3Error(err);
+      toast.error(errorMsg);
+    }
+  };
+
+  const handleCancel = () => {
     if (!account) {
       toast.error(t('subscription.connectWallet'));
       return;
     }
-
-    if (window.confirm(t('subscription.confirmCancel'))) {
-      const activeHash = subscription?.transactionHash;
-
-      if (!activeHash) {
-        toast.error(t('subscription.noTransactionFound'));
-        return;
-      }
-
-      try {
-        await cancelSubscription({
-          TransactionHash: activeHash,
-          WalletAddress: account
-        }).unwrap();
-        toast.success(t('subscription.cancelSuccess'), { position: 'top-right' });
-        navigate(-1);
-      } catch (err: any) {
-        console.error('Cancellation error:', err);
-      }
-    }
+    setShowModal(true);
   };
 
   if (isLoading) {
     return (
-      <div className="subscription-details-page loading-skeleton">
+      <div className="subscription-details-page loading-state">
         <header className="account-settings-header">
           <div className="header-inner">
-            <Skeleton variant="text" width="60px" height="24px" />
             <div className="header-copy">
-              <Skeleton variant="text" width="200px" height="32px" className="mb-2" />
-              <Skeleton variant="text" width="300px" height="16px" />
+              <h1>Loading Subscription...</h1>
             </div>
           </div>
         </header>
-
-        <div className="account-settings-content" style={{ padding: '24px' }}>
-          <Skeleton variant="rounded" width="100px" height="24px" className="mb-6" />
-          <div className="plan-info-header mb-8">
-            <Skeleton variant="text" width="150px" height="32px" className="mb-2" />
-            <Skeleton variant="text" width="100px" />
-          </div>
-
-          <div className="plan-highlight-card mb-8">
-            <Skeleton variant="rectangular" height="80px" />
-          </div>
-
-          <div className="info-list mb-8">
-            <Skeleton variant="rounded" height="60px" className="mb-4" />
-            <Skeleton variant="rounded" height="60px" className="mb-4" />
-            <Skeleton variant="rounded" height="60px" />
-          </div>
-
-          <div className="benefits-section">
-            <Skeleton variant="text" width="150px" height="28px" className="mb-6" />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <Skeleton variant="rounded" height="70px" />
-              <Skeleton variant="rounded" height="70px" />
-              <Skeleton variant="rounded" height="70px" />
-            </div>
-          </div>
-        </div>
       </div>
     );
   }
 
-  const planName = subscription?.planName === SubscriptionPlan.Pro ? t('subscription.plans.pro') : t('subscription.plans.free');
-  const planType = subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? t('subscription.billing.yearly') : t('subscription.billing.monthly');
-  const statusLabel = subscription?.status === SubscriptionStatus.Active ? t('subscription.status.active') : t('subscription.status.inactive');
-  const isActive = subscription?.status === SubscriptionStatus.Active;
-  
-  const price = subscription?.price || (subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? '99.00' : '9.99');
-  const nextBilling = subscription?.expiryDate ? new Date(subscription.expiryDate).toLocaleDateString() : t('subscription.notAvailable');
+  const planName =
+    subscription?.subscriptionPlan || t('subscription.plans.free');
+  const isYearly = subscription?.billingCycle === 2;
+  const planType = isYearly
+    ? t('subscription.billing.yearly')
+    : t('subscription.billing.monthly');
+  const statusLabel =
+    subscription?.subscriptionStatus || t('subscription.status.inactive');
+  const isActive = subscription?.subscriptionStatus === 'Active';
+
+  const price = subscription?.price?.toFixed(2) || '0.00';
+  const nextBilling = subscription?.expiryDate
+    ? new Date(subscription.expiryDate).toLocaleDateString()
+    : t('subscription.notAvailable');
   const paymentMethod = subscription?.paymentMethod || t('subscription.wallet');
-  const startDate = subscription?.startDate ? new Date(subscription.startDate).toLocaleDateString() : t('subscription.notAvailable');
+  const startDate = subscription?.startDate
+    ? new Date(subscription.startDate).toLocaleDateString()
+    : t('subscription.notAvailable');
 
   return (
     <div className="subscription-details-page">
       <header className="account-settings-header">
         <div className="header-inner">
-          <button className="back-btn" onClick={() => navigate(-1)}>
+          <button
+            type="button"
+            className="back-btn"
+            onClick={() => navigate(-1)}
+          >
             <FontAwesomeIcon icon={faChevronLeft} />
             {t('accountSettings.back')}
           </button>
@@ -126,7 +132,8 @@ export default function SubscriptionDetails() {
       <div className="account-settings-content">
         <div className="account-settings-main">
           <div className={`pc-badge ${!isActive ? 'pc-badge--inactive' : ''}`}>
-            <FontAwesomeIcon icon={isActive ? faCircleCheck : faCircleXmark} /> {statusLabel}
+            <FontAwesomeIcon icon={isActive ? faCircleCheck : faCircleXmark} />{' '}
+            {statusLabel}
           </div>
 
           <div className="plan-info-header">
@@ -137,11 +144,14 @@ export default function SubscriptionDetails() {
           <div className="plan-highlight-card">
             <div className="ph-left">
               <span className="label">{t('subscription.currentPlan')}</span>
-              <span className="val">${price}{subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? t('subscription.yearly') : t('subscription.monthly')}</span>
+              <span className="val">
+                ${price}
+                {isYearly
+                  ? t('subscription.yearly')
+                  : t('subscription.monthly')}
+              </span>
             </div>
-            <div className="ph-right">
-              {t('subscription.savings')}
-            </div>
+            <div className="ph-right">{t('subscription.savings')}</div>
           </div>
 
           <div className="info-list">
@@ -163,15 +173,17 @@ export default function SubscriptionDetails() {
                 <span className="val">{paymentMethod}</span>
               </div>
             </div>
-            <div className="info-item">
-              <div className="ii-icon">
-                <FontAwesomeIcon icon={faCalendarAlt} />
+            {subscription?.startDate && (
+              <div className="info-item">
+                <div className="ii-icon">
+                  <FontAwesomeIcon icon={faCalendarAlt} />
+                </div>
+                <div className="ii-text">
+                  <span className="label">{t('subscription.startedOn')}</span>
+                  <span className="val">{startDate}</span>
+                </div>
               </div>
-              <div className="ii-text">
-                <span className="label">{t('subscription.startedOn')}</span>
-                <span className="val">{startDate}</span>
-              </div>
-            </div>
+            )}
           </div>
 
           <div className="benefits-section">
@@ -207,23 +219,78 @@ export default function SubscriptionDetails() {
             </div>
           </div>
 
-          <div className="cancel-notice">
-            <FontAwesomeIcon icon={faTriangleExclamation} />
-            <div className="cn-text">
-              <h5>{t('subscription.thinkingCancel')}</h5>
-              <p>{t('subscription.loseAccess')}</p>
+          {subscription?.isCancelled ? (
+            <div className="cancel-notice cancelled-state">
+              <FontAwesomeIcon icon={faTriangleExclamation} />
+              <div className="cn-text">
+                <h5>{t('subscription.subscriptionCanceled')}</h5>
+                <p>
+                  {t('subscription.cancelledNotice', { date: nextBilling })}
+                </p>
+                <p className="repurchase-note">
+                  {t('subscription.repurchaseNotice')}
+                </p>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="cancel-notice">
+              <FontAwesomeIcon icon={faTriangleExclamation} />
+              <div className="cn-text">
+                <h5>{t('subscription.thinkingCancel')}</h5>
+                <p>{t('subscription.loseAccess')}</p>
+              </div>
+            </div>
+          )}
 
           <button
-            className="btn-cancel-membership"
+            type="button"
+            className={`btn-cancel-membership ${
+              subscription?.isCancelled ? 'btn-disabled-faded' : ''
+            }`}
             onClick={handleCancel}
-            disabled={isCancelling}
+            disabled={isCancelling || subscription?.isCancelled}
           >
-            {isCancelling ? t('subscription.cancelling') : t('subscription.cancelMembership')}
+            {isCancelling
+              ? t('subscription.cancelling')
+              : subscription?.isCancelled
+              ? t('subscription.subscriptionCanceled')
+              : t('subscription.cancelMembership')}
           </button>
         </div>
       </div>
+
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title={t('subscription.thinkingCancel')}
+        showFooter={false}
+      >
+        <div className="confirmation-modal">
+          <div className="cm-icon">
+            <FontAwesomeIcon icon={faTriangleExclamation} />
+          </div>
+          <p className="cm-text">{t('subscription.confirmCancel')}</p>
+          <div className="cm-actions">
+            <button
+              type="button"
+              className="btn-cancel"
+              onClick={() => setShowModal(false)}
+            >
+              {t('deleteAccount.cancel')}
+            </button>
+            <button
+              type="button"
+              className="btn-confirm"
+              onClick={performCancellation}
+              disabled={isCancelling}
+            >
+              {isCancelling
+                ? t('subscription.cancelling')
+                : t('subscription.cancelMembership')}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

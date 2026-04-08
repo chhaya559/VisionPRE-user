@@ -1,6 +1,8 @@
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../Store/Common';
+import api from '../../Services/Api/api';
+import { ensureAbsoluteUrl } from '../../Shared/Utils';
 import './MyProfile.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -26,6 +28,7 @@ export default function MyProfile() {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(api.util.resetApiState());
     navigate('/login');
   };
 
@@ -44,14 +47,13 @@ export default function MyProfile() {
           <div className="error-icon-wrap">
             <FontAwesomeIcon icon={faExclamationTriangle} />
           </div>
-          <h2 className="my-profile-error-title">
-            {t('myProfile.error')}
-          </h2>
+          <h2 className="my-profile-error-title">{t('myProfile.error')}</h2>
           <p className="my-profile-error-desc">
             {t('myProfile.errorDescription')}
           </p>
           <div className="my-profile-error-actions">
             <button
+              type="button"
               className="btn-error-action btn-primary"
               onClick={() => window.location.reload()}
             >
@@ -90,8 +92,24 @@ export default function MyProfile() {
           <div className="card-banner" />
 
           <div className="avatar-overlap-wrapper">
-            <div className="avatar-circle">{initials}</div>
+            <div className="avatar-circle">
+              {profileData.avatarUrl ? (
+                <img
+                  src={ensureAbsoluteUrl(profileData.avatarUrl) || ''}
+                  alt="Avatar"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                  }}
+                />
+              ) : (
+                initials
+              )}
+            </div>
             <button
+              type="button"
               className="btn-edit-floating"
               onClick={() => navigate('/dashboard/profile/edit-public')}
             >
@@ -101,7 +119,9 @@ export default function MyProfile() {
 
           <div className="card-main-content">
             <div className="name-details">
-              <h2>{firstName} {lastName}</h2>
+              <h2>
+                {firstName} {lastName}
+              </h2>
               <p className="email-text">{email}</p>
             </div>
 
@@ -132,6 +152,7 @@ export default function MyProfile() {
               </div>
             </div>
             <button
+              type="button"
               className="btn-edit-small"
               onClick={() => navigate('/dashboard/profile/edit-business')}
             >
@@ -146,11 +167,15 @@ export default function MyProfile() {
               <div className="business-summary">
                 <div className="summary-item">
                   <strong>{t('myProfile.industry')}</strong>{' '}
-                  {profileData.industry || profileData.Industry || t('myProfile.notSet')}
+                  {profileData.industry ||
+                    profileData.Industry ||
+                    t('myProfile.notSet')}
                 </div>
                 <div className="summary-item">
                   <strong>{t('myProfile.stage')}</strong>{' '}
-                  {profileData.stage || profileData.Stage || t('myProfile.notSet')}
+                  {profileData.stage ||
+                    profileData.Stage ||
+                    t('myProfile.notSet')}
                 </div>
               </div>
             )}
@@ -169,6 +194,7 @@ export default function MyProfile() {
               </div>
             </div>
             <button
+              type="button"
               className="btn-edit-small"
               onClick={() => navigate('/dashboard/profile/settings')}
             >
@@ -196,7 +222,7 @@ export default function MyProfile() {
           </div>
         </div>
 
-        <button className="btn-logout" onClick={handleLogout}>
+        <button type="button" className="btn-logout" onClick={handleLogout}>
           <FontAwesomeIcon icon={faSignOutAlt} />
           {t('myProfile.logout')}
         </button>

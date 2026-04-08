@@ -16,14 +16,14 @@ import {
   faTrash,
   faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 import { logout } from '../../Store/Common';
 import { useLogoutMutation } from '../../Services/Api/module/AuthApi';
 import type { RootState } from '../../Store';
 import { useGetSubscriptionQuery } from '../../Services/Api/module/SubscriptionApi';
-import SubscriptionBanner from '../../Views/Settings/SubscriptionBanner';
-import { SubscriptionPlan, SubscriptionStatus, SubscriptionBillingCycle } from '../../Shared/SubscriptionEnums';
-import { useTranslation } from 'react-i18next';
-import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+import api from '../../Services/Api/api';
+import SubscriptionBanner from '../Settings/SubscriptionBanner';
+
 import './ProfileEdits.scss';
 import '../Settings/Subscription.scss';
 
@@ -44,6 +44,7 @@ export default function AccountSettings() {
       console.log('Logout error:', err);
     } finally {
       dispatch(logout());
+      dispatch(api.util.resetApiState());
       navigate('/login', { replace: true });
     }
   };
@@ -60,20 +61,32 @@ export default function AccountSettings() {
   };
 
   const { t } = useTranslation('settings');
-  const { data: subscriptionResponse, isLoading: isSubscriptionLoading } = useGetSubscriptionQuery(undefined);
+  const { data: subscriptionResponse, isLoading: isSubscriptionLoading } =
+    useGetSubscriptionQuery(undefined);
   const subscription = subscriptionResponse?.data || subscriptionResponse;
 
-  const isActive = subscription?.status === SubscriptionStatus.Active;
-  const planName = subscription?.planName === SubscriptionPlan.Pro ? t('subscription.plans.pro') : t('subscription.plans.free');
-  const planType = subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? t('subscription.billing.yearly') : t('subscription.billing.monthly');
-  const price = subscription?.price || (subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? '99.00' : '9.99');
-  const nextBilling = subscription?.expiryDate ? new Date(subscription.expiryDate).toLocaleDateString() : t('accountSettings.billingDate');
+  const isActive = subscription?.subscriptionStatus === 'Active';
+  const planName =
+    subscription?.subscriptionPlan || t('subscription.plans.free');
+  // billingCycle 1 appears to be monthly in the users sample (price 19.99 is typically monthly)
+  const isYearly = subscription?.billingCycle === 2;
+  const planType = isYearly
+    ? t('subscription.billing.yearly')
+    : t('subscription.billing.monthly');
+  const price = subscription?.price?.toFixed(2) || '0.00';
+  const nextBilling = subscription?.expiryDate
+    ? new Date(subscription.expiryDate).toLocaleDateString()
+    : t('accountSettings.billingDate');
 
   return (
     <div className="account-settings-page">
       <header className="account-settings-header">
         <div className="header-inner">
-          <button className="back-btn" onClick={() => navigate(-1)}>
+          <button
+            type="button"
+            className="back-btn"
+            onClick={() => navigate(-1)}
+          >
             <FontAwesomeIcon icon={faChevronLeft} />
             {t('accountSettings.back')}
           </button>
@@ -88,18 +101,11 @@ export default function AccountSettings() {
         <div className="account-settings-grid">
           <div className="account-settings-main">
             {isSubscriptionLoading ? (
-              <div className="premium-card loading-skeleton" style={{ padding: '24px' }}>
-                <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-                  <Skeleton variant="circular" width="48px" height="48px" />
-                  <div style={{ flex: 1 }}>
-                    <Skeleton variant="text" width="120px" height="24px" className="mb-2" />
-                    <Skeleton variant="text" width="80px" />
-                  </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Skeleton variant="text" width="100px" />
-                  <Skeleton variant="text" width="100px" />
-                </div>
+              <div
+                className="premium-card loading-state"
+                style={{ padding: '24px' }}
+              >
+                <p>Loading subscription details...</p>
               </div>
             ) : isActive ? (
               <div className="premium-card">
@@ -113,23 +119,39 @@ export default function AccountSettings() {
                       <p>{planType}</p>
                     </div>
                   </div>
-                  <div className={`pc-badge ${!isActive ? 'pc-badge--inactive' : ''}`}>
-                    {isActive ? t('accountSettings.active') : t('subscription.status.inactive')}
+                  <div
+                    className={`pc-badge ${
+                      !isActive ? 'pc-badge--inactive' : ''
+                    }`}
+                  >
+                    {isActive
+                      ? t('accountSettings.active')
+                      : t('subscription.status.inactive')}
                   </div>
                 </div>
                 <div className="pc-meta">
                   <div className="meta-item">
-                    <span className="label">{t('accountSettings.nextBilling')}</span>
+                    <span className="label">
+                      {t('accountSettings.nextBilling')}
+                    </span>
                     <span className="val">{nextBilling}</span>
                   </div>
                   <div className="meta-item right">
                     <span className="label">{t('accountSettings.amount')}</span>
-                    <span className="val">${price}/{subscription?.billingCycle === SubscriptionBillingCycle.Yearly ? t('subscription.yearlyValue') : t('subscription.monthlyValue')}</span>
+                    <span className="val">
+                      ${price}
+                      {isYearly
+                        ? t('subscription.yearly')
+                        : t('subscription.monthly')}
+                    </span>
                   </div>
                 </div>
                 <button
+                  type="button"
                   className="btn-manage"
-                  onClick={() => navigate('/dashboard/profile/settings/subscription')}
+                  onClick={() =>
+                    navigate('/dashboard/profile/settings/subscription')
+                  }
                 >
                   {t('accountSettings.manageSubscription')}
                 </button>
@@ -226,7 +248,9 @@ export default function AccountSettings() {
                   <div className="aa-text">
                     <h5>{t('accountSettings.language')}</h5>
                   </div>
-                  <span className="badge-en">{t('accountSettings.languageCode')}</span>
+                  <span className="badge-en">
+                    {t('accountSettings.languageCode')}
+                  </span>
                   <FontAwesomeIcon icon={faChevronRight} className="chevron" />
                 </div>
 
@@ -285,7 +309,7 @@ export default function AccountSettings() {
           </aside>
         </div>
 
-        <button className="logout-btn" onClick={handleLogout}>
+        <button type="button" className="logout-btn" onClick={handleLogout}>
           <FontAwesomeIcon icon={faRightFromBracket} />
           {t('accountSettings.logout')}
         </button>

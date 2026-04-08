@@ -150,10 +150,10 @@ export default function LoginPage() {
                 placeholder="your.email@example.com"
                 {...register('email')}
               />
-              {errors.email && (
-                <span className="error">{errors.email.message}</span>
-              )}
             </div>
+            {errors.email && (
+              <span className="error">{errors.email.message}</span>
+            )}
           </div>
           <PasswordField
             id="password"

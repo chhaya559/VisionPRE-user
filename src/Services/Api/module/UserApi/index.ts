@@ -68,5 +68,5 @@ export const {
   useUploadAvatarMutation,
   useGetProfileQuery,
   useUploadFileMutation,
-  useDeleteAccountMutation
+  useDeleteAccountMutation,
 } = userApi;

@@ -31,9 +31,8 @@ export default function LanguageSettings() {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState(i18n.language);
 
-  const filteredLanguages = LANGUAGES.filter(
-    (l) =>
-      l.name.toLowerCase().includes(search.toLowerCase())
+  const filteredLanguages = LANGUAGES.filter((l) =>
+    l.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleApply = () => {
@@ -45,10 +44,7 @@ export default function LanguageSettings() {
   return (
     <div className="edit-profile-container">
       <header className="edit-profile-header secondary">
-        <button
-          className="back-btn"
-          onClick={() => navigate(-1)}
-        >
+        <button type="button" className="back-btn" onClick={() => navigate(-1)}>
           <FontAwesomeIcon icon={faChevronLeft} />
           {t('language.back')}
         </button>
@@ -78,8 +74,9 @@ export default function LanguageSettings() {
             {filteredLanguages.map((lang) => (
               <div
                 key={lang.code}
-                className={`language-card ${selected.startsWith(lang.code) ? 'selected' : ''
-                  }`}
+                className={`language-card ${
+                  selected.startsWith(lang.code) ? 'selected' : ''
+                }`}
                 onClick={() => setSelected(lang.code)}
               >
                 <div className="flag-box">{lang.flag}</div>
@@ -98,7 +95,7 @@ export default function LanguageSettings() {
           {t('language.applyNote')}
         </div>
 
-        <button className="btn-save" onClick={handleApply}>
+        <button type="button" className="btn-save" onClick={handleApply}>
           {t('language.apply')}
         </button>
       </div>

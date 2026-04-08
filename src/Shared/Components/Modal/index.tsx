@@ -34,7 +34,7 @@ function Modal({
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h3>{title}</h3>
-          <button className="close-btn" onClick={onClose}>
+          <button type="button" className="close-btn" onClick={onClose}>
             &times;
           </button>
         </div>
@@ -43,7 +43,7 @@ function Modal({
 
         {showFooter && (
           <div className="modal-footer">
-            <button className="btn-primary" onClick={onClose}>
+            <button type="button" className="btn-primary" onClick={onClose}>
               {t('I_understand')}
             </button>
           </div>

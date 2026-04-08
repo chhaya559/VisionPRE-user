@@ -29,7 +29,11 @@ export default function AlmostReady() {
         </div>
       </div>
 
-      <button className="btn-continue" onClick={() => navigate('/setup/name')}>
+      <button
+        type="button"
+        className="btn-continue"
+        onClick={() => navigate('/setup/name')}
+      >
         {t('continue')}
       </button>
     </div>

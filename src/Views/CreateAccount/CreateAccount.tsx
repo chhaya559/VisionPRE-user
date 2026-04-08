@@ -122,10 +122,10 @@ export default function CreateAccount() {
                 placeholder="Marc-Antoine Blais"
                 {...register('userName')}
               />
-              {errors.userName && (
-                <span className="error">{errors.userName.message}</span>
-              )}
             </div>
+            {errors.userName && (
+              <span className="error">{errors.userName.message}</span>
+            )}
           </div>
 
           <div className="form-group">
@@ -137,11 +137,11 @@ export default function CreateAccount() {
                 placeholder="marc@example.com"
                 {...register('email')}
               />
-
-              {errors.email && (
-                <span className="error">{errors.email.message}</span>
-              )}
             </div>
+
+            {errors.email && (
+              <span className="error">{errors.email.message}</span>
+            )}
           </div>
 
           <PasswordField
@@ -197,37 +197,93 @@ export default function CreateAccount() {
           </div>
           <Modal
             isOpen={showTerms}
-            title="Terms & Conditions"
+            title=""
             onClose={() => setShowTerms(false)}
           >
-            <h1>{t('terms:terms_cond')}</h1>
-            <h2>{t('terms:acceptance')}</h2>
+            <h1
+              style={{
+                fontWeight: 600,
+                fontSize: '24px',
+                marginBottom: '16px',
+              }}
+            >
+              {t('terms:terms_cond')}
+            </h1>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:acceptance')}
+            </h2>
             <p>{t('terms:acceptance_str')}</p>
-            <h2>{t('terms:license')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:license')}
+            </h2>
             <p>{t('terms:license_str')}</p>
-            <h2>{t('terms:account')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:account')}
+            </h2>
             <p>{t('terms:account_str')}</p>
-            <h2>{t('terms:privacy')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:privacy')}
+            </h2>
             <p>{t('terms:privacy_str')}</p>
-            <h2>{t('terms:grant')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:grant')}
+            </h2>
             <p>{t('terms:grant_str')}</p>
           </Modal>
 
           <Modal
             isOpen={showPolicy}
-            title="Privacy Policy"
+            title=""
             onClose={() => setShowPolicy(false)}
           >
-            <h1>{t('terms:privacy_policy')}</h1>
-            <h2>{t('terms:information')}</h2>
+            <h1
+              style={{
+                fontWeight: 600,
+                fontSize: '24px',
+                marginBottom: '16px',
+              }}
+            >
+              {t('terms:privacy_policy')}
+            </h1>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:information')}
+            </h2>
             <p>{t('terms:information_str')}</p>
-            <h2>{t('terms:use_info')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:use_info')}
+            </h2>
             <p>{t('terms:use_infoStr')}</p>
-            <h2>{t('terms:sharing')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:sharing')}
+            </h2>
             <p>{t('terms:sharing_str')}</p>
-            <h2>{t('terms:security')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:security')}
+            </h2>
             <p>{t('terms:security_str')}</p>
-            <h2>{t('terms:rights')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:rights')}
+            </h2>
             <p>{t('terms:rights_str')}</p>
           </Modal>
 

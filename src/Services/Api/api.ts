@@ -79,11 +79,11 @@ const baseQueryWithInterceptor: BaseQueryFn<
   return result;
 };
 
-export const api = createApi({
+const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithInterceptor,
   tagTypes: ['Notification', 'Profile', 'Subscription'],
   endpoints: () => ({}),
 });
 
-export default api;
+export default baseApi;

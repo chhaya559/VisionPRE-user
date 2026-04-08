@@ -16,7 +16,11 @@ export default function SubscriptionBanner() {
         <h4>{t('subscriptionBanner.title')}</h4>
         <p>{t('subscriptionBanner.description')}</p>
       </div>
-      <button className="btn-subscribe" onClick={() => navigate('/dashboard/profile/settings/plans')}>
+      <button
+        type="button"
+        className="btn-subscribe"
+        onClick={() => navigate('/dashboard/profile/settings/plans')}
+      >
         {t('subscriptionBanner.button')}
       </button>
     </div>

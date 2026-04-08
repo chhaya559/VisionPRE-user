@@ -9,14 +9,17 @@ export default function SplashScreen() {
   const location = useLocation();
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (location.pathname !== '/onboarding') {
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         navigate('/onboarding');
       }, 2000);
-
-      return () => clearTimeout(timer);
     }
-  }, [location.pathname]);
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [location.pathname, navigate]);
 
   const { t } = useTranslation('common');
 

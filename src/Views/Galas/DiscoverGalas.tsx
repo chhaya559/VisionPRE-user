@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetGalasQuery } from '../../Services/Api/module/GalaApi';
 import './Galas.scss';
-import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
-import GalaCardSkeleton from '../../Shared/Components/Skeleton/GalaCardSkeleton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendar,
@@ -33,30 +31,11 @@ export default function DiscoverGalas() {
 
   if (isLoading) {
     return (
-      <div className="galas-container loading-skeleton">
+      <div className="galas-container loading-state">
         <header className="galas-header">
-          <Skeleton variant="text" width="120px" height="16px" className="mb-2" />
-          <Skeleton variant="text" width="300px" height="48px" className="mb-4" />
-          <Skeleton variant="text" width="500px" height="24px" />
+          <h1>{t('galas.discover.title')}</h1>
+          <p>Loading events...</p>
         </header>
-        
-        <div className="galas-filters-bar mb-8">
-          <div className="galas-filters" style={{ display: 'flex', gap: '12px' }}>
-            <Skeleton variant="rounded" width="80px" height="36px" />
-            <Skeleton variant="rounded" width="100px" height="36px" />
-            <Skeleton variant="rounded" width="120px" height="36px" />
-            <Skeleton variant="rounded" width="90px" height="36px" />
-          </div>
-        </div>
-
-        <section className="galas-section" style={{ marginTop: '40px' }}>
-          <Skeleton variant="text" width="200px" height="32px" className="mb-6" />
-          <div className="galas-grid-skeleton" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-            <GalaCardSkeleton />
-            <GalaCardSkeleton />
-            <GalaCardSkeleton />
-          </div>
-        </section>
       </div>
     );
   }
@@ -68,9 +47,7 @@ export default function DiscoverGalas() {
           <h1>{t('galas.discover.title')}</h1>
           <p>{t('galas.discover.subtitle')}</p>
         </header>
-        <div className="galas-feedback error">
-          {t('galas.discover.error')}
-        </div>
+        <div className="galas-feedback error">{t('galas.discover.error')}</div>
       </div>
     );
   }
@@ -113,11 +90,11 @@ export default function DiscoverGalas() {
         <div className="galas-top-shell">
           <header className="galas-header">
             <div className="galas-header-inner">
-              <span className="galas-eyebrow">{t('galas.discover.exploreEvents')}</span>
+              <span className="galas-eyebrow">
+                {t('galas.discover.exploreEvents')}
+              </span>
               <h1>{t('galas.discover.title')}</h1>
-              <p>
-                {t('galas.discover.browseDescription')}
-              </p>
+              <p>{t('galas.discover.browseDescription')}</p>
             </div>
           </header>
 
@@ -125,9 +102,11 @@ export default function DiscoverGalas() {
             <div className="galas-filters">
               {filters.map((f) => (
                 <button
+                  type="button"
                   key={f.key}
-                  className={`filter-pill ${activeFilter === f.key ? 'active' : ''
-                    }`}
+                  className={`filter-pill ${
+                    activeFilter === f.key ? 'active' : ''
+                  }`}
                   onClick={() => setActiveFilter(f.key)}
                 >
                   {f.label}
@@ -141,7 +120,8 @@ export default function DiscoverGalas() {
           <section className="galas-section">
             <h2 className="section-title">
               <FontAwesomeIcon icon={faFire} className="section-icon active" />{' '}
-              {t('galas.discover.activeGalas')} <span className="count">({activeGalas.length})</span>
+              {t('galas.discover.activeGalas')}{' '}
+              <span className="count">({activeGalas.length})</span>
             </h2>
             {activeGalas.map((gala: any) => (
               <GalaCard
@@ -159,8 +139,13 @@ export default function DiscoverGalas() {
         {showUpcoming && upcomingGalas.length > 0 && (
           <section className="galas-section">
             <h2 className="section-title">
-              <FontAwesomeIcon icon={faClock} className="section-icon upcoming" />{' '}
-              {activeFilter === 'Planned' ? t('galas.discover.plannedGalas') : t('galas.discover.upcomingGalas')}{' '}
+              <FontAwesomeIcon
+                icon={faClock}
+                className="section-icon upcoming"
+              />{' '}
+              {activeFilter === 'Planned'
+                ? t('galas.discover.plannedGalas')
+                : t('galas.discover.upcomingGalas')}{' '}
               <span className="count">({upcomingGalas.length})</span>
             </h2>
             {upcomingGalas.map((gala: any) => (
@@ -180,7 +165,8 @@ export default function DiscoverGalas() {
           <section className="galas-section">
             <h2 className="section-title">
               <FontAwesomeIcon icon={faArchive} className="section-icon past" />{' '}
-              {t('galas.discover.pastGalas')} <span className="count">({pastGalas.length})</span>
+              {t('galas.discover.pastGalas')}{' '}
+              <span className="count">({pastGalas.length})</span>
             </h2>
             {pastGalas.map((gala: any) => (
               <GalaCard
@@ -198,9 +184,7 @@ export default function DiscoverGalas() {
         {!hasVisibleGalas && (
           <div className="galas-empty-state">
             <h3>{t('galas.discover.noGalas')}</h3>
-            <p>
-              {t('galas.discover.noGalasDescription')}
-            </p>
+            <p>{t('galas.discover.noGalasDescription')}</p>
           </div>
         )}
       </div>
@@ -217,10 +201,10 @@ function GalaCard({
   const dateStr = gala.eventDate || gala.Date || gala.event_date;
   const date = dateStr
     ? new Date(dateStr).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })
     : 'TBD';
   const location = gala.city || gala.venue || gala.Location || 'TBD';
   const attendees = gala.appliedCount ?? gala.Attendees ?? 0;
@@ -255,6 +239,7 @@ function GalaCard({
           {t(`galas.discover.status${status}`)}
         </div>
         <button
+          type="button"
           className="bookmark-btn"
           onClick={(e) => {
             e.stopPropagation();
@@ -283,6 +268,7 @@ function GalaCard({
         </div>
 
         <button
+          type="button"
           className="btn-details"
           onClick={(e) => {
             e.stopPropagation();

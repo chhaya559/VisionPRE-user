@@ -42,7 +42,7 @@ export default function OnboardingLayout({
           <ProgressDots total={total} current={step} />
 
           <div className="ActionSection">
-            <button className="btn-primary" onClick={onNext}>
+            <button type="button" className="btn-primary" onClick={onNext}>
               {isLast ? t('getStarted_string') : t('continue')}
             </button>
 
@@ -54,7 +54,7 @@ export default function OnboardingLayout({
                 </Link>
               </p>
             ) : (
-              <button className="btn-skip" onClick={onSkip}>
+              <button type="button" className="btn-skip" onClick={onSkip}>
                 {t('skip')}
               </button>
             )}

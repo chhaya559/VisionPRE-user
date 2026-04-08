@@ -1,13 +1,13 @@
 import { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useDropzone } from 'react-dropzone';
 import {
   useGetGalaByIdQuery,
   useApplyGrantMutation,
 } from '../../Services/Api/module/GalaApi';
-import { BASE_URL } from '../../Services/Api/Constants';
 import { useUploadFileMutation } from '../../Services/Api/module/UserApi';
-import { useDropzone } from 'react-dropzone';
+import { ensureAbsoluteUrl } from '../../Shared/Utils';
 import './GrantApplication.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -28,7 +28,12 @@ interface FileUploaderProps {
   t: any;
 }
 
-function FileUploader({ label, onUploadSuccess, required, t }: FileUploaderProps) {
+function FileUploader({
+  label,
+  onUploadSuccess,
+  required,
+  t,
+}: FileUploaderProps) {
   const [uploadFile, { isLoading }] = useUploadFileMutation();
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -74,8 +79,9 @@ function FileUploader({ label, onUploadSuccess, required, t }: FileUploaderProps
       </label>
       <div
         {...getRootProps()}
-        className={`dropzone-container ${isDragActive ? 'active' : ''} ${fileUrl ? 'has-file' : ''
-          }`}
+        className={`dropzone-container ${isDragActive ? 'active' : ''} ${
+          fileUrl ? 'has-file' : ''
+        }`}
       >
         <input {...getInputProps()} />
 
@@ -129,7 +135,9 @@ export default function GrantApplication() {
   if (isFetching) {
     return (
       <div className="grant-app-container grant-app-state loading">
-        <div className="grant-app-message">{t('grants.application.loading')}</div>
+        <div className="grant-app-message">
+          {t('grants.application.loading')}
+        </div>
       </div>
     );
   }
@@ -142,8 +150,11 @@ export default function GrantApplication() {
   if (!galaData || !grant) {
     return (
       <div className="grant-app-container grant-app-state error">
-        <h2 className="grant-app-error-title">{t('grants.application.notFound')}</h2>
+        <h2 className="grant-app-error-title">
+          {t('grants.application.notFound')}
+        </h2>
         <button
+          type="button"
           className="btn-continue grant-app-back-btn"
           onClick={() => navigate(-1)}
         >
@@ -165,13 +176,6 @@ export default function GrantApplication() {
     '4:00 PM',
     '8:00 PM',
   ];
-
-  const ensureAbsoluteUrl = (url: string) => {
-    if (!url) return null;
-    if (url.startsWith('http')) return url;
-    // Assuming relative paths should be prepended with the base origin
-    return `${BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -203,7 +207,10 @@ export default function GrantApplication() {
   if (isSuccess) {
     return (
       <div className="grant-app-container grant-app-state success">
-        <FontAwesomeIcon icon={faCheckCircle} className="grant-app-success-icon" />
+        <FontAwesomeIcon
+          icon={faCheckCircle}
+          className="grant-app-success-icon"
+        />
         <h2>{t('grants.application.submitted')}</h2>
         <p className="grant-app-success-copy">
           {t('grants.application.redirecting')}
@@ -228,7 +235,8 @@ export default function GrantApplication() {
       <div className="grant-summary-box">
         <h2>{gTitle}</h2>
         <span className="prize-info">
-          ${gAmount.toLocaleString()} {t('grants.application.prize')} • 5 {t('grants.application.winners')}
+          ${gAmount.toLocaleString()} {t('grants.application.prize')} • 5{' '}
+          {t('grants.application.winners')}
         </span>
         <p>{t('grants.application.prizeDescription')}</p>
       </div>
@@ -250,9 +258,15 @@ export default function GrantApplication() {
             <option value="" disabled>
               {t('grants.application.selectIndustry')}
             </option>
-            <option value="Technology">{t('grants.application.technology')}</option>
-            <option value="Healthcare">{t('grants.application.healthcare')}</option>
-            <option value="E-commerce">{t('grants.application.ecommerce')}</option>
+            <option value="Technology">
+              {t('grants.application.technology')}
+            </option>
+            <option value="Healthcare">
+              {t('grants.application.healthcare')}
+            </option>
+            <option value="E-commerce">
+              {t('grants.application.ecommerce')}
+            </option>
             <option value="Other">{t('grants.application.other')}</option>
           </select>
         </div>
@@ -296,10 +310,7 @@ export default function GrantApplication() {
             <div className="cal-header">
               <FontAwesomeIcon icon={faChevronLeft} />
               {t('grants.application.month')}
-              <FontAwesomeIcon
-                icon={faChevronLeft}
-                className="cal-next-icon"
-              />
+              <FontAwesomeIcon icon={faChevronLeft} className="cal-next-icon" />
             </div>
             <div className="cal-grid">
               {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d) => (
@@ -334,12 +345,19 @@ export default function GrantApplication() {
                 className={`time-slot ${selectedTime === slot ? 'active' : ''}`}
                 onClick={() => setSelectedTime(slot)}
               >
-                {slot === '9:00 AM' ? t('grants.application.time9') :
-                  slot === '10:30 AM' ? t('grants.application.time1030') :
-                    slot === '12:00 PM' ? t('grants.application.time12') :
-                      slot === '2:00 PM' ? t('grants.application.time2') :
-                        slot === '4:00 PM' ? t('grants.application.time4') :
-                          slot === '8:00 PM' ? t('grants.application.time8') : slot}
+                {slot === '9:00 AM'
+                  ? t('grants.application.time9')
+                  : slot === '10:30 AM'
+                  ? t('grants.application.time1030')
+                  : slot === '12:00 PM'
+                  ? t('grants.application.time12')
+                  : slot === '2:00 PM'
+                  ? t('grants.application.time2')
+                  : slot === '4:00 PM'
+                  ? t('grants.application.time4')
+                  : slot === '8:00 PM'
+                  ? t('grants.application.time8')
+                  : slot}
               </div>
             ))}
           </div>
@@ -355,7 +373,9 @@ export default function GrantApplication() {
           <div className="checkbox-item">
             <input type="checkbox" id="terms" required />
             <label htmlFor="terms">
-              {t('grants.application.agreeTo')}<a href="#">{t('grants.application.terms')}</a>{t('grants.application.and')}{' '}
+              {t('grants.application.agreeTo')}
+              <a href="#">{t('grants.application.terms')}</a>
+              {t('grants.application.and')}{' '}
               <a href="#">{t('grants.application.privacy')}</a>
             </label>
           </div>
@@ -367,10 +387,7 @@ export default function GrantApplication() {
               <span>{t('grants.application.submitting')}</span>
             ) : (
               <>
-                <FontAwesomeIcon
-                  icon={faPaperPlane}
-                  className="submit-icon"
-                />
+                <FontAwesomeIcon icon={faPaperPlane} className="submit-icon" />
                 {t('grants.application.submit')}
               </>
             )}
@@ -383,9 +400,7 @@ export default function GrantApplication() {
           </div>
           <div className="notice-content">
             <h4>{t('grants.application.reviewTime')}</h4>
-            <p>
-              {t('grants.application.reviewDescription')}
-            </p>
+            <p>{t('grants.application.reviewDescription')}</p>
           </div>
         </div>
       </form>

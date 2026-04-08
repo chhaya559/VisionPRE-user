@@ -99,7 +99,12 @@
     "growBusiness": "Mein Unternehmen ausbauen",
     "attendGalas": "An Galas teilnehmen",
     "saveChanges": "Änderungen speichern",
-    "user": "Benutzer"
+    "user": "Benutzer",
+    "uploading": "Hochladen...",
+    "uploadSuccess": "Avatar hochgeladen!",
+    "uploadFailed": "Bild-Upload fehlgeschlagen.",
+    "removePhoto": "Foto entfernen",
+    "updateSuccess": "Profil erfolgreich aktualisiert!"
   },
   "myProfile": {
     "loading": "Profil wird geladen...",
@@ -249,7 +254,22 @@
     "cancelSuccess": "Abonnement erfolgreich gekündigt.",
     "cancelError": "Kündigung des Abonnements fehlgeschlagen.",
     "connectWallet": "Bitte verbinden Sie Ihre Wallet, um das Abonnement zu kündigen.",
-    "confirmCancel": "Sind Sie sicher, dass Sie Ihr Abonnement kündigen möchten? Sie verlieren sofort den Zugriff auf alle Premium-Funktionen."
+    "confirmCancel": "Sind Sie sicher, dass Sie Ihr Abonnement kündigen möchten? Sie verlieren sofort den Zugriff auf alle Premium-Funktionen.",
+    "noWallet": "Wallet nicht gefunden. Bitte installieren Sie MetaMask.",
+    "contractError": "Verbindung zum Vertrag fehlgeschlagen.",
+    "checkingBalance": "USDC-Guthaben wird geprüft...",
+    "insufficientBalance": "Unzureichendes USDC-Guthaben für diesen Plan.",
+    "checkingAllowance": "Berechtigung wird geprüft...",
+    "approving": "USDC wird genehmigt...",
+    "approved": "USDC erfolgreich genehmigt!",
+    "confirmInWallet": "Bitte bestätigen Sie das Abonnement in Ihrer Wallet.",
+    "processingTx": "Transaktion wird verarbeitet...",
+    "success": "Abonnement erfolgreich!",
+    "wrongNetwork": "Sie befinden sich im falschen Netzwerk. Bitte wechseln Sie zu Sepolia oder Ethereum Mainnet.",
+    "connectWalletPrompt": "Bitte verbinden Sie Ihre Wallet, um fortzufahren.",
+    "errors": {
+      "contractError": "Token-Vertrag nicht gefunden."
+    }
   },
   "subscriptionBanner": {
     "title": "Premium-Funktionen freischalten",
