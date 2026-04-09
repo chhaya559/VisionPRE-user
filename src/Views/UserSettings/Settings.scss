@@ -116,6 +116,11 @@
       box-shadow: 0 0 0 4px rgba($primaryGreen, 0.08);
     }
 
+    &::placeholder {
+      color: #cbd5e1;
+      opacity: 0.8;
+    }
+
     &.error {
       border-color: $error;
 
@@ -165,7 +170,10 @@
 }
 
 .btn-save {
+  display: block;
   width: 100%;
+  max-width: 500px;
+  margin: 32px auto 0;
   background: $primaryGreen;
   color: #fff;
   border: none;

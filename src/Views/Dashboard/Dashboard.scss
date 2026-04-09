@@ -191,18 +191,37 @@
     .user-mini-profile {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
-      padding: 12px;
-      background: $surfaceColor;
-      border-radius: 16px;
-      position: relative;
-      cursor: default;
+      padding: 16px 0;
+      background: transparent;
+      border-top: 1px solid $borderColorLight;
+      margin-top: 8px;
 
-      img {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
+      .user-profile-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 0;
+      }
+
+      img.user-avatar, .user-avatar-initials {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
         object-fit: cover;
+        flex-shrink: 0;
+      }
+
+      .user-avatar-initials {
+        background: $primaryGreen;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 16px;
       }
 
       .user-details {
@@ -214,32 +233,46 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-        }
-
-        .name {
-          font-size: 14px;
-          font-weight: 700;
           color: $primaryText;
         }
 
+        .name {
+          font-size: 15px;
+          font-weight: 700;
+          line-height: 1.2;
+        }
+
         .email {
-          font-size: 11px;
-          color: $secondaryText;
+          font-size: 12px;
+          color: $secondaryText !important;
+          font-weight: 500;
+          margin-top: 2px;
+          opacity: 0.8;
         }
       }
 
-      .settings-link {
-        color: $inactiveTabText;
-        padding: 4px;
-        transition: color 0.2s;
+      .logout-btn {
+        width: 40px;
+        height: 40px;
+        background: none;
+        border: none;
+        color: #94A3B8;
+        cursor: pointer;
+        border-radius: 50%;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
 
         svg {
-          width: 18px;
-          height: 18px;
+          width: 20px;
+          height: 20px;
         }
 
         &:hover {
-          color: $primaryGreen;
+          color: $error;
+          background: rgba($error, 0.08);
         }
       }
     }

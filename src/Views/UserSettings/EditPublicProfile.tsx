@@ -281,22 +281,27 @@ export default function EditPublicProfile() {
           </div>
           <div className="form-grid">
             <div className="form-group">
-              <label>{t('editPublic.fullName')}</label>
               <div className="name-inputs-row">
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder={t('editPublic.firstName')}
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                />
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder={t('editPublic.lastName')}
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                />
+                <div className="name-input-group">
+                  <label>{t('editPublic.firstName')}</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    placeholder={t('editPublic.firstName')}
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="name-input-group">
+                  <label>{t('editPublic.lastName')}</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    placeholder={t('editPublic.lastName')}
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
             </div>
             <div className="form-group">

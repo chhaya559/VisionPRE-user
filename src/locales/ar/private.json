@@ -34,7 +34,9 @@
       "galas": "الفعاليات",
       "grants": "المنح",
       "profile": "الملف الشخصي"
-    }
+    },
+    "recentAnnouncements": "Recent Announcements",
+    "noRecentAnnouncements": "No recent announcements."
   },
   "galas": {
     "discover": {
@@ -51,16 +53,22 @@
       "noGalas": "لا توجد فعاليات",
       "noGalasDescription": "لا توجد فعاليات متاحة لهذا الفلتر حاليًا.",
       "applied": "تم التقديم",
+      "ticketPurchased": "تم شراء التذكرة",
       "viewDetails": "عرض التفاصيل",
       "all": "الكل",
       "filterActive": "نشط",
       "filterUpcoming": "قادم",
       "filterPlanned": "مخطط",
+      "filterSaved": "تم الحفظ",
+      "savedGalas": "حفلات محفوظة",
+      "savedDescription": "مجموعتك من الأحداث المحفوظة.",
       "filterPast": "سابق",
       "statusActive": "نشط",
       "statusUpcoming": "قادم",
       "statusPast": "سابق",
-      "statusPlanned": "مخطط"
+      "statusPlanned": "مخطط",
+      "noSavedGalasDescription": "لم تقم بحفظ أي حفلات بعد.",
+      "browseEvents": "تصفح الأحداث"
     },
     "details": {
       "loading": "جارٍ تحميل تفاصيل الفعالية...",
@@ -81,8 +89,13 @@
       "mustBuyTicket": "يجب عليك شراء تذكرة لهذا الحفل قبل أن تتمكن من التقدم بطلب للحصول على منحة.",
       "buyTicketAmount": "شراء تذكرة - {{price}}$",
       "buyTicketAmountShort": "شراء تذكرة ({{price}}$)",
-      "buyTicketNow": "اشتري التذكرة الآن - {{price}}$",
-      "processing": "جاري المعالجة..."
+      "buyTicketNow": "اشترِ تذكرة الآن - ${{price}}",
+      "subscribeToBuy": "اشترك للشراء",
+      "processing": "جاري المعالجة...",
+      "ticketPrice": "سعر التذكرة",
+      "ticketPurchased": "تم شراء التذكرة",
+      "purchaseSuccess": "تم شراء التذكرة بنجاح!",
+      "pastEvent": "حدث سابق"
     },
     "grants": {
       "loading": "جارٍ تحميل المنح...",
@@ -106,7 +119,10 @@
       "statusUpcoming": "قادم",
       "statusPublished": "منشور",
       "statusActive": "نشط",
-      "statusPast": "سابق"
+      "statusPast": "سابق",
+      "subscriptionRequired": "الاشتراك مطلوب",
+      "subscriptionRequiredDesc": "يجب أن يكون لديك خطة اشتراك نشطة لتنفيذ هذا الإجراء.",
+      "upgradeNow": "ترقية الخطة الآن"
     }
   },
   "grants": {
@@ -175,6 +191,18 @@
       "at": " في 14:00 - 14:30",
       "submittedOn": "تم التقديم في ",
       "galaName": "Gala Vision 2026"
+    }
+  },
+  "subscription": {
+    "processing": {
+      "title": "معالجة المعاملة",
+      "switchingNetwork": "التبديل إلى شبكة سيبوليا...",
+      "initializing": "تهيئة العقود...",
+      "checkingToken": "التحقق من الرصيد...",
+      "approving": "الموافقة على sUSD...",
+      "confirming": "تأكيد الشراء...",
+      "processing": "معالجة المعاملة...",
+      "secureNote": "معاملة آمنة يتم التعامل معها عبر MetaMask"
     }
   }
 }

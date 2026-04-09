@@ -1,7 +1,6 @@
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../Store/Common';
-import api from '../../Services/Api/api';
+import { showLogoutModal } from '../../Store/Common';
 import { ensureAbsoluteUrl } from '../../Shared/Utils';
 import './MyProfile.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -27,9 +26,7 @@ export default function MyProfile() {
     useOutletContext<DashboardOutletContext>();
 
   const handleLogout = () => {
-    dispatch(logout());
-    dispatch(api.util.resetApiState());
-    navigate('/login');
+    dispatch(showLogoutModal());
   };
 
   if (profileLoading) {

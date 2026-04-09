@@ -98,6 +98,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       '0x89': '0x1e7f5f6Bd0F2D03A6eA77B467C722Be7c53f5452',
       '0x13881': '0x1e7f5f6Bd0F2D03A6eA77B467C722Be7c53f5452',
       '0x13882': '0x1e7f5f6Bd0F2D03A6eA77B467C722Be7c53f5452',
+      '0xaa36a7': import.meta.env.VITE_CONTRACT_ADDRESS,
     };
 
     const activeAddress =

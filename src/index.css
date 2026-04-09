@@ -54,11 +54,13 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: transparent;
 }
 button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+button:focus-visible,
+button:active {
+  outline: none;
+  box-shadow: none;
 }
 
 @media (prefers-color-scheme: light) {

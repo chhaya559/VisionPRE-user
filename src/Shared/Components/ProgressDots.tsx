@@ -1,4 +1,4 @@
-import './styles.scss';
+import './ProgressDots.scss';
 
 type Props = {
   total: number;

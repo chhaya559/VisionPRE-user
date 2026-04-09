@@ -1,0 +1,17 @@
+{
+  "usernameRequired": "Username is required",
+  "usernameMax": "Username must not exceed 10 characters",
+  "emailRequired": "Email is required",
+  "emailInvalid": "Invalid email format",
+  "passwordRequired": "Password is required",
+  "passwordMin": "Password must be at least 8 characters",
+  "passwordLower": "Must contain at least one lowercase letter",
+  "passwordUpper": "Must contain at least one uppercase letter",
+  "passwordNumber": "Must contain at least one number",
+  "passwordSpecial": "Must contain at least one special character",
+  "passwordsMatch": "Passwords must match",
+  "confirmPassword": "Please confirm your password",
+  "currentPasswordRequired": "Current password is required",
+  "newPasswordRequired": "New password is required",
+  "confirmPasswordRequired": "Please confirm your new password"
+}

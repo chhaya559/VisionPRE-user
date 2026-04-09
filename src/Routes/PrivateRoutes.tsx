@@ -6,22 +6,14 @@ import Dashboard from '../Views/Dashboard/Dashboard';
 import DiscoverGalas from '../Views/Galas/DiscoverGalas';
 import GalaDetails from '../Views/Galas/GalaDetails';
 import GalaGrants from '../Views/Galas/GalaGrants';
+import SavedGalas from '../Views/Galas/SavedGalas';
 import GrantApplication from '../Views/Grants/GrantApplication';
 import GrantsList from '../Views/Grants/GrantsList';
 import Notifications from '../Views/Notifications/Notifications';
-import MyProfile from '../Views/Profile/MyProfile';
-import EditPublicProfile from '../Views/Profile/EditPublicProfile';
-import EditBusinessProfile from '../Views/Profile/EditBusinessProfile';
-import AccountSettings from '../Views/Profile/AccountSettings';
-import ChangePassword from '../Views/Settings/ChangePassword';
-import LanguageSettings from '../Views/Settings/LanguageSettings';
-import TermsAndConditions from '../Views/Settings/TermsAndConditions';
-import PrivacyPolicy from '../Views/Settings/PrivacyPolicy';
-import DeleteAccount from '../Views/Settings/DeleteAccount';
-import ProfileSetupLayout from '../Views/ProfileSetup/ProfileSetupLayout';
-import SubscriptionDetails from '../Views/Settings/SubscriptionDetails';
-import SubscriptionPlans from '../Views/Settings/SubscriptionPlans';
-// ... rest of imports
+import MyProfile from '../Views/UserSettings/MyProfile';
+import EditPublicProfile from '../Views/UserSettings/EditPublicProfile';
+import EditBusinessProfile from '../Views/UserSettings/EditBusinessProfile';
+import AccountSettings from '../Views/UserSettings/AccountSettings';
 import Welcome from '../Views/ProfileSetup/Steps/Welcome';
 import AlmostReady from '../Views/ProfileSetup/Steps/AlmostReady';
 import StepName from '../Views/ProfileSetup/Steps/StepName';
@@ -33,8 +25,15 @@ import StepDescribe from '../Views/ProfileSetup/Steps/StepDescribe';
 import StepGoal from '../Views/ProfileSetup/Steps/StepGoal';
 import StepPhone from '../Views/ProfileSetup/Steps/StepPhone';
 import ProfileReady from '../Views/ProfileSetup/Steps/ProfileReady';
+import ChangePassword from '../Views/UserSettings/ChangePassword';
+import LanguageSettings from '../Views/UserSettings/LanguageSettings';
+import TermsAndConditions from '../Views/UserSettings/TermsAndConditions';
+import PrivacyPolicy from '../Views/UserSettings/PrivacyPolicy';
+import DeleteAccount from '../Views/UserSettings/DeleteAccount';
+import SubscriptionDetails from '../Views/UserSettings/SubscriptionDetails';
+import SubscriptionPlans from '../Views/UserSettings/SubscriptionPlans';
+import ProfileSetupLayout from '../Views/ProfileSetup/ProfileSetupLayout';
 
-// eslint-disable-next-line import/prefer-default-export
 export const PRIVATE_ROUTES: Array<CustomRouter> = [
   {
     path: '/',
@@ -52,6 +51,7 @@ export const PRIVATE_ROUTES: Array<CustomRouter> = [
       },
       { path: 'galas/:id', element: <GalaDetails /> },
       { path: 'galas/:id/grants', element: <GalaGrants /> },
+      { path: 'galas/saved', element: <SavedGalas /> },
       { path: 'galas/:id/apply/:grantId', element: <GrantApplication /> },
       { path: 'grants', element: <GrantsList /> },
       { path: 'notifications', element: <Notifications /> },
@@ -62,7 +62,7 @@ export const PRIVATE_ROUTES: Array<CustomRouter> = [
       { path: 'profile/settings/change-password', element: <ChangePassword /> },
       { path: 'profile/settings/language', element: <LanguageSettings /> },
       { path: 'profile/settings/terms', element: <TermsAndConditions /> },
-      { path: 'profile/settings/privacy', element: <PrivacyPolicy /> },
+      { path: 'profile/settings/privacy', element: <PrivacyPolicy/> },
       { path: 'profile/settings/delete-account', element: <DeleteAccount /> },
       {
         path: 'profile/settings/subscription',

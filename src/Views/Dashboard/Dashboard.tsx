@@ -10,9 +10,12 @@ import {
   faHome,
   faLayerGroup,
   faLocationDot,
+  faSignOutAlt,
   faTrophy,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch } from 'react-redux';
+import { showLogoutModal } from '../../Store/Common';
 import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import { useGetProfileQuery } from '../../Services/Api/module/UserApi';
 import {
@@ -191,8 +194,8 @@ function DashboardHomeContent({
                   <span className="ann-date">
                     {ann.createdAt || ann.CreatedAt
                       ? new Date(
-                          ann.createdAt || ann.CreatedAt
-                        ).toLocaleDateString()
+                        ann.createdAt || ann.CreatedAt
+                      ).toLocaleDateString()
                       : 'Recently'}
                   </span>
                   <p className="ann-desc">
@@ -268,6 +271,7 @@ function DashboardHomeContent({
 export default function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { t } = useTranslation('private');
   const { account, connectWallet, disconnectWallet, isConnecting } =
     useWalletContext();
@@ -304,23 +308,36 @@ export default function Dashboard() {
 
   const nextGala = upcomingGalas[0];
 
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   // Calculate Stats
   const pendingApps = Array.isArray(applications)
     ? applications.filter((a) =>
-        isGrantPendingStatus(getGrantApplicationStatusValue(a))
-      ).length
+      isGrantPendingStatus(getGrantApplicationStatusValue(a))
+    ).length
     : 0;
   const approvedApps = Array.isArray(applications)
     ? applications.filter((a) =>
-        isGrantApprovedStatus(getGrantApplicationStatusValue(a))
-      ).length
+      isGrantApprovedStatus(getGrantApplicationStatusValue(a))
+    ).length
     : 0;
   const totalApps = Array.isArray(applications) ? applications.length : 0;
 
-  const displayName = profile?.firstName || 'User';
+  const firstName = profile?.firstName || profile?.FirstName || 'User';
+  const lastName = profile?.lastName || profile?.LastName || '';
+  const email = profile?.email || profile?.Email || '';
+  const fullName = `${firstName} ${lastName}`.trim() || 'User';
+
   const avatarUrl =
     ensureAbsoluteUrl(profile?.avatarUrl) ||
-    `https://ui-avatars.com/api/?name=${displayName}&background=1e293b&color=fff`;
+    `https://ui-avatars.com/api/?name=${fullName}&background=1e293b&color=fff`;
 
   return (
     <div className="dashboard-layout">
@@ -336,36 +353,32 @@ export default function Dashboard() {
         <nav className="sidebar-nav">
           <Link
             to="/dashboard"
-            className={`nav-item ${
-              location.pathname === '/dashboard' ? 'active' : ''
-            }`}
+            className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''
+              }`}
           >
             <FontAwesomeIcon icon={faHome} />{' '}
             <span>{t('dashboard.sidebar.dashboard')}</span>
           </Link>
           <Link
             to="/dashboard/galas"
-            className={`nav-item ${
-              location.pathname.includes('/dashboard/galas') ? 'active' : ''
-            }`}
+            className={`nav-item ${location.pathname.includes('/dashboard/galas') ? 'active' : ''
+              }`}
           >
             <FontAwesomeIcon icon={faCalendarDays} />{' '}
             <span>{t('dashboard.sidebar.galas')}</span>
           </Link>
           <Link
             to="/dashboard/grants"
-            className={`nav-item ${
-              location.pathname.includes('/dashboard/grants') ? 'active' : ''
-            }`}
+            className={`nav-item ${location.pathname.includes('/dashboard/grants') ? 'active' : ''
+              }`}
           >
             <FontAwesomeIcon icon={faTrophy} />{' '}
             <span>{t('dashboard.sidebar.grants')}</span>
           </Link>
           <Link
             to="/dashboard/profile"
-            className={`nav-item ${
-              location.pathname.includes('/dashboard/profile') ? 'active' : ''
-            }`}
+            className={`nav-item ${location.pathname.includes('/dashboard/profile') ? 'active' : ''
+              }`}
           >
             <FontAwesomeIcon icon={faUser} />{' '}
             <span>{t('dashboard.sidebar.profile')}</span>
@@ -400,18 +413,27 @@ export default function Dashboard() {
           </div>
 
           <div className="user-mini-profile">
-            <img src={avatarUrl} alt="Avatar" />
-            <div className="user-details">
-              <p className="name">{displayName}</p>
-              <p className="email">{profile?.email || 'User'}</p>
+            <div className="user-profile-info">
+              {profile?.avatarUrl ? (
+                <img src={avatarUrl} alt="Avatar" className="user-avatar" />
+              ) : (
+                <div className="user-avatar-initials">{getInitials(fullName)}</div>
+              )}
+              <div className="user-details">
+                <p className="name">{fullName}</p>
+                <p className="email">
+                  {'User'} • {email || 'no-email@example.com'}
+                </p>
+              </div>
             </div>
-            <Link
-              to="/dashboard/profile/settings"
-              className="settings-link"
-              title="Settings"
+            <button
+              type="button"
+              className="logout-btn"
+              title="Logout"
+              onClick={() => dispatch(showLogoutModal())}
             >
-              <FontAwesomeIcon icon={faCog} />
-            </Link>
+              <FontAwesomeIcon icon={faSignOutAlt} />
+            </button>
           </div>
         </div>
       </aside>
@@ -430,12 +452,20 @@ export default function Dashboard() {
               <FontAwesomeIcon icon={faBell} />
               {unreadNotifications > 0 && <span className="dot" />}
             </button>
+            <button
+              type="button"
+              className="notification-bell settings-btn-top"
+              onClick={() => navigate('/dashboard/profile/settings')}
+              title="Settings"
+            >
+              <FontAwesomeIcon icon={faCog} />
+            </button>
             <div
               className="profile-pill"
               onClick={() => navigate('/dashboard/profile')}
             >
               <img src={avatarUrl} alt="Avatar" />
-              <span>{displayName}</span>
+              <span>{fullName}</span>
             </div>
           </div>
         </header>
@@ -471,36 +501,32 @@ export default function Dashboard() {
       <nav className="mobile-bottom-nav">
         <Link
           to="/dashboard"
-          className={`nav-item ${
-            location.pathname === '/dashboard' ? 'active' : ''
-          }`}
+          className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''
+            }`}
         >
           <FontAwesomeIcon icon={faHome} />{' '}
           <span>{t('dashboard.mobile.home')}</span>
         </Link>
         <Link
           to="/dashboard/galas"
-          className={`nav-item ${
-            location.pathname.includes('/dashboard/galas') ? 'active' : ''
-          }`}
+          className={`nav-item ${location.pathname.includes('/dashboard/galas') ? 'active' : ''
+            }`}
         >
           <FontAwesomeIcon icon={faCalendarDays} />{' '}
           <span>{t('dashboard.mobile.galas')}</span>
         </Link>
         <Link
           to="/dashboard/grants"
-          className={`nav-item ${
-            location.pathname.includes('/dashboard/grants') ? 'active' : ''
-          }`}
+          className={`nav-item ${location.pathname.includes('/dashboard/grants') ? 'active' : ''
+            }`}
         >
           <FontAwesomeIcon icon={faTrophy} />{' '}
           <span>{t('dashboard.mobile.grants')}</span>
         </Link>
         <Link
           to="/dashboard/profile"
-          className={`nav-item ${
-            location.pathname.includes('/dashboard/profile') ? 'active' : ''
-          }`}
+          className={`nav-item ${location.pathname.includes('/dashboard/profile') ? 'active' : ''
+            }`}
         >
           <FontAwesomeIcon icon={faUser} />{' '}
           <span>{t('dashboard.mobile.profile')}</span>

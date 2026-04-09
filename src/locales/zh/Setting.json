@@ -22,6 +22,7 @@
     "applicationDescription": "申请的状态变更",
     "account": "账户",
     "changePassword": "修改密码",
+    "savedGalas": "已保存的晚会",
     "language": "语言",
     "languageCode": "ZH",
     "privacy": "隐私",
@@ -287,7 +288,7 @@
     "nextBilling": "下次账单日期",
     "cancelMembership": "取消订阅",
     "subscriptionCanceled": "订阅已取消",
-    "cancelledNotice": "您的订阅已被取消。在您的当前计费周期于 {{date}} 结束后，您将转为免费计划。",
+    "cancelledNotice": "您的订阅已取消。您当前的计费周期将于 {{date}} 结束。",
     "repurchaseNotice": "之后，如果您希望继续享受高级福利，您将需要重新购买计划。",
     "cancelling": "正在取消...",
     "cancelSuccess": "订阅已成功取消。",
@@ -298,7 +299,10 @@
     "notAvailable": "暂无",
     "wallet": "加密钱包",
     "noTransactionFound": "未找到此订阅的活动交易哈希",
-    "confirmCancel": "您确定要取消吗？这将立即终止您的高级权益。"
+    "confirmCancel": "您确定要取消吗？这将立即终止您的高级权益。",
+    "errors": {
+      "contractError": "Token contract not found."
+    }
   },
   "subscriptionBanner": {
     "title": "解锁高级功能",

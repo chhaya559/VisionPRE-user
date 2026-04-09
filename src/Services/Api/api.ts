@@ -30,6 +30,9 @@ const baseQuery = fetchBaseQuery({
     }
     // Fix for ngrok CORS issues: skip the interstitial warning page
     headers.set('ngrok-skip-browser-warning', 'true');
+    const lang = localStorage.getItem('i18nextLng') || 'en';
+    headers.set('X-Language', lang);
+    headers.set('Accept-Language', lang);
     return headers;
   },
 });
@@ -82,7 +85,7 @@ const baseQueryWithInterceptor: BaseQueryFn<
 const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithInterceptor,
-  tagTypes: ['Notification', 'Profile', 'Subscription'],
+  tagTypes: ['Notification', 'Profile', 'Subscription', 'NotificationSettings'],
   endpoints: () => ({}),
 });
 

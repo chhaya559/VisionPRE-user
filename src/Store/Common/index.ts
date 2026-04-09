@@ -17,6 +17,11 @@ export type CommonState = {
   goal: string | null;
   phoneNumber: string | null;
   language: string;
+  notificationSettings: {
+    email: boolean;
+    push: boolean;
+  };
+  isLogoutModalOpen: boolean;
 };
 
 const initialState: CommonState = {
@@ -36,6 +41,11 @@ const initialState: CommonState = {
   phoneNumber: null,
   companyName: null,
   language: 'en',
+  notificationSettings: {
+    email: true,
+    push: true,
+  },
+  isLogoutModalOpen: false,
 };
 
 const common = createSlice({
@@ -91,13 +101,33 @@ const common = createSlice({
     setLanguage: (state, action: PayloadAction<string>) => {
       state.language = action.payload;
     },
-    logout: () => {
-      return initialState;
+    setNotificationSettings: (
+      state,
+      action: PayloadAction<{ email: boolean; push: boolean }>
+    ) => {
+      state.notificationSettings = action.payload;
+    },
+    logout: (state) => {
+      Object.assign(state, { ...initialState, language: state.language });
+    },
+    showLogoutModal: (state) => {
+      state.isLogoutModalOpen = true;
+    },
+    hideLogoutModal: (state) => {
+      state.isLogoutModalOpen = false;
     },
   },
 });
 
-export const { login, setAuthData, setUserData, setLanguage, logout } =
-  common.actions;
+export const {
+  login,
+  setAuthData,
+  setUserData,
+  setLanguage,
+  setNotificationSettings,
+  logout,
+  showLogoutModal,
+  hideLogoutModal,
+} = common.actions;
 
 export default common.reducer;

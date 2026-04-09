@@ -17,9 +17,11 @@ import { toast } from 'react-toastify';
 import {
   useGetPlansQuery,
   useSubscribeMutation,
+  useGetSubscriptionQuery,
 } from '../../Services/Api/module/SubscriptionApi';
 import { useWalletContext } from '../../Context/WalletContext';
 
+import WalletConnectModal from '../../Shared/Components/WalletConnectModal/WalletConnectModal';
 import { mapWeb3Error } from '../../Shared/Web3Utils';
 import './SubscriptionPlans.scss';
 
@@ -37,9 +39,12 @@ export default function SubscriptionPlans() {
     getTokenContract,
   } = useWalletContext();
   const { data: plansResponse, isLoading, error } = useGetPlansQuery(undefined);
+  const { refetch: refetchSubscription } = useGetSubscriptionQuery(undefined);
   const [subscribeMutation] = useSubscribeMutation();
   const [isProcessing, setIsProcessing] = useState(false);
   const [processStatus, setProcessStatus] = useState('');
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+
   const plans = plansResponse?.data?.items || plansResponse?.data || [];
 
   const handleSubscribe = async (planId: string, e: React.MouseEvent) => {
@@ -63,9 +68,7 @@ export default function SubscriptionPlans() {
     }
 
     if (!account) {
-      if (window.confirm(t('subscription.connectWalletPrompt'))) {
-        await connectWallet();
-      }
+      setIsWalletModalOpen(true);
       return;
     }
 
@@ -195,6 +198,7 @@ export default function SubscriptionPlans() {
 
       if (response.success) {
         localStorage.setItem('active_subscription_hash', realHash);
+        await refetchSubscription();
         toast.success(response.message || t('subscription.success'));
         setIsProcessing(false);
         navigate('/dashboard/profile/settings');
@@ -389,6 +393,16 @@ export default function SubscriptionPlans() {
           </div>
         </div>
       )}
+
+      {/* ── Wallet Connect Modal ── */}
+      <WalletConnectModal
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
+        onConnect={async () => {
+          setIsWalletModalOpen(false);
+          await connectWallet();
+        }}
+      />
     </div>
   );
 }

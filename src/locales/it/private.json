@@ -34,7 +34,9 @@
       "galas": "Gala",
       "grants": "Sovvenzioni",
       "profile": "Profilo"
-    }
+    },
+    "recentAnnouncements": "Recent Announcements",
+    "noRecentAnnouncements": "No recent announcements."
   },
   "galas": {
     "discover": {
@@ -51,16 +53,22 @@
       "noGalas": "Nessuna gala trovata",
       "noGalasDescription": "Non ci sono eventi di gala disponibili per il filtro selezionato al momento.",
       "applied": "candidato",
+      "ticketPurchased": "Biglietto acquistato",
       "viewDetails": "Visualizza dettagli",
       "all": "Tutte",
       "filterActive": "Attive",
       "filterUpcoming": "In arrivo",
       "filterPlanned": "Pianificate",
+      "filterSaved": "Salvato",
+      "savedGalas": "Gala salvati",
+      "savedDescription": "La tua collezione di eventi salvati.",
       "filterPast": "Passate",
       "statusActive": "Attive",
       "statusUpcoming": "In arrivo",
       "statusPast": "Passate",
-      "statusPlanned": "Pianificate"
+      "statusPlanned": "Pianificate",
+      "noSavedGalasDescription": "Non hai ancora salvato alcun gala.",
+      "browseEvents": "Sfoglia eventi"
     },
     "details": {
       "loading": "Caricamento dettagli della gala...",
@@ -81,8 +89,13 @@
       "mustBuyTicket": "È necessario acquistare un biglietto per questo gala prima di poter richiedere una sovvenzione.",
       "buyTicketAmount": "Acquista biglietto - {{price}}$",
       "buyTicketAmountShort": "Acquista biglietto ({{price}}$)",
-      "buyTicketNow": "Acquista biglietto ora - {{price}}$",
-      "processing": "In corso..."
+      "buyTicketNow": "Acquista biglietto ora - ${{price}}",
+      "subscribeToBuy": "Abbonati per acquistare",
+      "processing": "Elaborazione...",
+      "ticketPrice": "Prezzo del biglietto",
+      "ticketPurchased": "Biglietto acquistato",
+      "purchaseSuccess": "Biglietto acquistato con successo!",
+      "pastEvent": "Evento passato"
     },
     "grants": {
       "loading": "Caricamento delle sovvenzioni...",
@@ -106,7 +119,10 @@
       "statusUpcoming": "In arrivo",
       "statusPublished": "Pubblicato",
       "statusActive": "Attivo",
-      "statusPast": "Passato"
+      "statusPast": "Passato",
+      "subscriptionRequired": "Abbonamento richiesto",
+      "subscriptionRequiredDesc": "È necessario dispor di un piano di abbonamento attivo per eseguire questa azione.",
+      "upgradeNow": "Aggiorna piano ora"
     }
   },
   "grants": {
@@ -175,6 +191,18 @@
       "at": " alle 14:00 - 14:30",
       "submittedOn": "Inviato il ",
       "galaName": "Gala Vision 2026"
+    }
+  },
+  "subscription": {
+    "processing": {
+      "title": "Elaborazione della transazione",
+      "switchingNetwork": "Passaggio alla rete Sepolia...",
+      "initializing": "Inizializzazione dei contratti...",
+      "checkingToken": "Verifica del saldo...",
+      "approving": "Approvazione di sUSD...",
+      "confirming": "Conferma dell'acquisto...",
+      "processing": "Elaborazione della transazione...",
+      "secureNote": "Transazione sicura gestita tramite MetaMask"
     }
   }
 }

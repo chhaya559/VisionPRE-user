@@ -1,0 +1,17 @@
+{
+  "usernameRequired": "اسم المستخدم مطلوب",
+  "usernameMax": "يجب ألا يتجاوز اسم المستخدم 10 أحرف",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "emailInvalid": "صيغة البريد الإلكتروني غير صحيحة",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "passwordMin": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+  "passwordLower": "يجب أن تحتوي على حرف صغير واحد على الأقل",
+  "passwordUpper": "يجب أن تحتوي على حرف كبير واحد على الأقل",
+  "passwordNumber": "يجب أن تحتوي على رقم واحد على الأقل",
+  "passwordSpecial": "يجب أن تحتوي على رمز خاص واحد على الأقل",
+  "passwordsMatch": "كلمات المرور غير متطابقة",
+  "confirmPassword": "يرجى تأكيد كلمة المرور",
+  "currentPasswordRequired": "كلمة المرور الحالية مطلوبة",
+  "newPasswordRequired": "كلمة المرور الجديدة مطلوبة",
+  "confirmPasswordRequired": "يرجى تأكيد كلمة المرور الجديدة"
+}

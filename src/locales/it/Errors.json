@@ -1,0 +1,17 @@
+{
+  "usernameRequired": "Il nome utente è obbligatorio",
+  "usernameMax": "Il nome utente non deve superare i 10 caratteri",
+  "emailRequired": "L'email è obbligatoria",
+  "emailInvalid": "Formato email non valido",
+  "passwordRequired": "La password è obbligatoria",
+  "passwordMin": "La password deve contenere almeno 8 caratteri",
+  "passwordLower": "Deve contenere almeno una lettera minuscola",
+  "passwordUpper": "Deve contenere almeno una lettera maiuscola",
+  "passwordNumber": "Deve contenere almeno un numero",
+  "passwordSpecial": "Deve contenere almeno un carattere speciale",
+  "passwordsMatch": "Le password devono corrispondere",
+  "confirmPassword": "Per favore, conferma la tua password",
+  "currentPasswordRequired": "La password attuale è obbligatoria",
+  "newPasswordRequired": "La nuova password è obbligatoria",
+  "confirmPasswordRequired": "Per favore, conferma la tua nuova password"
+}

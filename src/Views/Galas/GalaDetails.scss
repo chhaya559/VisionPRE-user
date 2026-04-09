@@ -80,6 +80,15 @@
     .right-actions {
       display: flex;
       gap: 8px;
+
+      .bookmark-btn {
+        &.active {
+          background: #10b981;
+          color: white;
+          border-color: #10b981;
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+      }
     }
   }
 
@@ -411,6 +420,34 @@
 
   &.loading {
     cursor: wait;
+  }
+}
+
+.registered-status-banner {
+  width: 100%;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #059669;
+  padding: 15px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 0.97rem;
+  
+  svg {
+    font-size: 1.1rem;
+  }
+
+  &.mobile {
+    margin-right: 12px;
+    flex: 1;
+    background: #10B981;
+    color: white;
+    border: none;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
   }
 }
 

@@ -9,7 +9,7 @@ import { Bounce, toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { signInWithPopup } from 'firebase/auth';
 import { login } from '../../Store/Common';
-import { loginSchema } from '../../validations/userSchema';
+import { loginSchema } from '../../validations/validationSchema';
 import {
   useAppleLoginMutation,
   useGoogleLoginMutation,

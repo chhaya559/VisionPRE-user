@@ -7,7 +7,6 @@ import { PRIVATE_ROUTES } from './PrivateRoutes';
 import { PUBLIC_ROUTES } from './PublicRoutes';
 import { CustomRouter } from './RootRoutes';
 
-// eslint-disable-next-line react/prop-types
 function DocumentTitle({ isAuthenticated = false }) {
   const location = useLocation();
   const ROUTES: CustomRouter[] = PUBLIC_ROUTES.concat(

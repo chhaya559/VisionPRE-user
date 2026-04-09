@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import './ProfileSetupLayout.scss';
 import { useTranslation } from 'react-i18next';
 
-// The steps for the progress bar
 const PROGRESS_STEPS = [
   '/setup/name',
   '/setup/company',

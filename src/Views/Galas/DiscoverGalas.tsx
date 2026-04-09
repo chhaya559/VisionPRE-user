@@ -1,18 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useGetGalasQuery } from '../../Services/Api/module/GalaApi';
+import { 
+  useGetGalasQuery, 
+} from '../../Services/Api/module/GalaApi';
+import { GalaStatus } from '../../Shared/Enums';
 import './Galas.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendar,
   faMapMarkerAlt,
   faUsers,
-  faBookmark,
-  faChevronRight,
   faFire,
   faClock,
   faArchive,
+  faChevronRight,
+  faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function DiscoverGalas() {
@@ -52,25 +55,16 @@ export default function DiscoverGalas() {
     );
   }
 
-  // Categorize with safe access to the items list
   const galas = apiResponse?.data?.items || [];
 
-  const getStatusLabel = (s: any) => {
-    if (typeof s === 'string') return s;
-    if (s === 1) return 'Active';
-    if (s === 2) return 'Upcoming';
-    if (s === 3) return 'Past';
-    return 'Active';
-  };
-
   const activeGalas = galas.filter(
-    (g: any) => getStatusLabel(g?.status) === 'Active'
+    (g: any) => g?.status === GalaStatus.Active
   );
   const upcomingGalas = galas.filter(
-    (g: any) => getStatusLabel(g?.status) === 'Upcoming'
+    (g: any) => g?.status === GalaStatus.Upcoming
   );
   const pastGalas = galas.filter(
-    (g: any) => getStatusLabel(g?.status) === 'Past'
+    (g: any) => g?.status === GalaStatus.Completed
   );
 
   const showActive = activeFilter === 'All' || activeFilter === 'Active';
@@ -79,6 +73,7 @@ export default function DiscoverGalas() {
     activeFilter === 'Upcoming' ||
     activeFilter === 'Planned';
   const showPast = activeFilter === 'All' || activeFilter === 'Past';
+
   const hasVisibleGalas =
     (showActive && activeGalas.length > 0) ||
     (showUpcoming && upcomingGalas.length > 0) ||
@@ -128,9 +123,7 @@ export default function DiscoverGalas() {
                 key={gala.id || gala.Id}
                 gala={gala}
                 t={t}
-                onClick={() =>
-                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
-                }
+                onClick={() => navigate(`/dashboard/galas/${gala.id || gala.Id}`)}
               />
             ))}
           </section>
@@ -153,9 +146,7 @@ export default function DiscoverGalas() {
                 key={gala.id || gala.Id}
                 gala={gala}
                 t={t}
-                onClick={() =>
-                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
-                }
+                onClick={() => navigate(`/dashboard/galas/${gala.id || gala.Id}`)}
               />
             ))}
           </section>
@@ -173,9 +164,7 @@ export default function DiscoverGalas() {
                 key={gala.id || gala.Id}
                 gala={gala}
                 t={t}
-                onClick={() =>
-                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
-                }
+                onClick={() => navigate(`/dashboard/galas/${gala.id || gala.Id}`)}
               />
             ))}
           </section>
@@ -196,7 +185,11 @@ function GalaCard({
   gala,
   t,
   onClick,
-}: Readonly<{ gala: any; t: any; onClick: () => void }>) {
+}: Readonly<{ 
+  gala: any; 
+  t: any; 
+  onClick: () => void; 
+}>) {
   const title = gala.name || 'Untitled Gala';
   const dateStr = gala.eventDate || gala.Date || gala.event_date;
   const date = dateStr
@@ -208,16 +201,18 @@ function GalaCard({
     : 'TBD';
   const location = gala.city || gala.venue || gala.Location || 'TBD';
   const attendees = gala.appliedCount ?? gala.Attendees ?? 0;
-  const prizePool = gala.totalPrizePool ?? gala.PrizePool ?? 0;
+  const prizePool = gala.totalGalaValue ?? gala.totalPrizePool ?? gala.PrizePool ?? 0;
 
-  const getStatusLabel = (s: any) => {
-    if (typeof s === 'string') return s;
-    if (s === 1) return 'Active';
-    if (s === 2) return 'Upcoming';
-    if (s === 3) return 'Past';
-    return 'Active';
+  const getStatusLabel = (s: GalaStatus) => {
+    switch (s) {
+      case GalaStatus.Draft: return 'Draft';
+      case GalaStatus.Upcoming: return 'Upcoming';
+      case GalaStatus.Active: return 'Active';
+      case GalaStatus.Completed: return 'Past';
+      default: return 'Active';
+    }
   };
-  const status = getStatusLabel(gala.status || gala.Status);
+  const status = getStatusLabel(gala.status);
   const imageUrl =
     gala.coverImageUrl ||
     gala.imageUrl ||
@@ -238,15 +233,12 @@ function GalaCard({
           {status === 'Active' && <span className="status-dot" />}
           {t(`galas.discover.status${status}`)}
         </div>
-        <button
-          type="button"
-          className="bookmark-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <FontAwesomeIcon icon={faBookmark} />
-        </button>
+        {gala.isTicketPurchased && (
+          <div className="registered-badge">
+            <FontAwesomeIcon icon={faCheckCircle} />
+            {t('galas.discover.ticketPurchased') || 'Ticket Purchased'}
+          </div>
+        )}
       </div>
       <div className="card-content">
         <h3>{title}</h3>
@@ -267,17 +259,19 @@ function GalaCard({
           <div className="prize-pool">${prizePool.toLocaleString()}</div>
         </div>
 
-        <button
-          type="button"
-          className="btn-details"
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick();
-          }}
-        >
-          {t('galas.discover.viewDetails')}
-          <FontAwesomeIcon icon={faChevronRight} />
-        </button>
+        <div className="card-actions">
+          <button
+            type="button"
+            className="btn-details secondary"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick();
+            }}
+          >
+            {t('galas.discover.viewDetails')}
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
+        </div>
       </div>
     </div>
   );

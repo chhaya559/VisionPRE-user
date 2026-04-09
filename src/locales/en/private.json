@@ -29,12 +29,14 @@
       "dashboard": "Dashboard",
       "galas": "Galas",
       "grants": "Grants",
+      "savedGalas": "Saved Galas",
       "profile": "Profile"
     },
     "mobile": {
       "home": "Home",
       "galas": "Galas",
       "grants": "Grants",
+      "saved": "Saved",
       "profile": "Profile"
     }
   },
@@ -53,16 +55,23 @@
       "noGalas": "No galas found",
       "noGalasDescription": "There are no gala events available for the selected filter right now.",
       "applied": "applied",
+      "registered": "Registered",
+      "ticketPurchased": "Ticket Purchased",
       "viewDetails": "View Details",
       "all": "All",
       "filterActive": "Active",
       "filterUpcoming": "Upcoming",
       "filterPlanned": "Planned",
       "filterPast": "Past",
+      "filterSaved": "Saved",
+      "savedGalas": "Saved Galas",
+      "savedDescription": "Your collection of bookmarked events.",
       "statusActive": "Active",
       "statusUpcoming": "Upcoming",
       "statusPast": "Past",
-      "statusPlanned": "Planned"
+      "statusPlanned": "Planned",
+      "noSavedGalasDescription": "You haven't saved any galas yet.",
+      "browseEvents": "Browse Events"
     },
     "details": {
       "loading": "Loading gala details...",
@@ -84,7 +93,12 @@
       "buyTicketAmount": "Buy Ticket - ${{price}}",
       "buyTicketAmountShort": "Buy Ticket (${{price}})",
       "buyTicketNow": "Buy Ticket Now - ${{price}}",
-      "processing": "Processing..."
+      "subscribeToBuy": "Subscribe to Buy",
+      "processing": "Processing...",
+      "ticketPrice": "Ticket Price",
+      "ticketPurchased": "Ticket Purchased",
+      "purchaseSuccess": "Ticket purchased successfully!",
+      "pastEvent": "Past Event"
     },
     "grants": {
       "loading": "Loading grants...",
@@ -108,7 +122,10 @@
       "statusUpcoming": "Upcoming",
       "statusPublished": "Published",
       "statusActive": "Active",
-      "statusPast": "Past"
+      "statusPast": "Past",
+      "subscriptionRequired": "Subscription Required",
+      "subscriptionRequiredDesc": "You need to have an active subscription plan to perform this action.",
+      "upgradeNow": "Upgrade Plan Now"
     }
   },
   "grants": {
@@ -177,6 +194,18 @@
       "at": " at 14h00 - 14h30",
       "submittedOn": "Submitted on ",
       "galaName": "Gala Vision 2026"
+    }
+  },
+  "subscription": {
+    "processing": {
+      "title": "Processing Transaction",
+      "switchingNetwork": "Switching to Sepolia...",
+      "initializing": "Initializing contracts...",
+      "checkingToken": "Checking balance...",
+      "approving": "Approving sUSD...",
+      "confirming": "Confirming purchase...",
+      "processing": "Processing transaction...",
+      "secureNote": "Secure transaction handled via MetaMask"
     }
   }
 }

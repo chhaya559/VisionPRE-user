@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import ProgressDots from './ProgressDots';
+import ProgressDots from '../../Shared/Components/ProgressDots';
 import './styles.scss';
 import { useTranslation } from 'react-i18next';
 

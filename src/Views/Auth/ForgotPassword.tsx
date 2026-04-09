@@ -10,10 +10,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { emailSchema } from '../../validations/userSchema';
+import { emailSchema } from '../../validations/validationSchema';
 import { useForgotPasswordMutation } from '../../Services/Api/module/AuthApi';
 import { ROUTES_CONFIG } from '../../Shared/Constants';
 import Modal from '../../Shared/Components/Modal';
+import { toast } from 'react-toastify';
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -48,8 +49,15 @@ export default function ForgotPassword() {
         setShowModal(true);
         reset();
       }
-    } catch (error) {
-      console.log(error);
+      else {
+        toast.error(respone?.data?.message);
+      }
+    } catch (error: any) {
+      const message =
+        error?.data?.errors?.[0]?.message ||
+        error?.data?.message ||
+        t('something_went_wrong');
+      toast.error(message);
     }
   };
   return (

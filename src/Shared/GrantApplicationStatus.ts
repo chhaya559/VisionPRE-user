@@ -1,12 +1,6 @@
-export enum GrantApplicationStatus {
-  Draft = 1,
-  Pending = 2,
-  InReview = 3,
-  Approved = 4,
-  Rejected = 5,
-  Winner = 6,
-  ApprovedForInterview = 7,
-}
+import { GrantApplicationStatus } from './Enums';
+
+export { GrantApplicationStatus };
 
 export const getGrantApplicationStatusValue = (application: { status: any }) =>
   Number(application?.status);

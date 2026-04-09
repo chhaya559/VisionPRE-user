@@ -1,0 +1,110 @@
+@import '../../Colors.scss';
+
+.logout-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.logout-modal-container {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: slideUp 0.3s ease-out;
+}
+
+.logout-modal-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba($error, 0.1);
+  color: $error;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  font-size: 28px;
+}
+
+.logout-modal-content {
+  h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: $primaryText;
+    margin: 0 0 12px;
+  }
+
+  p {
+    font-size: 15px;
+    color: $secondaryText;
+    line-height: 1.6;
+    margin: 0 0 32px;
+  }
+}
+
+.logout-modal-actions {
+  display: flex;
+  gap: 12px;
+
+  button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+  }
+
+  .btn-cancel {
+    background: #F1F4F9;
+    color: $secondaryText;
+
+    &:hover {
+      background: darken(#F1F4F9, 3%);
+    }
+  }
+
+  .btn-confirm {
+    background: $error;
+    color: white;
+
+    &:hover {
+      background: darken($error, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba($error, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

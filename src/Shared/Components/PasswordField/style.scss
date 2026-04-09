@@ -28,7 +28,7 @@
       transition: all 0.2s ease;
 
       &::placeholder {
-        color: $secondaryText;
+        color: $placeholderColor;
       }
 
       &:focus {

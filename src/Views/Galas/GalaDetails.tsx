@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import {
   useGetGalaByIdQuery,
   usePurchaseTicketMutation,
+  useToggleSaveGalaMutation,
 } from '../../Services/Api/module/GalaApi';
+import { GalaStatus } from '../../Shared/Enums';
 import './GalaDetails.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
-  faShareAlt,
   faBookmark,
   faCalendar,
   faMapMarkerAlt,
@@ -17,11 +18,17 @@ import {
   faStar,
   faArrowRight,
   faCreditCard,
+  faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useSubscription } from '../../hooks/useSubscription';
+import { usePurchaseTicketBlockchain } from '../../hooks/usePurchaseTicketBlockchain';
+import SubscriptionGuardModal from '../../Shared/Components/Modal/SubscriptionGuardModal';
+import BlockchainProcessingModal from '../../Shared/Components/Modal/BlockchainProcessingModal';
 
 export default function GalaDetails() {
-  const { id } = useParams<{ id: string }>();
+  const { id: urlId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation('private');
   const {
@@ -29,9 +36,18 @@ export default function GalaDetails() {
     isLoading,
     error,
     refetch,
-  } = useGetGalaByIdQuery(id || '');
+  } = useGetGalaByIdQuery(urlId || '');
   const [purchaseTicket, { isLoading: isPurchasing }] =
     usePurchaseTicketMutation();
+  const [toggleSave] = useToggleSaveGalaMutation();
+
+  const { isActive } = useSubscription();
+  const { 
+    purchaseTicketBlockchain, 
+    isProcessing: isBlockchainProcessing, 
+    processStatus 
+  } = usePurchaseTicketBlockchain();
+  const [isSubModalOpen, setIsSubModalOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -74,16 +90,20 @@ export default function GalaDetails() {
   }
 
   const galaData = (apiResponse as any)?.data || apiResponse || {};
-  const title = galaData.name;
-  const isRegistered = galaData.isRegistered || false;
-  const ticketPrice = galaData.ticket_price || 0;
+  const id = urlId || '';
 
-  const getStatusLabel = (s: any) => {
-    if (typeof s === 'string') return s;
-    if (s === 1) return 'Active';
-    if (s === 2) return 'Upcoming';
-    if (s === 3) return 'Past';
-    return 'Active';
+  const title = galaData.name;
+  const isRegistered = galaData.isTicketPurchased || galaData.isRegistered || false;
+  const ticketPrice = galaData.ticketPrice || galaData.ticket_price || 0;
+
+  const getStatusLabel = (s: GalaStatus) => {
+    switch (s) {
+      case GalaStatus.Draft: return 'Draft';
+      case GalaStatus.Upcoming: return 'Upcoming';
+      case GalaStatus.Active: return 'Active';
+      case GalaStatus.Completed: return 'Past';
+      default: return 'Active';
+    }
   };
   const status = getStatusLabel(galaData.status);
 
@@ -97,7 +117,7 @@ export default function GalaDetails() {
       ? `${galaData.venue}, ${galaData.city}`
       : galaData.city || galaData.location || 'TBD';
   const attendees = galaData.appliedCount ?? galaData.expectedAttendees ?? 0;
-  const prizePool = galaData.totalPrizePool ?? 0;
+  const prizePool = galaData.totalGalaValue ?? galaData.totalPrizePool ?? 0;
   const description =
     galaData.about || galaData.description || 'No description available.';
 
@@ -112,19 +132,66 @@ export default function GalaDetails() {
   };
 
   const handlePurchase = async () => {
+    if (!isActive) {
+      setIsSubModalOpen(true);
+      return;
+    }
     try {
-      await purchaseTicket({ galaId: id }).unwrap();
-      toast.success(
-        t('galas.details.purchaseSuccess') || 'Ticket purchased successfully!'
+      // 1. Blockchain Transaction
+      console.log('[GalaDetails] Initiating handlePurchase...');
+      if (!id || !galaData) {
+        console.warn('[GalaDetails] Missing id or gala data');
+        return;
+      }
+
+      console.log('[GalaDetails] Step 1: Blockchain Purchase');
+      const organiserWallet = galaData.organiserWalletAddress;
+      if (!organiserWallet) {
+        toast.error('Gala organiser wallet address not found.');
+        return;
+      }
+
+      const blockchainResult = await purchaseTicketBlockchain(
+        id,
+        organiserWallet,
+        ticketPrice
       );
+
+      if (!blockchainResult) {
+        console.log('[GalaDetails] Blockchain purchase cancelled or failed.');
+        return;
+      }
+
+      console.log('[GalaDetails] Step 2: Backend Synchronization', blockchainResult);
+      const purchasePayload = { 
+        galaId: (galaData.id || id || '').trim(),
+        transactionHash: (blockchainResult.transactionHash || '').trim(),
+        walletAddress: blockchainResult.walletAddress
+      };
+      console.log('[DEBUG] Exact Backend Payload:', JSON.stringify(purchasePayload, null, 2));
+
+      await purchaseTicket(purchasePayload).unwrap();
+
+      console.log('[GalaDetails] Purchase fully successful.');
+      toast.success(t('galas.details.purchaseSuccess') || 'Ticket purchased successfully!');
       refetch();
     } catch (err: any) {
-      toast.error(err?.data?.message || 'Failed to purchase ticket.');
+      console.error('[GalaDetails] Error during purchase flow:', err);
+      toast.error(err?.data?.message || 'Failed to complete purchase.');
     }
   };
 
   const handleApplyClick = () => {
     navigate(`/dashboard/galas/${id}/grants`);
+  };
+
+  const handleToggleSave = async () => {
+    try {
+      const result = await toggleSave((galaData.id || id || '').trim()).unwrap();
+      toast.success(result?.message || (galaData.isSaved ? 'Removed from saved' : 'Added to saved'));
+    } catch {
+      toast.error('Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -151,10 +218,12 @@ export default function GalaDetails() {
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
             <div className="right-actions">
-              <button type="button" className="icon-btn-round">
-                <FontAwesomeIcon icon={faShareAlt} />
-              </button>
-              <button type="button" className="icon-btn-round">
+
+              <button 
+                type="button" 
+                className={`icon-btn-round bookmark-btn ${galaData.isSaved ? 'active' : ''}`}
+                onClick={handleToggleSave}
+              >
                 <FontAwesomeIcon icon={faBookmark} />
               </button>
             </div>
@@ -267,31 +336,35 @@ export default function GalaDetails() {
               </div>
             </div>
 
-            {!isRegistered && (
+            {isRegistered ? (
+              <div className="registered-status-banner">
+                <FontAwesomeIcon icon={faCheckCircle} />
+                <span>{t('galas.details.ticketPurchased') || 'Ticket Purchased'}</span>
+              </div>
+            ) : (
               <button
                 type="button"
                 className={`btn-purchase-ticket ${
-                  isPurchasing ? 'loading' : ''
+                  (isPurchasing || isBlockchainProcessing) ? 'loading' : ''
                 }`}
-                disabled={isPurchasing || galaData.status > 2}
+                disabled={isPurchasing || isBlockchainProcessing || galaData.status === GalaStatus.Completed}
                 onClick={handlePurchase}
               >
-                {isPurchasing
+                {isPurchasing || isBlockchainProcessing
                   ? t('galas.details.processing') || 'Processing...'
-                  : t('galas.details.buyTicketAmount', { price: ticketPrice })}
+                  : !isActive 
+                    ? t('galas.details.subscribeToBuy') || 'Subscribe to Buy'
+                    : t('galas.details.buyTicketAmount', { price: ticketPrice })}
               </button>
             )}
 
             <button
               type="button"
-              className={`btn-apply-grant inline ${
-                galaData.status > 2 ? 'disabled' : ''
-              }`}
-              disabled={galaData.status > 2}
+              className="btn-apply-grant inline"
               onClick={handleApplyClick}
             >
-              {galaData.status > 2
-                ? t('galas.details.pastEvent')
+              {galaData.status === GalaStatus.Completed
+                ? t('galas.details.viewGrants') || 'View Grants'
                 : t('galas.details.applyToGrant')}
               <FontAwesomeIcon
                 icon={faArrowRight}
@@ -305,34 +378,52 @@ export default function GalaDetails() {
       {/* end .gala-details-shell */}
 
       <div className="bottom-sticky-bar">
-        {!isRegistered && (
+        {isRegistered ? (
+          <div className="registered-status-banner mobile">
+            <FontAwesomeIcon icon={faCheckCircle} />
+            <span>{t('galas.details.ticketPurchased') || 'Ticket Purchased'}</span>
+          </div>
+        ) : (
           <button
             type="button"
-            className="btn-purchase-ticket"
-            disabled={isPurchasing || galaData.status > 2}
+            className={`btn-purchase-ticket ${
+              (isPurchasing || isBlockchainProcessing) ? 'loading' : ''
+            }`}
+            disabled={isPurchasing || isBlockchainProcessing || galaData.status === GalaStatus.Completed}
             onClick={handlePurchase}
             style={{ marginRight: '12px', flex: 1 }}
           >
-            {isPurchasing
+            {isPurchasing || isBlockchainProcessing
               ? '...'
-              : t('galas.details.buyTicketAmountShort', {
+              : !isActive 
+                ? t('galas.details.subscribeToBuy') || 'Subscribe'
+                : t('galas.details.buyTicketAmountShort', {
                   price: ticketPrice,
                 }) || `Buy Ticket ($${ticketPrice})`}
           </button>
         )}
         <button
           type="button"
-          className={`btn-apply-grant ${galaData.status > 2 ? 'disabled' : ''}`}
-          disabled={galaData.status > 2}
+          className="btn-apply-grant"
           onClick={handleApplyClick}
           style={{ flex: 2 }}
         >
-          {galaData.status > 2
-            ? t('galas.details.pastEvent')
+          {galaData.status === GalaStatus.Completed
+            ? t('galas.details.viewGrants') || 'View Grants'
             : t('galas.details.applyToGrant')}
           <FontAwesomeIcon icon={faArrowRight} style={{ marginLeft: '8px' }} />
         </button>
       </div>
+
+      <SubscriptionGuardModal
+        isOpen={isSubModalOpen}
+        onClose={() => setIsSubModalOpen(false)}
+      />
+
+      <BlockchainProcessingModal
+        isOpen={isBlockchainProcessing}
+        status={processStatus}
+      />
     </div>
   );
 }

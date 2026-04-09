@@ -21,7 +21,8 @@
     "applicationUpdates": "申請の更新",
     "applicationDescription": "申請のステータス変更",
     "account": "アカウント",
-    "changePassword": "パスワードを変更",
+    "changePassword": "パスワードを変更する",
+    "savedGalas": "保存されたガラ",
     "language": "言語",
     "languageCode": "JA",
     "privacy": "プライバシー",
@@ -269,7 +270,40 @@
     "connectWalletPrompt": "続行するにはウォレットを接続してください。",
     "errors": {
       "contractError": "トークンコントラクトが見つかりません。"
-    }
+    },
+    "confirmCancelInWallet": "Please confirm the cancellation in your wallet.",
+    "plans": {
+      "free": "Free",
+      "pro": "Pro"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "processing": {
+      "title": "Purchase in Process",
+      "initializing": "Initializing payment gateway...",
+      "checkingToken": "Checking token compatibility...",
+      "approving": "Requesting spending approval in your wallet...",
+      "confirming": "Awaiting purchase confirmation...",
+      "processing": "Verifying transaction on the blockchain...",
+      "syncing": "Finalizing your premium access...",
+      "secureNote": "Your connection is encrypted and secure"
+    },
+    "billing": {
+      "none": "None",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "subscriptionCanceled": "Subscription Canceled",
+    "cancelledNotice": "Your subscription has been canceled. Your current billing period will end on {{date}}.",
+    "repurchaseNotice": "After this, you will need to repurchase a plan to continue enjoying premium benefits.",
+    "monthly": "/month",
+    "yearlyValue": "year",
+    "monthlyValue": "month",
+    "notAvailable": "n/a",
+    "wallet": "Crypto Wallet",
+    "noTransactionFound": "No active transaction hash found for this subscription"
   },
   "subscriptionBanner": {
     "title": "プレミアム機能をアンロック",
@@ -300,6 +334,10 @@
     "cancelAnytime": "いつでもキャンセル可能",
     "subscribe": "今すぐ登録",
     "loading": "プランを取得中...",
-    "error": "プランの読み込みに失敗しました。"
+    "error": "プランの読み込みに失敗しました。",
+    "annual": "Annual",
+    "monthly": "Monthly",
+    "choosePlan": "Choose your plan",
+    "securePayment": "Secure Payment"
   }
 }

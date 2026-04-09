@@ -34,7 +34,9 @@
       "galas": "ガラ",
       "grants": "助成金",
       "profile": "プロフィール"
-    }
+    },
+    "recentAnnouncements": "Recent Announcements",
+    "noRecentAnnouncements": "No recent announcements."
   },
   "galas": {
     "discover": {
@@ -51,16 +53,21 @@
       "noGalas": "ガラが見つかりません",
       "noGalasDescription": "現在、このフィルターに該当するガラはありません。",
       "applied": "応募済み",
+      "ticketPurchased": "チケット購入済み",
       "viewDetails": "詳細を見る",
       "all": "すべて",
       "filterActive": "開催中",
       "filterUpcoming": "今後",
       "filterPlanned": "予定",
-      "filterPast": "過去",
-      "statusActive": "開催中",
+      "filterSaved": "保存済み",
+      "savedGalas": "保存されたガラ",
+      "savedDescription": "ブックマークされたイベントのコレクション。",
+      "statusActive": "有効",
       "statusUpcoming": "今後",
       "statusPast": "過去",
-      "statusPlanned": "予定"
+      "statusPlanned": "予定",
+      "noSavedGalasDescription": "保存されたガラはまだありません。",
+      "browseEvents": "イベントを閲覧する"
     },
     "details": {
       "loading": "ガラの詳細を読み込み中...",
@@ -81,8 +88,13 @@
       "mustBuyTicket": "助成金を申請する前に、このガラへのチケットを購入する必要があります。",
       "buyTicketAmount": "チケットを購入 - {{price}}$",
       "buyTicketAmountShort": "チケットを購入 ({{price}}$)",
-      "buyTicketNow": "今すぐチケットを購入 - {{price}}$",
-      "processing": "処理中..."
+      "buyTicketNow": "今すぐチケットを購入 - ${{price}}",
+      "subscribeToBuy": "購入するために購読する",
+      "processing": "処理中...",
+      "ticketPrice": "チケット価格",
+      "ticketPurchased": "チケット購入済み",
+      "purchaseSuccess": "チケットの購入に成功しました！",
+      "pastEvent": "過去のイベント"
     },
     "grants": {
       "loading": "助成金を読み込み中...",
@@ -106,7 +118,10 @@
       "statusUpcoming": "今後",
       "statusPublished": "公開済み",
       "statusActive": "開催中",
-      "statusPast": "過去"
+      "statusPast": "過去のイベント",
+      "subscriptionRequired": "サブスクリプションが必要です",
+      "subscriptionRequiredDesc": "このアクションを実行するには、アクティブなサブスクリプションプランが必要です。",
+      "upgradeNow": "今すぐプランをアップグレード"
     }
   },
   "grants": {
@@ -175,6 +190,18 @@
       "at": " 14:00 - 14:30",
       "submittedOn": "提出日：",
       "galaName": "Gala Vision 2026"
+    }
+  },
+  "subscription": {
+    "processing": {
+      "title": "トランザクションを処理中",
+      "switchingNetwork": "Sepoliaネットワークに切り替えています...",
+      "initializing": "コントラクトを初期化中...",
+      "checkingToken": "残高を確認中...",
+      "approving": "sUSDを承認中...",
+      "confirming": "購入を確認中...",
+      "processing": "トランザクションを処理中...",
+      "secureNote": "MetaMaskを介した安全なトランザクション"
     }
   }
 }

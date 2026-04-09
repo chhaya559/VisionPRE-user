@@ -44,5 +44,15 @@
     "hour": "منذ ساعة",
     "hours": "منذ ساعات",
     "days": "منذ أيام"
+  },
+  "tabs": {
+    "notifications": "Notifications",
+    "announcements": "Announcements"
+  },
+  "announcements": {
+    "title": "Announcements",
+    "subtitle": "Stay updated with global news and platform updates",
+    "noAnnouncements": "No Announcements Yet",
+    "noAnnouncementsDesc": "Check back later for important updates from the platform."
   }
 }

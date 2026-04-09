@@ -22,6 +22,7 @@
     "applicationDescription": "Changements de statut des candidatures",
     "account": "Compte",
     "changePassword": "Changer le mot de passe",
+    "savedGalas": "Galas enregistrés",
     "language": "Langue",
     "languageCode": "FR",
     "privacy": "Confidentialité",
@@ -269,7 +270,40 @@
     "connectWalletPrompt": "Veuillez connecter votre portefeuille pour continuer.",
     "errors": {
       "contractError": "Contrat de jeton non trouvé."
-    }
+    },
+    "confirmCancelInWallet": "Please confirm the cancellation in your wallet.",
+    "plans": {
+      "free": "Free",
+      "pro": "Pro"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "processing": {
+      "title": "Purchase in Process",
+      "initializing": "Initializing payment gateway...",
+      "checkingToken": "Checking token compatibility...",
+      "approving": "Requesting spending approval in your wallet...",
+      "confirming": "Awaiting purchase confirmation...",
+      "processing": "Verifying transaction on the blockchain...",
+      "syncing": "Finalizing your premium access...",
+      "secureNote": "Your connection is encrypted and secure"
+    },
+    "billing": {
+      "none": "None",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "subscriptionCanceled": "Subscription Canceled",
+    "cancelledNotice": "Your subscription has been canceled. Your current billing period will end on {{date}}.",
+    "repurchaseNotice": "After this, you will need to repurchase a plan to continue enjoying premium benefits.",
+    "monthly": "/month",
+    "yearlyValue": "year",
+    "monthlyValue": "month",
+    "notAvailable": "n/a",
+    "wallet": "Crypto Wallet",
+    "noTransactionFound": "No active transaction hash found for this subscription"
   },
   "subscriptionBanner": {
     "title": "Débloquez les fonctionnalités Premium",
@@ -300,6 +334,10 @@
     "cancelAnytime": "Annulez à tout moment",
     "subscribe": "S'abonner maintenant",
     "loading": "Récupération des forfaits...",
-    "error": "Échec du chargement des forfaits."
+    "error": "Échec du chargement des forfaits.",
+    "annual": "Annual",
+    "monthly": "Monthly",
+    "choosePlan": "Choose your plan",
+    "securePayment": "Secure Payment"
   }
 }

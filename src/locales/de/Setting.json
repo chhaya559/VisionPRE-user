@@ -22,6 +22,7 @@
     "applicationDescription": "Statusänderungen bei Bewerbungen",
     "account": "Konto",
     "changePassword": "Passwort ändern",
+    "savedGalas": "Gespeicherte Galas",
     "language": "Sprache",
     "languageCode": "DE",
     "privacy": "Datenschutz",
@@ -269,7 +270,40 @@
     "connectWalletPrompt": "Bitte verbinden Sie Ihre Wallet, um fortzufahren.",
     "errors": {
       "contractError": "Token-Vertrag nicht gefunden."
-    }
+    },
+    "confirmCancelInWallet": "Please confirm the cancellation in your wallet.",
+    "plans": {
+      "free": "Free",
+      "pro": "Pro"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "processing": {
+      "title": "Purchase in Process",
+      "initializing": "Initializing payment gateway...",
+      "checkingToken": "Checking token compatibility...",
+      "approving": "Requesting spending approval in your wallet...",
+      "confirming": "Awaiting purchase confirmation...",
+      "processing": "Verifying transaction on the blockchain...",
+      "syncing": "Finalizing your premium access...",
+      "secureNote": "Your connection is encrypted and secure"
+    },
+    "billing": {
+      "none": "None",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "subscriptionCanceled": "Subscription Canceled",
+    "cancelledNotice": "Your subscription has been canceled. Your current billing period will end on {{date}}.",
+    "repurchaseNotice": "After this, you will need to repurchase a plan to continue enjoying premium benefits.",
+    "monthly": "/month",
+    "yearlyValue": "year",
+    "monthlyValue": "month",
+    "notAvailable": "n/a",
+    "wallet": "Crypto Wallet",
+    "noTransactionFound": "No active transaction hash found for this subscription"
   },
   "subscriptionBanner": {
     "title": "Premium-Funktionen freischalten",
@@ -300,6 +334,10 @@
     "cancelAnytime": "Jederzeit kündigen",
     "subscribe": "Jetzt abonnieren",
     "loading": "Pläne werden abgerufen...",
-    "error": "Pläne konnten nicht geladen werden."
+    "error": "Pläne konnten nicht geladen werden.",
+    "annual": "Annual",
+    "monthly": "Monthly",
+    "choosePlan": "Choose your plan",
+    "securePayment": "Secure Payment"
   }
 }

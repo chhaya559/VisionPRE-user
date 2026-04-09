@@ -18,19 +18,20 @@ export default function PasswordField({
   name,
   register,
   error,
-  placeholder = '••••••••••',
 }: Readonly<PasswordProps>) {
   const [show, setShow] = useState(false);
+  const dynPlaceholder = show
+    ? `Enter ${label.toLowerCase()}`
+    : '••••••••••••';
 
   return (
     <div className="form-group">
       <label htmlFor={id}>{label}</label>
-
       <div className="input-wrap">
         <input
           id={id}
           type={show ? 'text' : 'password'}
-          placeholder={placeholder}
+          placeholder={dynPlaceholder}
           className="with-toggle"
           {...register(name)}
         />

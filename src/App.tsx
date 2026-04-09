@@ -11,7 +11,7 @@ import { store, persistor } from './Store';
 import RootRouter from './Routes/RootRouter';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
-import ErrorBoundary from './Components/ErrorBoundary';
+import ErrorBoundary from './Shared/Components/ErrorBoundary';
 import { useEffect } from 'react';
 
 import { requestNotificationPermission } from './Services/notifications';

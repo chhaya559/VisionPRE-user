@@ -230,8 +230,9 @@
           display: flex;
           gap: 12px;
 
-          input {
+          .name-input-group {
             flex: 1;
+            min-width: 0;
           }
         }
 

@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch } from 'react-redux';
 import { signInWithPopup } from 'firebase/auth';
 import Modal from '../../Shared/Components/Modal';
-import { userSchema } from '../../validations/userSchema';
+import { userSchema } from '../../validations/validationSchema';
 import { ROUTES_CONFIG } from '../../Shared/Constants';
 import {
   useGoogleLoginMutation,
@@ -19,6 +19,7 @@ import {
 import { setAuthData, login } from '../../Store/Common';
 import PasswordField from '../../Shared/Components/PasswordField';
 import { auth, googleProvider } from '../../Services/firebase';
+import { toast } from 'react-toastify';
 
 export default function CreateAccount() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function CreateAccount() {
   const { t } = useTranslation(['common', 'terms']);
   const [registerApi, { isLoading }] = useRegisterMutation();
   const [googleLogin] = useGoogleLoginMutation();
+  
   function handleBack() {
     navigate(-1);
   }
@@ -42,14 +44,14 @@ export default function CreateAccount() {
   });
 
   const dispatch = useDispatch();
+
   async function handleGoogleLogin() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const idToken = await result.user.getIdToken();
-      console.log('Firebase ID token:', idToken);
       const response = await googleLogin({ idToken }).unwrap();
-      console.log(response);
       if (response.success) {
+        toast.success(response.message || 'Logged in with Google');
         dispatch(
           login({
             token: response.data.accessToken,
@@ -65,25 +67,27 @@ export default function CreateAccount() {
           navigate(ROUTES_CONFIG.SETUP.path);
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Google login failed:', err);
+      toast.error(err.data?.message || 'Google login failed');
     }
   }
 
   const onSubmit = async (data: any) => {
-    if (!agreed) return alert('Please agree to terms');
+    if (!agreed) {
+      toast.warning('Please agree to the Terms & Conditions and Privacy Policy');
+      return;
+    }
 
     const payload = {
       userName: data.userName,
       email: data.email,
       password: data.password,
     };
-    console.log(payload);
     try {
       const response = await registerApi(payload).unwrap();
-
-      console.log(response);
       if (response.success) {
+        toast.success(response.message || 'Account created successfully');
         dispatch(
           setAuthData({
             email: response.data.email,
@@ -92,9 +96,12 @@ export default function CreateAccount() {
           })
         );
         navigate(ROUTES_CONFIG.EMAILVERIFICATION.path);
+      } else {
+        toast.error(response.message || 'Registration failed');
       }
-    } catch (err) {
-      console.log('error-', err);
+    } catch (err: any) {
+      console.error('Registration error:', err);
+      toast.error(err.data?.message || 'Something went wrong. Please try again.');
     }
   };
 
@@ -111,7 +118,6 @@ export default function CreateAccount() {
           <p>{t('signup_str')}</p>
         </div>
 
-        {/* Form */}
         <div className="login-card__form">
           <div className="form-group">
             <label htmlFor="fullName">{t('Username')}</label>
@@ -138,7 +144,6 @@ export default function CreateAccount() {
                 {...register('email')}
               />
             </div>
-
             {errors.email && (
               <span className="error">{errors.email.message}</span>
             )}
@@ -160,7 +165,6 @@ export default function CreateAccount() {
             error={errors.confirmPassword?.message}
           />
 
-          {/* Terms */}
           <div className="terms-row">
             <input
               type="checkbox"
@@ -195,49 +199,22 @@ export default function CreateAccount() {
               </button>
             </label>
           </div>
+
           <Modal
             isOpen={showTerms}
             title=""
             onClose={() => setShowTerms(false)}
           >
-            <h1
-              style={{
-                fontWeight: 600,
-                fontSize: '24px',
-                marginBottom: '16px',
-              }}
-            >
-              {t('terms:terms_cond')}
-            </h1>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:acceptance')}
-            </h2>
+            <h1 style={{ fontWeight: 600, fontSize: '24px', marginBottom: '16px' }}>{t('terms:terms_cond')}</h1>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:acceptance')}</h2>
             <p>{t('terms:acceptance_str')}</p>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:license')}
-            </h2>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:license')}</h2>
             <p>{t('terms:license_str')}</p>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:account')}
-            </h2>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:account')}</h2>
             <p>{t('terms:account_str')}</p>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:privacy')}
-            </h2>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:privacy')}</h2>
             <p>{t('terms:privacy_str')}</p>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:grant')}
-            </h2>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:grant')}</h2>
             <p>{t('terms:grant_str')}</p>
           </Modal>
 
@@ -246,48 +223,19 @@ export default function CreateAccount() {
             title=""
             onClose={() => setShowPolicy(false)}
           >
-            <h1
-              style={{
-                fontWeight: 600,
-                fontSize: '24px',
-                marginBottom: '16px',
-              }}
-            >
-              {t('terms:privacy_policy')}
-            </h1>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:information')}
-            </h2>
+            <h1 style={{ fontWeight: 600, fontSize: '24px', marginBottom: '16px' }}>{t('terms:privacy_policy')}</h1>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:information')}</h2>
             <p>{t('terms:information_str')}</p>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:use_info')}
-            </h2>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:use_info')}</h2>
             <p>{t('terms:use_infoStr')}</p>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:sharing')}
-            </h2>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:sharing')}</h2>
             <p>{t('terms:sharing_str')}</p>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:security')}
-            </h2>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:security')}</h2>
             <p>{t('terms:security_str')}</p>
-            <h2
-              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
-            >
-              {t('terms:rights')}
-            </h2>
+            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:rights')}</h2>
             <p>{t('terms:rights_str')}</p>
           </Modal>
 
-          {/* Create Account CTA */}
           <button
             className="btn-create"
             type="button"
@@ -297,12 +245,10 @@ export default function CreateAccount() {
             {isLoading ? t('creating_acc') : t('create_acc')}
           </button>
 
-          {/* Divider */}
           <div className="or-divider">
             <span>{t('social_option')}</span>
           </div>
 
-          {/* Social */}
           <div className="social-btns">
             <button
               className="btn-social"
@@ -323,7 +269,6 @@ export default function CreateAccount() {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="login-footer">
           {t('already_account')}{' '}
           <button

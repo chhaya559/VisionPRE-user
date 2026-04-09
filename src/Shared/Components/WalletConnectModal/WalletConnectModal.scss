@@ -1,0 +1,120 @@
+@import '../../Colors.scss';
+
+.wallet-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.wallet-modal-container {
+  background: $primaryWhite;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: modalIn 0.3s ease-out;
+}
+
+.wallet-modal-icon {
+  width: 64px;
+  height: 64px;
+  background: $blueBg;
+  color: $blue;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.wallet-modal-content {
+  margin-bottom: 32px;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: $primaryText;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    font-size: 16px;
+    color: $secondaryText;
+    line-height: 1.5;
+  }
+}
+
+.wallet-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+
+  button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-connect {
+    background: $primaryGreen;
+    color: $primaryWhite;
+    box-shadow: 0 4px 12px rgba($primaryGreen, 0.2);
+
+    &:hover {
+      background: darken($primaryGreen, 5%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .btn-cancel {
+    background: $surfaceColor;
+    color: $textGray;
+    border: 1px solid $borderColor;
+
+    &:hover {
+      background: $borderColorLight;
+      color: $primaryText;
+    }
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

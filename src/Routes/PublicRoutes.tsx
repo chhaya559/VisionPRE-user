@@ -3,7 +3,7 @@ import { ROUTES_CONFIG, WILDCARD_ROUTES } from '../Shared/Constants';
 import { CustomRouter } from './RootRoutes';
 import SplashScreen from '../Views/Splash/Splash';
 import OnboardingFlow from '../Views/Onboarding/OnboardingFlow';
-import Login from '../Views/Login/Login';
+import Login from '../Views/Auth/Login';
 import CreateAccount from '../Views/CreateAccount/CreateAccount';
 import EmailVerification from '../Views/Auth/EmailVerification';
 import ForgotPassword from '../Views/Auth/ForgotPassword';

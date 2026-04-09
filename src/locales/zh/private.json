@@ -53,16 +53,22 @@
       "noGalas": "未找到活动",
       "noGalasDescription": "当前筛选条件下暂无可用活动。",
       "applied": "已申请",
+      "ticketPurchased": "已购票",
       "viewDetails": "查看详情",
       "all": "全部",
       "filterActive": "进行中",
       "filterUpcoming": "即将",
       "filterPlanned": "已计划",
+      "filterSaved": "已保存",
+      "savedGalas": "已保存的晚会",
+      "savedDescription": "您收藏的活动。",
       "filterPast": "过去",
       "statusActive": "进行中",
       "statusUpcoming": "即将",
       "statusPast": "过去",
-      "statusPlanned": "已计划"
+      "statusPlanned": "已计划",
+      "noSavedGalasDescription": "您还没有保存任何佳礼。",
+      "browseEvents": "浏览活动"
     },
     "details": {
       "loading": "正在加载活动详情...",
@@ -83,8 +89,13 @@
       "mustBuyTicket": "在申请资助之前，您必须购买此晚会的门票。",
       "buyTicketAmount": "购买门票 - {{price}}美元",
       "buyTicketAmountShort": "购买门票 ({{price}}美元)",
-      "buyTicketNow": "现在购买门票 - {{price}}美元",
-      "processing": "处理中..."
+      "buyTicketNow": "立即购买门票 - ${{price}}",
+      "subscribeToBuy": "订阅以购买",
+      "processing": "处理中...",
+      "ticketPrice": "门票价格",
+      "ticketPurchased": "已购票",
+      "purchaseSuccess": "成功购买门票！",
+      "pastEvent": "过去的活动"
     },
     "grants": {
       "loading": "正在加载资助...",
@@ -108,7 +119,10 @@
       "statusUpcoming": "即将",
       "statusPublished": "已发布",
       "statusActive": "进行中",
-      "statusPast": "过去"
+      "statusPast": "过去的活动",
+      "subscriptionRequired": "需要订阅",
+      "subscriptionRequiredDesc": "您需要有一个有效的订阅计划才能执行此操作。",
+      "upgradeNow": "立即升级计划"
     }
   },
   "grants": {
@@ -177,6 +191,18 @@
       "at": " 14:00 - 14:30",
       "submittedOn": "提交于 ",
       "galaName": "Gala Vision 2026"
+    }
+  },
+  "subscription": {
+    "processing": {
+      "title": "处理交易",
+      "switchingNetwork": "切换到 Sepolia 网络...",
+      "initializing": "初始化合约...",
+      "checkingToken": "检查余额...",
+      "approving": "批准 sUSD...",
+      "confirming": "确认购买...",
+      "processing": "正在处理交易...",
+      "secureNote": "通过 MetaMask 处理的安全交易"
     }
   }
 }

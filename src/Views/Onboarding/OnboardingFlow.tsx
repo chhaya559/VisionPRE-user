@@ -1,4 +1,3 @@
-// OnboardingFlow.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { onboardingSteps } from './data/OnboardingData.ts';
@@ -12,7 +11,6 @@ export default function OnboardingFlow() {
 
   const handleNext = () => {
     if (isLast) {
-      // localStorage.setItem("hasSeenOnboarding", "true");
       navigate('/create-account');
     } else {
       setStep((prev) => prev + 1);
@@ -20,7 +18,6 @@ export default function OnboardingFlow() {
   };
 
   const handleSkip = () => {
-    // localStorage.setItem("hasSeenOnboarding", "true");
     navigate('/create-account');
   };
 

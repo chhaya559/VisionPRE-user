@@ -22,6 +22,7 @@
     "applicationDescription": "Mudanças de status nas candidaturas",
     "account": "Conta",
     "changePassword": "Alterar senha",
+    "savedGalas": "Galas salvas",
     "language": "Idioma",
     "languageCode": "PT",
     "privacy": "Privacidade",
@@ -269,7 +270,40 @@
     "connectWalletPrompt": "Por favor, conecte sua carteira para continuar.",
     "errors": {
       "contractError": "Contrato do token não encontrado."
-    }
+    },
+    "confirmCancelInWallet": "Please confirm the cancellation in your wallet.",
+    "plans": {
+      "free": "Free",
+      "pro": "Pro"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "processing": {
+      "title": "Purchase in Process",
+      "initializing": "Initializing payment gateway...",
+      "checkingToken": "Checking token compatibility...",
+      "approving": "Requesting spending approval in your wallet...",
+      "confirming": "Awaiting purchase confirmation...",
+      "processing": "Verifying transaction on the blockchain...",
+      "syncing": "Finalizing your premium access...",
+      "secureNote": "Your connection is encrypted and secure"
+    },
+    "billing": {
+      "none": "None",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "subscriptionCanceled": "Subscription Canceled",
+    "cancelledNotice": "Your subscription has been canceled. Your current billing period will end on {{date}}.",
+    "repurchaseNotice": "After this, you will need to repurchase a plan to continue enjoying premium benefits.",
+    "monthly": "/month",
+    "yearlyValue": "year",
+    "monthlyValue": "month",
+    "notAvailable": "n/a",
+    "wallet": "Crypto Wallet",
+    "noTransactionFound": "No active transaction hash found for this subscription"
   },
   "subscriptionBanner": {
     "title": "Desbloqueie os recursos Premium",
@@ -300,6 +334,10 @@
     "cancelAnytime": "Cancele a qualquer momento",
     "subscribe": "Assinar agora",
     "loading": "Buscando planos...",
-    "error": "Falha ao carregar os planos."
+    "error": "Falha ao carregar os planos.",
+    "annual": "Annual",
+    "monthly": "Monthly",
+    "choosePlan": "Choose your plan",
+    "securePayment": "Secure Payment"
   }
 }

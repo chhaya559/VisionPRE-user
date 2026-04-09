@@ -1,0 +1,26 @@
+@import '../Colors.scss';
+
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  .dot {
+    height: 8px;
+    border-radius: 50px;
+    transition:
+      width 0.3s ease,
+      background-color 0.3s ease;
+
+    &--active {
+      width: 32px;
+      background-color: $primaryGreen;
+    }
+
+    &--inactive {
+      width: 8px;
+      background-color: $borderColor;
+    }
+  }
+}
