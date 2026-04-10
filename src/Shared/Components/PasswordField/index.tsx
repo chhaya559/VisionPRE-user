@@ -1,24 +1,25 @@
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
+import { FieldValues, UseFormRegister, Path } from 'react-hook-form';
 import './style.scss';
 
-type PasswordProps = {
+type PasswordProps<T extends FieldValues> = {
   id: string;
   label: string;
-  name: string;
-  register?: any;
+  name: Path<T>;
+  register: UseFormRegister<T>;
   error?: string;
   placeholder?: string;
 };
 
-export default function PasswordField({
+export default function PasswordField<T extends FieldValues>({
   id,
   label,
   name,
   register,
   error,
-}: Readonly<PasswordProps>) {
+}: Readonly<PasswordProps<T>>) {
   const [show, setShow] = useState(false);
   const dynPlaceholder = show ? `Enter ${label.toLowerCase()}` : '••••••••••••';
 
@@ -37,7 +38,7 @@ export default function PasswordField({
         <button
           type="button"
           className="eye-btn"
-          onClick={() => setShow((s) => !s)}
+          onClick={() => setShow((s: boolean) => !s)}
           tabIndex={-1}
         >
           <FontAwesomeIcon icon={show ? faEye : faEyeSlash} />

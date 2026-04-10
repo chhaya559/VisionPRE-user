@@ -17,6 +17,7 @@ import {
 } from '../../Services/Api/module/AuthApi';
 import PasswordField from '../../Shared/Components/PasswordField';
 import { auth, googleProvider, appleProvider } from '../../Services/firebase';
+import { ApiError } from '../../Shared/Types';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -35,16 +36,13 @@ export default function LoginPage() {
     mode: 'onTouched',
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: { email: string; password?: string }) => {
     const payload = {
       email: data.email,
-      password: data.password,
+      password: data.password ?? '',
     };
-    console.log(payload);
     try {
       const response = await loginApi(payload).unwrap();
-
-      console.log('Login Response (Full):', response);
       if (response.message) {
         toast.success(response.message, { position: 'top-right' });
       }
@@ -63,16 +61,10 @@ export default function LoginPage() {
           isProfileCompleted,
         })
       );
-    } catch (err: any) {
-      console.log('error-', err);
-      toast.error(err?.data?.message || 'Login failed', {
+    } catch (err) {
+      const error = err as ApiError;
+      toast.error(error?.data?.message || 'Login failed', {
         position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: 'light',
         transition: Bounce,
       });
@@ -83,9 +75,7 @@ export default function LoginPage() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const idToken = await result.user.getIdToken();
-      console.log('Firebase ID token:', idToken);
       const response = await googleLogin({ idToken }).unwrap();
-      console.log(response);
       if (response.success) {
         dispatch(
           login({

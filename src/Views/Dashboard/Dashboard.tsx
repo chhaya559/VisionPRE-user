@@ -35,6 +35,25 @@ import {
   isGrantPendingStatus,
 } from '../../Shared/GrantApplicationStatus';
 import type { UserProfile } from '../../Shared/Types';
+import { GalaEvent } from '../../Services/Api/module/GalaApi/types';
+
+interface Announcement {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  Id?: string;
+  Title?: string;
+  CreatedAt?: string;
+  Description?: string;
+}
+
+interface Application {
+  id: string;
+  grantName: string;
+  submittedAt: string;
+  status: number;
+}
 
 export type DashboardOutletContext = {
   profile: UserProfile | null;
@@ -54,18 +73,18 @@ function DashboardHomeContent({
   announcementsLoading,
   galasLoading,
 }: Readonly<{
-  nextGala: any;
+  nextGala: GalaEvent | null;
   totalApps: number;
   pendingApps: number;
   approvedApps: number;
-  applications: any[];
-  announcements: any[];
-  t: any;
+  applications: Application[];
+  announcements: Announcement[];
+  t: (key: string) => string;
   appsLoading?: boolean;
   announcementsLoading?: boolean;
   galasLoading?: boolean;
 }>) {
-  const getLocalizedStatus = (app: any) => {
+  const getLocalizedStatus = (app: Application) => {
     const statusLabel = getGrantApplicationStatusLabel(
       getGrantApplicationStatusValue(app)
     );
@@ -182,7 +201,7 @@ function DashboardHomeContent({
               </div>
             ))
           ) : announcements.length > 0 ? (
-            announcements.slice(0, 3).map((ann: any) => (
+            announcements.slice(0, 3).map((ann: Announcement) => (
               <div
                 key={ann.id || ann.Id}
                 className="activity-item-premium announcement-item"
@@ -195,7 +214,7 @@ function DashboardHomeContent({
                   <span className="ann-date">
                     {ann.createdAt || ann.CreatedAt
                       ? new Date(
-                          ann.createdAt || ann.CreatedAt
+                          ann.createdAt || ann.CreatedAt || ''
                         ).toLocaleDateString()
                       : t('dashboard.recently')}
                   </span>
@@ -236,7 +255,7 @@ function DashboardHomeContent({
               </div>
             ))
           ) : applications.length > 0 ? (
-            applications.slice(0, 3).map((app: any) => {
+            applications.slice(0, 3).map((app: Application) => {
               const status = getLocalizedStatus(app);
               return (
                 <div key={app.id} className="activity-item-premium">
@@ -296,14 +315,14 @@ export default function Dashboard() {
   const notifications = notificationsResponse?.data ?? [];
   const announcements = announcementsResponse?.data ?? [];
   const unreadNotifications = notifications.filter(
-    (item: any) => !item.isRead
+    (item: { isRead: boolean }) => !item.isRead
   ).length;
 
   // Find Next Gala
-  const upcomingGalas = galas
-    .filter((g: any) => g.status === 1 || g.status === 2)
+  const upcomingGalas = (galas as GalaEvent[])
+    .filter((g: GalaEvent) => g.status === 1 || g.status === 2)
     .sort(
-      (a: any, b: any) =>
+      (a: GalaEvent, b: GalaEvent) =>
         new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime()
     );
 

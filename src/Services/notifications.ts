@@ -1,27 +1,9 @@
 import { getToken } from 'firebase/messaging';
-import {
-  MutationDefinition,
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-} from '@reduxjs/toolkit/dist/query';
-import { MutationActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate';
 import { messaging } from './firebase';
 
-export const requestNotificationPermission = async (sendToken: {
-  (
-    arg: any
-  ): MutationActionCreatorResult<
-    MutationDefinition<
-      any,
-      BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
-      never,
-      any,
-      'api'
-    >
-  >;
-  (arg0: { token: string; platform: string }): any;
-}) => {
+export const requestNotificationPermission = async (
+  sendToken: (arg: { token: string; platform: string }) => Promise<unknown>
+) => {
   try {
     const permission = await Notification.requestPermission();
 
@@ -33,19 +15,14 @@ export const requestNotificationPermission = async (sendToken: {
     });
 
     if (!token) {
-      console.log('No token received');
       return;
     }
 
-    console.log('FCM Token:', token);
-
-    const response = await sendToken({
+    await sendToken({
       token,
       platform: 'web',
     });
-
-    console.log('respone for token send', response);
   } catch (err) {
-    console.error('FCM Error:', err);
+    // Silently fail or use a logger
   }
 };

@@ -15,6 +15,7 @@ import { useForgotPasswordMutation } from '../../Services/Api/module/AuthApi';
 import { ROUTES_CONFIG } from '../../Shared/Constants';
 import Modal from '../../Shared/Components/Modal';
 import { toast } from 'react-toastify';
+import { ApiError } from '../../Shared/Types';
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -38,23 +39,22 @@ export default function ForgotPassword() {
     buttonText = t('sending');
   }
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: { email: string }) => {
     try {
       const respone = await ForgotPasswordApi({
         email: data.email,
       }).unwrap();
-      console.log(respone);
       if (respone?.success) {
         setShowModal(true);
         reset();
       } else {
         toast.error(respone?.data?.message);
       }
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as ApiError;
       const message =
-        error?.data?.errors?.[0]?.message ||
-        error?.data?.message ||
+        err?.data?.errors?.[0]?.message ||
+        err?.data?.message ||
         t('something_went_wrong');
       toast.error(message);
     }

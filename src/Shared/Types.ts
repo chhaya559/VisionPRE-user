@@ -36,7 +36,7 @@ export interface NotificationItem {
   createdAt: string;
   isRead: boolean;
   category: string;
-  raw?: any;
+  raw?: Record<string, unknown>;
 }
 
 export interface Plan {
@@ -48,4 +48,15 @@ export interface Plan {
   currency: string;
   features: string[];
   isPopular?: boolean;
+}
+export interface ApiError {
+  data?: {
+    success?: boolean;
+    message?: string;
+    errors?: Array<{
+      message: string;
+      code?: string;
+    }>;
+  };
+  status?: number;
 }

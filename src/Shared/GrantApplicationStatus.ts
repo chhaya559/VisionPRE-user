@@ -2,10 +2,11 @@ import { GrantApplicationStatus } from './Enums';
 
 export { GrantApplicationStatus };
 
-export const getGrantApplicationStatusValue = (application: { status: any }) =>
-  Number(application?.status);
+export const getGrantApplicationStatusValue = (application: {
+  status: number | string;
+}) => Number(application?.status);
 
-export const getGrantApplicationStatusLabel = (status: any) => {
+export const getGrantApplicationStatusLabel = (status: number | string) => {
   if (typeof status === 'string') {
     return status;
   }

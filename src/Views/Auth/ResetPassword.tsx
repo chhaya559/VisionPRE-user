@@ -10,6 +10,7 @@ import { resetPasswordSchema } from '../../validations/validationSchema';
 import { useResetPasswordMutation } from '../../Services/Api/module/AuthApi';
 import { ROUTES_CONFIG } from '../../Shared/Constants';
 import { toast } from 'react-toastify';
+import { ApiError } from '../../Shared/Types';
 
 export default function ResetPassword() {
   const navigate = useNavigate();
@@ -26,11 +27,11 @@ export default function ResetPassword() {
     mode: 'onTouched',
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: { password?: string }) => {
     try {
       const payload = {
         token,
-        newPassword: data.password,
+        newPassword: data.password ?? '',
       };
       const response = await resetPasswordApi(payload).unwrap();
       if (response?.success) {
@@ -39,10 +40,10 @@ export default function ResetPassword() {
       } else {
         toast.error(response?.message || 'Failed to reset password');
       }
-    } catch (error: any) {
-      console.error('Reset password error:', error);
+    } catch (error) {
+      const err = error as ApiError;
       toast.error(
-        error.data?.message || 'Something went wrong. Please try again.'
+        err.data?.message || 'Something went wrong. Please try again.'
       );
     }
   };

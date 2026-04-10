@@ -1,7 +1,18 @@
+interface Web3Error {
+  code?: number;
+  message?: string;
+  info?: {
+    error?: {
+      code?: number;
+    };
+  };
+  reason?: string;
+}
+
 /**
  * Maps common Ethereum RPC error codes to user-friendly messages.
  */
-export const mapWeb3Error = (error: any): string => {
+export const mapWeb3Error = (error: Web3Error): string => {
   const errorCode = error?.code || error?.info?.error?.code;
   const message = error?.message || '';
 
@@ -25,7 +36,9 @@ export const mapWeb3Error = (error: any): string => {
     return 'ALREADY_PURCHASED';
   }
 
-  return error?.reason || error?.message;
+  return (
+    error?.reason || error?.message || 'An unknown blockchain error occurred.'
+  );
 };
 
 /**
