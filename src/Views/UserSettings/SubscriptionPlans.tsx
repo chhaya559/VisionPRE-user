@@ -20,6 +20,7 @@ import {
   useGetSubscriptionQuery,
 } from '../../Services/Api/module/SubscriptionApi';
 import { useWalletContext } from '../../Context/WalletContext';
+import { Plan } from '../../Shared/Types';
 
 import WalletConnectModal from '../../Shared/Components/WalletConnectModal/WalletConnectModal';
 import { mapWeb3Error } from '../../Shared/Web3Utils';
@@ -50,7 +51,6 @@ export default function SubscriptionPlans() {
 
   const handleSubscribe = async (planId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('Current Chain ID:', chainId);
 
     if (
       chainId &&
@@ -62,8 +62,8 @@ export default function SubscriptionPlans() {
       toast.warning(t('subscription.wrongNetwork'));
       try {
         await switchChain('0x13882'); // Try Amoy by default if on wrong network
-      } catch (err) {
-        console.error('Failed to switch network:', err);
+      } catch (err: unknown) {
+        // eslint-disable-next-line no-console
       }
       return; // BLOCK execution
     }
@@ -73,7 +73,7 @@ export default function SubscriptionPlans() {
       return;
     }
 
-    const { ethereum } = window as any;
+    const { ethereum } = window as { ethereum?: unknown };
     if (!ethereum) {
       toast.error(t('subscription.noWallet'));
       return;
@@ -91,16 +91,10 @@ export default function SubscriptionPlans() {
       }
 
       // 2. Map UUID to Numeric ID for Smart Contract
-      const selectedPlan = plans.find(
-        (p: any) => p.id === planId || p.Id === planId
-      );
-
-      console.log('Selected Plan Metadata:', selectedPlan);
+      const selectedPlan = plans.find((p: Plan) => p.id === planId);
 
       // Determine the numeric ID the contract expects (1 for Free, 2 for Pro)
       const numericPlanId = selectedPlan?.planCode || 2; // Default to Pro if not specified
-
-      console.log('Resolved numericPlanId:', numericPlanId);
 
       const priceValue =
         selectedPlan?.price || (numericPlanId === 2 ? '19.99' : '0');
@@ -131,18 +125,6 @@ export default function SubscriptionPlans() {
 
       // Step 0: Information Logging (No blocking)
       const balance = await tokenContract.balanceOf(account);
-      console.log('Subscription Context:', {
-        Account: account,
-        ChainId: chainId,
-        USDC_Address: USDC_ADDRESS,
-        Contract_Address: contractAddress,
-        PlanId: planId,
-        NumericPlanId: numericPlanId,
-        Price: priceValue,
-        Decimals: decimals.toString(),
-        AmountInUnits: amountInUnits.toString(),
-        CurrentBalance: balance.toString(),
-      });
 
       if (balance < amountInUnits) {
         const errorMsg = `Insufficient balance. Required: ${ethers.formatUnits(
@@ -157,36 +139,26 @@ export default function SubscriptionPlans() {
 
       // Step 1: Check Allowance
       const allowance = await tokenContract.allowance(account, contractAddress);
-      console.log('Current Allowance:', allowance.toString());
 
       if (allowance < amountInUnits) {
-        console.log('Requesting USDC Approval...');
         setProcessStatus(t('subscription.processing.approving'));
         const approveTx = await tokenContract.approve(
           contractAddress,
           ethers.MaxUint256
         );
-        console.log('Approval Transaction Sent:', approveTx.hash);
         await approveTx.wait();
-        console.log('Approval Confirmed');
 
         // Add a small delay to ensure MetaMask is ready for the next popup
-        console.log('Waiting 500ms for wallet readiness...');
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
 
       // Step 2: Subscribe
-      console.log('Requesting Subscription Signature for Plan ID:', planId);
       setProcessStatus(t('subscription.processing.confirming'));
       const tx = await contract.subscribe(planId);
-      console.log('Subscription Transaction Sent:', tx.hash);
 
       setProcessStatus(t('subscription.processing.processing'));
       const receipt = await tx.wait();
       const realHash = receipt.hash || tx.hash;
-      console.log('Subscription Confirmed! Receipt:', receipt);
-
-      console.log('Transaction Confirmed:', realHash);
 
       // 3. Sync with Backend
       setProcessStatus(t('subscription.processing.syncing'));
@@ -204,23 +176,16 @@ export default function SubscriptionPlans() {
         setIsProcessing(false);
         navigate('/dashboard/profile/settings');
       } else {
-        console.error('Backend subscription sync failed:', response);
         toast.error(
           response.message || 'Backend sync failed. Please contact support.'
         );
         setIsProcessing(false);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setIsProcessing(false);
-      console.group('Subscription Error Details');
-      console.error('Error Object:', err);
-      if (err?.data) console.error('Error Data:', err.data);
-      if (err?.error) console.error('Error context:', err.error);
-      if (err?.transaction)
-        console.error('Failed Transaction:', err.transaction);
-      console.groupEnd();
+      // eslint-disable-next-line no-console
 
-      const errorMsg = mapWeb3Error(err);
+      const errorMsg = mapWeb3Error(err as { code?: number; message?: string });
       toast.error(errorMsg);
     }
   };
@@ -336,7 +301,7 @@ export default function SubscriptionPlans() {
             {t('subscriptionPlans.choosePlan')}
           </p>
           <div className="sp-plans__grid">
-            {plans.map((plan: any) => {
+            {plans.map((plan: Plan) => {
               const { id } = plan;
               const isYearly = plan.billingCycle === 2;
               const { isPopular } = plan;

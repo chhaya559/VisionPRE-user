@@ -17,7 +17,7 @@ export default function EditBusinessProfile() {
   const { data: apiResponse, isLoading } = useGetProfileQuery(undefined);
   const [editProfileMutation] = useEditProfileMutation();
   const { t } = useTranslation('settings');
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<UserProfile>>({});
 
   useEffect(() => {
     if (apiResponse?.data) {
@@ -25,7 +25,7 @@ export default function EditBusinessProfile() {
       setFormData({
         ...p,
         industry: Array.isArray(p.industry) ? p.industry[0] : p.industry || '',
-        foundedYear: p.foundedYear?.toString() || '',
+        foundedYear: p.foundedYear || 0,
       });
     }
   }, [apiResponse]);
@@ -69,11 +69,10 @@ export default function EditBusinessProfile() {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev: any) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   async function handleSaveProfile() {
-    console.log('handleSaveProfile (Business) triggered');
     try {
       const payload = {
         companyName: formData.companyName || undefined,
@@ -82,14 +81,11 @@ export default function EditBusinessProfile() {
           : [formData.industry || 'Technology'],
         companySize: formData.companySize || undefined,
         foundedYear: formData.foundedYear
-          ? parseInt(formData.foundedYear, 10)
+          ? parseInt(String(formData.foundedYear), 10)
           : 0,
         annualRevenue: formData.annualRevenue || undefined,
         website: formData.website || undefined,
-        businessDescription:
-          formData.businessDescription ||
-          formData.companyDescription ||
-          undefined,
+        businessDescription: formData.businessDescription || undefined,
         stage: formData.stage || undefined,
         profileType: Array.isArray(formData.profileType)
           ? formData.profileType
@@ -99,9 +95,7 @@ export default function EditBusinessProfile() {
         avatarUrl: formData.avatarUrl || undefined,
       };
 
-      console.log('Update Business Profile Request:', payload);
       const response = await editProfileMutation(payload).unwrap();
-      console.log('Update Business Profile Response:', response);
 
       if (response.success) {
         toast.success(
@@ -110,9 +104,11 @@ export default function EditBusinessProfile() {
         );
         navigate(-1);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('Error editing business profile', err);
-      toast.error(err?.data?.message || 'Update failed', {
+      const apiError = err as { data?: { message?: string } };
+      toast.error(apiError?.data?.message || 'Update failed', {
         position: 'top-right',
       });
     }

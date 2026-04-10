@@ -21,11 +21,37 @@ import {
 import type { UserProfile } from '../../Shared/Types';
 import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 
+// Normalize stage label → short ID (for data saved before this fix)
+const stageNormalizeMap: Record<string, string> = {
+  Ideation: 'idea',
+  'Startup - First sales': 'startup',
+  'Growth Stage': 'growth',
+  Established: 'established',
+};
+
+// Normalize profileType label → short ID (for data saved before this fix)
+const profileTypeNormalizeMap: Record<string, string> = {
+  Startup: 'startup',
+  'Innovation / Technology': 'innovation',
+  'Woman entrepreneur': 'woman',
+  'Young entrepreneur': 'young',
+  'Growth-stage': 'growth',
+  'Social impact': 'impact',
+  'Diverse background': 'diverse',
+};
+
+// Normalize goal label → short ID
+const goalNormalizeMap: Record<string, string> = {
+  'Meet other entrepreneurs': 'meet',
+  'Apply for grants': 'apply',
+  'Grow my business': 'grow',
+  'Attend galas': 'attend',
+};
+
 export default function EditPublicProfile() {
   const navigate = useNavigate();
   const { data: apiResponse, isLoading } = useGetProfileQuery(undefined);
-  console.log(apiResponse, 'response from get query');
-  const [EditPublicProfileMutation] = useEditProfileMutation();
+  const [editProfile] = useEditProfileMutation();
   const [uploadFile, { isLoading: isUploading }] = useUploadFileMutation();
   const { t } = useTranslation('settings');
 
@@ -41,33 +67,6 @@ export default function EditPublicProfile() {
     goal: '',
     avatarUrl: '',
   });
-
-  // Normalize stage label → short ID (for data saved before this fix)
-  const stageNormalizeMap: Record<string, string> = {
-    Ideation: 'idea',
-    'Startup - First sales': 'startup',
-    'Growth Stage': 'growth',
-    Established: 'established',
-  };
-
-  // Normalize profileType label → short ID (for data saved before this fix)
-  const profileTypeNormalizeMap: Record<string, string> = {
-    Startup: 'startup',
-    'Innovation / Technology': 'innovation',
-    'Woman entrepreneur': 'woman',
-    'Young entrepreneur': 'young',
-    'Growth-stage': 'growth',
-    'Social impact': 'impact',
-    'Diverse background': 'diverse',
-  };
-
-  // Normalize goal label → short ID
-  const goalNormalizeMap: Record<string, string> = {
-    'Meet other entrepreneurs': 'meet',
-    'Apply for grants': 'apply',
-    'Grow my business': 'grow',
-    'Attend galas': 'attend',
-  };
 
   useEffect(() => {
     if (apiResponse?.data) {
@@ -185,9 +184,7 @@ export default function EditPublicProfile() {
     if (!file) return;
 
     try {
-      console.log('Starting upload for file:', file.name);
       const resp = await uploadFile({ file }).unwrap();
-      console.log('Upload result:', resp);
 
       // Support various response formats:
       // 1. { data: { url: "..." } }
@@ -203,11 +200,9 @@ export default function EditPublicProfile() {
       const imageUrl = ensureAbsoluteUrl(rawUrl);
 
       if (imageUrl) {
-        console.log('Extracted Image URL:', imageUrl);
         setFormData((prev) => ({ ...prev, avatarUrl: imageUrl }));
 
         // Auto-save the profile with the new avatar URL
-        console.log('Auto-saving profile with new avatar...');
         const payload = {
           firstName: formData.firstName || undefined,
           lastName: formData.lastName || undefined,
@@ -221,22 +216,24 @@ export default function EditPublicProfile() {
           avatarUrl: imageUrl,
         };
 
-        await EditPublicProfileMutation(payload).unwrap();
+        await editProfile(payload).unwrap();
         toast.success(
           t('editPublic.uploadSuccess') || 'Avatar updated and saved!'
         );
       } else {
+        // eslint-disable-next-line no-console
         console.error('No URL found in upload response', resp);
         toast.error(
           t('editPublic.uploadFailed') ||
             'Upload completed, but no image URL was returned.'
         );
       }
-    } catch (error: any) {
-      console.error('Upload failed', error);
+    } catch (error: unknown) {
+      // eslint-disable-next-line no-console
+      const apiErr = error as { data?: { message?: string }; message?: string };
       const errorMsg =
-        error?.data?.message ||
-        error?.message ||
+        apiErr?.data?.message ||
+        apiErr?.message ||
         t('editPublic.uploadFailed') ||
         'Failed to upload image.';
       toast.error(errorMsg);
@@ -248,9 +245,7 @@ export default function EditPublicProfile() {
   };
 
   async function handleSaveProfile() {
-    console.log('handleSaveProfile function triggered');
     try {
-      console.log('Current formData:', formData);
       const payload = {
         firstName: formData.firstName || undefined,
         lastName: formData.lastName || undefined,
@@ -264,9 +259,7 @@ export default function EditPublicProfile() {
         avatarUrl: formData.avatarUrl, // Send actual value to support removal ("") or persistence
       };
 
-      console.log('Update Public Profile Request:', payload);
-      const response = await EditPublicProfileMutation(payload).unwrap();
-      console.log('Update Public Profile Response:', response);
+      const response = await editProfile(payload).unwrap();
 
       // On successful unwrap, we show success regardless of explicit 'success' field
       toast.success(
@@ -276,10 +269,14 @@ export default function EditPublicProfile() {
         { position: 'top-right' }
       );
       navigate(-1);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('Error editing public profile', err);
+      const apiErr = err as { data?: { message?: string } };
       toast.error(
-        err?.data?.message || t('editPublic.updateFailed') || 'Update failed',
+        apiErr?.data?.message ||
+          t('editPublic.updateFailed') ||
+          'Update failed',
         {
           position: 'top-right',
         }

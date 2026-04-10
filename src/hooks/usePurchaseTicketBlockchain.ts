@@ -25,7 +25,6 @@ export const usePurchaseTicketBlockchain = () => {
 
   const findPreviousPurchaseHash = async (galaId: string, attendee: string) => {
     try {
-      console.log('[Web3] Searching for previous TicketPurchased event...');
       const contract = await getContract();
       if (!contract) return null;
 
@@ -36,27 +35,18 @@ export const usePurchaseTicketBlockchain = () => {
 
       if (events.length > 0) {
         const lastEvent = events[events.length - 1];
-        console.log(
-          '[Web3] Found previous purchase in tx:',
-          lastEvent.transactionHash
-        );
         return lastEvent.transactionHash;
       }
 
       // If not in last 10k, try from block 0 (expensive but sure)
-      console.log(
-        '[Web3] Not found in last 10k blocks, searching from genesis...'
-      );
       const allEvents = await contract.queryFilter(filter);
       if (allEvents.length > 0) {
         return allEvents[allEvents.length - 1].transactionHash;
       }
 
-      console.warn(
-        '[Web3] No purchase event found on-chain for this user/gala.'
-      );
       return null;
-    } catch (err) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('[Web3] Error searching for events:', err);
       return null;
     }
@@ -69,18 +59,8 @@ export const usePurchaseTicketBlockchain = () => {
   ) => {
     const normalizedGalaId = (galaId || '').trim();
     try {
-      console.log(
-        '[Web3] Starting purchase flow for galaId:',
-        normalizedGalaId
-      );
       // 1. Check Network
       if (chainId !== SEPOLIA_CHAIN_ID) {
-        console.log(
-          '[Web3] Incorrect network. Current:',
-          chainId,
-          'Expected:',
-          SEPOLIA_CHAIN_ID
-        );
         setProcessStatus(
           t('subscription.processing.switchingNetwork') ||
             'Switching to Sepolia...'
@@ -88,7 +68,8 @@ export const usePurchaseTicketBlockchain = () => {
         try {
           toast.info('Please switch to Sepolia network.');
           await switchChain(SEPOLIA_CHAIN_ID);
-        } catch (err) {
+        } catch (err: unknown) {
+          // eslint-disable-next-line no-console
           console.error('[Web3] Network switch failed:', err);
           toast.error('Please switch to Sepolia network to proceed.');
           return null;
@@ -104,7 +85,6 @@ export const usePurchaseTicketBlockchain = () => {
       setIsProcessing(true);
 
       // 3. Get Contracts
-      console.log('[Web3] Initializing contracts...');
       setProcessStatus(
         t('subscription.processing.initializing') || 'Initializing contracts...'
       );
@@ -112,6 +92,7 @@ export const usePurchaseTicketBlockchain = () => {
       const tokenContract = await getTokenContract(SEPOLIA_SUSD);
 
       if (!contract || !tokenContract) {
+        // eslint-disable-next-line no-console
         console.error('[Web3] Contract initialization failed.');
         toast.error('Failed to initialize blockchain contracts.');
         setIsProcessing(false);
@@ -120,12 +101,6 @@ export const usePurchaseTicketBlockchain = () => {
 
       const contractAddress = await contract.getAddress();
       const decimals = await tokenContract.decimals();
-      console.log('[Web3] Contract context:', {
-        contractAddress,
-        decimals,
-        organiserWallet,
-        price,
-      });
       const amountInUnits = ethers.parseUnits(price.toString(), decimals);
 
       // 4. Check Balance
@@ -141,13 +116,7 @@ export const usePurchaseTicketBlockchain = () => {
 
       // 5. Check Allowance
       const allowance = await tokenContract.allowance(account, contractAddress);
-      console.log(
-        '[Web3] Current allowance:',
-        ethers.formatUnits(allowance, decimals),
-        'sUSD'
-      );
       if (allowance < amountInUnits) {
-        console.log('[Web3] Allowance insufficient. Approving...');
         setProcessStatus(
           t('subscription.processing.approving') || 'Approving sUSD...'
         );
@@ -156,22 +125,18 @@ export const usePurchaseTicketBlockchain = () => {
           contractAddress,
           ethers.MaxUint256
         );
-        console.log('[Web3] Approval tx submitted:', approveTx.hash);
         await approveTx.wait();
-        console.log('[Web3] Approval confirmed.');
         toast.success('sUSD approved!');
         // Wait a bit for MetaMask readiness
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
 
       // 6. Execute applyForGala
-      console.log('[Web3] Executing applyForGala...');
       setProcessStatus(
         t('subscription.processing.confirming') || 'Confirming purchase...'
       );
       toast.info('Please confirm the ticket purchase in your wallet.');
       const tx = await contract.applyForGala(normalizedGalaId, organiserWallet);
-      console.log('[Web3] Transaction submitted:', tx.hash);
 
       setProcessStatus(
         t('subscription.processing.processing') || 'Processing transaction...'
@@ -180,10 +145,6 @@ export const usePurchaseTicketBlockchain = () => {
         'Transaction submitted! Waiting for blockchain confirmation...'
       );
       const receipt = await tx.wait();
-      console.log(
-        '[Web3] Transaction confirmed in block:',
-        receipt.blockNumber
-      );
 
       setIsProcessing(false);
       const normalizedAddress = account ? ethers.getAddress(account) : '';
@@ -191,10 +152,11 @@ export const usePurchaseTicketBlockchain = () => {
         transactionHash: receipt.hash || tx.hash,
         walletAddress: normalizedAddress,
       };
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('[Web3] Error in purchaseTicketBlockchain:', err);
       setIsProcessing(false);
-      const errorMsg = mapWeb3Error(err);
+      const errorMsg = mapWeb3Error(err as { code?: number; message?: string });
 
       if (errorMsg === 'ALREADY_PURCHASED') {
         setProcessStatus('Recovering transaction...');

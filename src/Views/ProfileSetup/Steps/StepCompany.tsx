@@ -29,7 +29,7 @@ export default function StepCompany() {
   } = useForm<StepCompanyForm>({
     resolver: yupResolver(schema),
     defaultValues: {
-      companyName: formData.companyName,
+      companyName: formData.companyName || '',
     },
     mode: 'onChange',
   });

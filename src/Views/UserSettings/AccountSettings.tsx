@@ -65,10 +65,11 @@ export default function AccountSettings() {
         emailNotifications: newLocalToggles.email,
         pushNotifications: newLocalToggles.push,
       }).unwrap();
-    } catch (err) {
+    } catch (err: unknown) {
       const revertedToggles = { ...toggles, [key]: !nextValue };
       setToggles(revertedToggles);
       dispatch(setNotificationSettings(revertedToggles));
+      // eslint-disable-next-line no-console
       console.error('Failed to update notification settings:', err);
     }
   };

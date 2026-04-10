@@ -48,8 +48,9 @@ export default function ChangePassword() {
       } else {
         toast.error(response.message);
       }
-    } catch (err: any) {
-      toast.error(err.data?.message);
+    } catch (err: unknown) {
+      const apiError = err as { data?: { message?: string } };
+      toast.error(apiError.data?.message || 'Password update failed');
     }
   };
 

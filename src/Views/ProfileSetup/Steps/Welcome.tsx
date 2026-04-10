@@ -9,6 +9,16 @@ import { useDispatch } from 'react-redux';
 import { login } from '../../../Store/Common';
 import { ROUTES } from '../../../Shared/Constants';
 
+type VerifyEmailResponse = {
+  data?: {
+    accessToken?: string;
+    refreshToken?: string;
+    email?: string;
+    userName?: string;
+    isProfileCompleted?: boolean;
+  };
+};
+
 export default function Welcome() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -25,16 +35,14 @@ export default function Welcome() {
 
       verifyEmail(token)
         .unwrap()
-        .then((response: any) => {
-          console.log('Email verified successfully');
-
+        .then((response: VerifyEmailResponse) => {
           dispatch(
             login({
-              token: response.data.accessToken,
-              refreshToken: response.data.refreshToken,
-              email: response.data.email,
-              userName: response.data.userName,
-              isProfileCompleted: response.data.isProfileCompleted,
+              token: response?.data?.accessToken ?? '',
+              refreshToken: response?.data?.refreshToken ?? '',
+              email: response?.data?.email ?? '',
+              userName: response?.data?.userName ?? '',
+              isProfileCompleted: response?.data?.isProfileCompleted ?? false,
             })
           );
 
@@ -44,11 +52,12 @@ export default function Welcome() {
             `${ROUTES.SETUP}/welcome`
           );
         })
-        .catch((error: any) => {
+        .catch((error: unknown) => {
+          // eslint-disable-next-line no-console
           console.error('Email verification failed:', error);
         });
     }
-  }, [token]);
+  }, [token, verifyEmail, dispatch]);
   return (
     <div className="intro-step text-center">
       <div className="icon-badge success-badge">

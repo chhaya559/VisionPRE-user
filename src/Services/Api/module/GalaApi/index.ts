@@ -8,7 +8,7 @@ import {
 
 export const GalaApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getGalas: builder.query<GalasResponse, any>({
+    getGalas: builder.query<GalasResponse, Record<string, never>>({
       query: () => ({
         url: '/user/gala',
         method: 'GET',
@@ -20,44 +20,53 @@ export const GalaApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    applyGrant: builder.mutation<any, any>({
+    applyGrant: builder.mutation<
+      { success: boolean; message: string },
+      Record<string, unknown>
+    >({
       query: (payload) => ({
         url: '/user/grants/apply',
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['Grants' as any, 'GalaDetails' as any],
+      invalidatesTags: ['Grants', 'GalaDetails'],
     }),
-    getMyApplications: builder.query<any, any>({
+    getMyApplications: builder.query<{ data: any[] }, Record<string, never>>({
       query: () => ({
         url: '/user/grants/applications',
         method: 'GET',
       }),
-      providesTags: ['Grants' as any],
+      providesTags: ['Grants'],
     }),
-    purchaseTicket: builder.mutation<any, PurchaseTicketPayload>({
+    purchaseTicket: builder.mutation<
+      { success: boolean; message: string; data?: any },
+      PurchaseTicketPayload
+    >({
       query: (payload) => ({
         url: `/user/gala/purchase`,
         method: 'POST',
         body: payload,
       }),
-      invalidatesTags: ['GalaDetails' as any, 'Galas' as any],
+      invalidatesTags: ['GalaDetails', 'Galas'],
     }),
     getSavedGalas: builder.query<GalasResponse, void>({
       query: () => ({
         url: '/user/gala/saved',
         method: 'GET',
       }),
-      providesTags: ['Galas' as any],
+      providesTags: ['Galas'],
     }),
-    toggleSaveGala: builder.mutation<any, SaveGalaPayload>({
+    toggleSaveGala: builder.mutation<
+      { success: boolean; message: string },
+      SaveGalaPayload
+    >({
       query: (payload) => ({
         url: '/user/gala/saved',
         method: 'POST',
         body: JSON.stringify(payload),
         headers: { 'Content-Type': 'application/json' },
       }),
-      invalidatesTags: ['Galas' as any, 'GalaDetails' as any],
+      invalidatesTags: ['Galas', 'GalaDetails'],
     }),
   }),
   overrideExisting: false,

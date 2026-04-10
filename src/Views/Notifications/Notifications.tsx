@@ -35,61 +35,70 @@ type NotificationItem = {
   createdAt?: string;
   isRead: boolean;
   category: string;
-  raw: any;
+  raw: Record<string, unknown>;
 };
 
-const getCollection = (payload: any): any[] => {
+const getCollection = (
+  payload: Record<string, unknown> | unknown[] | undefined
+): unknown[] => {
+  const collectionList = payload as Record<string, unknown>;
   const collections = [
-    payload?.data?.items,
-    payload?.data?.notifications,
-    payload?.data,
-    payload?.items,
-    payload?.notifications,
+    collectionList?.data &&
+      (collectionList.data as Record<string, unknown>).items,
+    collectionList?.data &&
+      (collectionList.data as Record<string, unknown>).notifications,
+    collectionList?.data,
+    collectionList?.items,
+    collectionList?.notifications,
     payload,
   ];
 
   const match = collections.find(Array.isArray);
-  return Array.isArray(match) ? match : [];
+  return Array.isArray(match) ? (match as unknown[]) : [];
 };
 
-const getDetailPayload = (payload: any) =>
-  payload?.data?.item ||
-  payload?.data?.notification ||
+const getDetailPayload = (payload: Record<string, unknown> | undefined) =>
+  (payload?.data as Record<string, unknown>)?.item ||
+  (payload?.data as Record<string, unknown>)?.notification ||
   payload?.data ||
   payload;
 
 const toNotificationItem = (
-  item: any,
+  item: Record<string, unknown>,
   index: number,
-  t: any
+  t: (key: string, options?: Record<string, unknown>) => string
 ): NotificationItem => {
   const id = String(
     item?.id || item?.Id || item?._id || `notification-${index}`
   );
-  const title =
+  const title = String(
     item?.title ||
-    item?.Title ||
-    item?.subject ||
-    item?.Subject ||
-    item?.heading ||
-    item?.Heading ||
-    t('notificationFallback') ||
-    'Notification';
-  const message =
+      item?.Title ||
+      item?.subject ||
+      item?.Subject ||
+      item?.heading ||
+      item?.Heading ||
+      t('notificationFallback') ||
+      'Notification'
+  );
+  const message = String(
     item?.message ||
-    item?.Message ||
-    item?.body ||
-    item?.Body ||
-    item?.description ||
-    item?.Description ||
-    '';
-  const createdAt =
+      item?.Message ||
+      item?.body ||
+      item?.Body ||
+      item?.description ||
+      item?.Description ||
+      ''
+  );
+  const createdAt = String(
     item?.createdAt ||
-    item?.CreatedAt ||
-    item?.date ||
-    item?.Date ||
-    item?.sentAt ||
-    item?.updatedAt;
+      item?.CreatedAt ||
+      item?.date ||
+      item?.Date ||
+      item?.sentAt ||
+      item?.updatedAt ||
+      ''
+  );
   const readState =
     item?.isRead ??
     item?.read ??
@@ -103,14 +112,17 @@ const toNotificationItem = (
     id,
     title,
     message,
-    createdAt,
+    createdAt: createdAt || undefined,
     isRead: Boolean(readState),
     category: String(category).toLowerCase(),
     raw: item,
   };
 };
 
-const getRelativeTime = (value: string | undefined, t: any) => {
+const getRelativeTime = (
+  value: string | undefined,
+  t: (key: string) => string
+) => {
   if (!value) {
     return t('relativeTime.recently');
   }
@@ -144,7 +156,10 @@ const getRelativeTime = (value: string | undefined, t: any) => {
   });
 };
 
-const getSectionLabel = (value: string | undefined, t: any) => {
+const getSectionLabel = (
+  value: string | undefined,
+  t: (key: string) => string
+) => {
   if (!value) return t('groups.earlier');
 
   const date = new Date(value);
@@ -223,16 +238,18 @@ export default function Notifications() {
 
   const rawNotifications = useMemo(
     () =>
-      getCollection(notificationsResponse).map((n, i) =>
-        toNotificationItem(n, i, t)
+      getCollection(notificationsResponse as Record<string, unknown>).map(
+        (n, i) => toNotificationItem(n as Record<string, unknown>, i, t)
       ),
     [notificationsResponse, t]
   );
 
   const rawAnnouncements = useMemo(() => {
-    const list = getCollection(announcementsResponse);
-    return list.map((item: any, idx: number) => ({
-      ...toNotificationItem(item, idx, t),
+    const list = getCollection(
+      announcementsResponse as Record<string, unknown>
+    );
+    return list.map((item, idx) => ({
+      ...toNotificationItem(item as Record<string, unknown>, idx, t),
       category: 'announcement',
       isRead: true,
     }));
@@ -259,7 +276,9 @@ export default function Notifications() {
     );
 
   const detailPayload = selectedId
-    ? getDetailPayload(notificationDetailResponse)
+    ? (getDetailPayload(
+        notificationDetailResponse as Record<string, unknown>
+      ) as Record<string, unknown>)
     : null;
   const hasNotifications = notifications.length > 0;
   const unreadCount = rawNotifications.filter((item) => !item.isRead).length;
@@ -311,23 +330,27 @@ export default function Notifications() {
     }
   };
 
-  const detailTitle =
+  const detailTitle = String(
     detailPayload?.title ||
-    detailPayload?.Title ||
-    selectedNotification?.title ||
-    t('detailTitle');
-  const detailMessage =
+      detailPayload?.Title ||
+      selectedNotification?.title ||
+      t('detailTitle')
+  );
+  const detailMessage = String(
     detailPayload?.message ||
-    detailPayload?.Message ||
-    detailPayload?.body ||
-    detailPayload?.description ||
-    selectedNotification?.message ||
-    t('noDetails');
-  const detailCreatedAt =
+      detailPayload?.Message ||
+      detailPayload?.body ||
+      detailPayload?.description ||
+      selectedNotification?.message ||
+      t('noDetails')
+  );
+  const detailCreatedAt = String(
     detailPayload?.createdAt ||
-    detailPayload?.CreatedAt ||
-    detailPayload?.date ||
-    selectedNotification?.createdAt;
+      detailPayload?.CreatedAt ||
+      detailPayload?.date ||
+      selectedNotification?.createdAt ||
+      ''
+  );
 
   return (
     <div className="notifications-page">

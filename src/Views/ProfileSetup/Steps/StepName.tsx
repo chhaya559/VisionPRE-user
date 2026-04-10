@@ -34,7 +34,7 @@ export default function StepName() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<StepNameForm>({
-    resolver: yupResolver(schema) as any,
+    resolver: yupResolver(schema),
     defaultValues: {
       firstName: formData.firstName,
       lastName: formData.lastName,

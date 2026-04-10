@@ -31,7 +31,8 @@ const schema = yup.object().shape({
   profileType: yup
     .array()
     .of(yup.string().required())
-    .min(1, 'Please select at least one profile type'),
+    .min(1, 'Please select at least one profile type')
+    .required(),
 });
 
 interface StepProfileForm {
@@ -48,7 +49,7 @@ export default function StepProfile() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<StepProfileForm>({
-    resolver: yupResolver(schema) as any,
+    resolver: yupResolver(schema),
     defaultValues: {
       profileType: formData.profileType,
     },

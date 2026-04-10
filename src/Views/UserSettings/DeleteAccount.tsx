@@ -19,11 +19,11 @@ export default function DeleteAccount() {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteAccount({}).unwrap();
-      console.log('Account deleted successfully:', response);
+      await deleteAccount({}).unwrap();
       dispatch(logout());
       navigate('/');
-    } catch (error) {
+    } catch (error: unknown) {
+      // eslint-disable-next-line no-console
       console.error('Error deleting account:', error);
     }
   };

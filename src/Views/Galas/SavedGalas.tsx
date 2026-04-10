@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetSavedGalasQuery } from '../../Services/Api/module/GalaApi';
+import type { GalaEvent } from '../../Services/Api/module/GalaApi/types';
 import './Galas.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -106,14 +107,12 @@ export default function SavedGalas() {
 
         {galas.length > 0 ? (
           <section className="galas-section">
-            {galas.map((gala: any) => (
+            {galas.map((gala: GalaEvent) => (
               <GalaCard
-                key={gala.id || gala.Id}
+                key={gala.id}
                 gala={gala}
                 t={t}
-                onClick={() =>
-                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
-                }
+                onClick={() => navigate(`/dashboard/galas/${gala.id}`)}
               />
             ))}
           </section>
@@ -148,12 +147,12 @@ function GalaCard({
   t,
   onClick,
 }: Readonly<{
-  gala: any;
-  t: any;
+  gala: GalaEvent;
+  t: (key: string, options?: Record<string, unknown>) => string;
   onClick: () => void;
 }>) {
   const title = gala.name || t('galas.discover.untitledGala');
-  const dateStr = gala.eventDate || gala.Date || gala.event_date;
+  const dateStr = gala.eventDate;
   const date = dateStr
     ? new Date(dateStr).toLocaleDateString('en-GB', {
         day: '2-digit',
@@ -161,11 +160,9 @@ function GalaCard({
         year: 'numeric',
       })
     : t('galas.discover.tbd');
-  const location =
-    gala.city || gala.venue || gala.Location || t('galas.discover.tbd');
-  const attendees = gala.appliedCount ?? gala.Attendees ?? 0;
-  const prizePool =
-    gala.totalGalaValue ?? gala.totalPrizePool ?? gala.PrizePool ?? 0;
+  const location = gala.city || gala.venue || t('galas.discover.tbd');
+  const attendees = gala.appliedCount ?? gala.expectedAttendees ?? 0;
+  const prizePool = gala.totalGalaValue ?? 0;
 
   const getStatusLabel = (s: GalaStatus) => {
     switch (s) {
@@ -184,7 +181,6 @@ function GalaCard({
   const status = getStatusLabel(gala.status);
   const imageUrl =
     gala.coverImageUrl ||
-    gala.imageUrl ||
     'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80';
 
   return (

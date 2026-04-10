@@ -63,9 +63,10 @@ export default function SubscriptionDetails() {
 
       toast.success(t('subscription.cancelSuccess'));
       navigate(-1);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('Cancellation error:', err);
-      const errorMsg = mapWeb3Error(err);
+      const errorMsg = mapWeb3Error(err as { code?: number; message?: string });
       toast.error(errorMsg);
     }
   };

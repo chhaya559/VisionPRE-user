@@ -30,7 +30,8 @@ const schema = yup.object().shape({
   industry: yup
     .array()
     .of(yup.string().required())
-    .min(1, 'Please select at least one industry'),
+    .min(1, 'Please select at least one industry')
+    .required(),
 });
 
 interface StepIndustryForm {
@@ -47,7 +48,7 @@ export default function StepIndustry() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<StepIndustryForm>({
-    resolver: yupResolver(schema) as any,
+    resolver: yupResolver(schema),
     defaultValues: {
       industry: formData.industry,
     },

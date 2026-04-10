@@ -29,7 +29,7 @@ interface FileUploaderProps {
   label: string;
   onUploadSuccess: (url: string) => void;
   required?: boolean;
-  t: any;
+  t: (key: string) => string;
 }
 
 function FileUploader({
@@ -53,15 +53,14 @@ function FileUploader({
 
       try {
         const result = await uploadFile({ file, type: 'Document' }).unwrap();
-        const url = (result as any)?.data || result;
+        const url = (result as { data?: string })?.data || (result as string);
         setFileUrl(url);
         onUploadSuccess(url);
       } catch (err) {
-        console.error('Upload failed:', err);
         setError(t('grants.application.uploadFailed'));
       }
     },
-    [uploadFile, onUploadSuccess]
+    [uploadFile, onUploadSuccess, t]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -167,10 +166,12 @@ export default function GrantApplication() {
     );
   }
 
-  const galaData = (apiResponse as any)?.data || apiResponse || {};
-  const rawGrants = galaData?.grants || galaData?.Grants;
-  const grants = Array.isArray(rawGrants) ? rawGrants : [];
-  const grant = grants.find((g: any) => (g.id || g.Id) === grantId);
+  const galaData = apiResponse?.data;
+  const rawGrants = galaData?.grants;
+  const grants = Array.isArray(rawGrants)
+    ? (rawGrants as unknown as Array<Record<string, unknown>>)
+    : [];
+  const grant = grants.find((g) => (g.id || g.Id) === grantId);
 
   if (!galaData || !grant) {
     return (
@@ -189,7 +190,7 @@ export default function GrantApplication() {
     );
   }
 
-  const gTitle = grant.title || grant.Title;
+  const gTitle = String(grant.title || grant.Title || '');
   const gAmount = grant.prizeAmount ?? grant.amount ?? grant.Amount ?? 0;
 
   const days = Array.from({ length: 28 }, (_, i) => i + 1);
@@ -231,13 +232,11 @@ export default function GrantApplication() {
       await applyGrant(payload).unwrap();
       setIsSuccess(true);
       setTimeout(() => navigate('/dashboard/grants'), 2000);
-    } catch (err) {
-      console.error('Failed to apply:', err);
-      const errorMessage =
-        (err as any)?.data?.message ||
-        (err as any)?.message ||
-        'Failed to apply for the grant. Please try again.';
-      toast.error(errorMessage);
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to submit application:', err);
+      const apiErr = err as { data?: { message?: string } };
+      toast.error(apiErr?.data?.message || t('grantApplication.submitError'));
     }
   };
 

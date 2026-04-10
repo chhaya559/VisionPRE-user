@@ -39,7 +39,7 @@ export default function StepGoal() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<StepGoalForm>({
-    resolver: yupResolver(schema) as any,
+    resolver: yupResolver(schema),
     defaultValues: {
       goal: formData.goal,
     },

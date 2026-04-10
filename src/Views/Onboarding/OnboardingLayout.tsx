@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 type OnboardingFlowProps = {
   step: number;
   total: number;
-  data: any;
+  data: { image: string; title: string; description: string };
   onNext: () => void;
   onSkip: () => void;
   isLast: boolean;

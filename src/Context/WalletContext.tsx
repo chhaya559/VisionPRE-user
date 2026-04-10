@@ -23,7 +23,7 @@ interface WalletContextType {
 }
 
 interface EthereumProvider {
-  request: (args: { method: string; params?: any[] }) => Promise<any>;
+  request: (args: { method: string; params?: unknown[] }) => Promise<any>;
   on: (event: string, handler: (...args: any[]) => void) => void;
   removeListener: (event: string, handler: (...args: any[]) => void) => void;
 }
@@ -43,7 +43,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [isConnecting, setIsConnecting] = useState(false);
 
   const checkIfWalletIsConnected = useCallback(async () => {
-    const { ethereum } = window as any;
+    const { ethereum } = window;
     if (!ethereum) return;
 
     try {
@@ -55,7 +55,8 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         });
         setChainId(currentChainId);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('Wallet check error:', err);
     }
   }, []);
@@ -77,8 +78,8 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       setAccount(accounts[0]);
       const currentChainId = await ethereum.request({ method: 'eth_chainId' });
       setChainId(currentChainId);
-    } catch (err: any) {
-      setError(err.message || 'Failed to connect wallet.');
+    } catch (err: unknown) {
+      setError((err as Error).message || 'Failed to connect wallet.');
     } finally {
       setIsConnecting(false);
     }
@@ -104,7 +105,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     const activeAddress =
       CONTRACT_MAP[chainId || ''] || import.meta.env.VITE_CONTRACT_ADDRESS;
 
-    const provider = new ethers.BrowserProvider(ethereum as any);
+    const provider = new ethers.BrowserProvider(
+      ethereum as ethers.Eip1193Provider
+    );
     const signer = await provider.getSigner();
     return new ethers.Contract(activeAddress, GrantPlatformABI.abi, signer);
   }, [account, chainId]);
@@ -114,7 +117,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       const { ethereum } = window;
       if (!ethereum || !account) return null;
 
-      const provider = new ethers.BrowserProvider(ethereum as any);
+      const provider = new ethers.BrowserProvider(
+        ethereum as ethers.Eip1193Provider
+      );
       const signer = await provider.getSigner();
       return new ethers.Contract(tokenAddress, ERC20_ABI, signer);
     },
@@ -129,8 +134,8 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: hexChainId }],
       });
-    } catch (switchError: any) {
-      if (switchError.code === 4902) {
+    } catch (switchError: unknown) {
+      if ((switchError as { code?: number }).code === 4902) {
         // Handle network not found
       }
       throw switchError;

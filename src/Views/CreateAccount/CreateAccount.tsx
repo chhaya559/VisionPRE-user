@@ -67,13 +67,19 @@ export default function CreateAccount() {
           navigate(ROUTES_CONFIG.SETUP.path);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('Google login failed:', err);
-      toast.error(err.data?.message || 'Google login failed');
+      const error = err as { data?: { message?: string } };
+      toast.error(error.data?.message || 'Google login failed');
     }
   }
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: {
+    userName: string;
+    email: string;
+    password?: string;
+  }) => {
     if (!agreed) {
       toast.warning(
         'Please agree to the Terms & Conditions and Privacy Policy'
@@ -101,10 +107,12 @@ export default function CreateAccount() {
       } else {
         toast.error(response.message || 'Registration failed');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('Registration error:', err);
+      const error = err as { data?: { message?: string } };
       toast.error(
-        err.data?.message || 'Something went wrong. Please try again.'
+        error.data?.message || 'Something went wrong. Please try again.'
       );
     }
   };

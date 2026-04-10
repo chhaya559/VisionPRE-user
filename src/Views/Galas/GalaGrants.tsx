@@ -6,6 +6,7 @@ import {
   usePurchaseTicketMutation,
   useGetMyApplicationsQuery,
 } from '../../Services/Api/module/GalaApi';
+import type { GalaEvent } from '../../Services/Api/module/GalaApi/types';
 import { GrantStatus } from '../../Shared/Enums';
 import Modal from '../../Shared/Components/Modal';
 import { toast } from 'react-toastify';
@@ -37,7 +38,11 @@ export default function GalaGrants() {
     refetch,
   } = useGetGalaByIdQuery(id || '');
   const { data: appsResponse } = useGetMyApplicationsQuery({});
-  const applications = (appsResponse as any)?.data || appsResponse || [];
+  const applications = ((
+    appsResponse as { data?: Array<Record<string, unknown>> }
+  )?.data || (Array.isArray(appsResponse) ? appsResponse : [])) as Array<
+    Record<string, unknown>
+  >;
 
   const [purchaseTicket, { isLoading: isPurchasing }] =
     usePurchaseTicketMutation();
@@ -107,12 +112,10 @@ export default function GalaGrants() {
     );
   }
 
-  // Map specific fields from the provided API response shape
-  const galaData = (apiResponse as any)?.data || apiResponse || {};
+  const galaData: GalaEvent = (apiResponse?.data || {}) as GalaEvent;
   const galaTitle = galaData.name;
-  const isRegistered =
-    galaData.isTicketPurchased || galaData.isRegistered || false;
-  const ticketPrice = galaData.ticketPrice || galaData.ticket_price || 0;
+  const isRegistered = galaData.isRegistered || false;
+  const ticketPrice = galaData.ticketPrice || 0;
   const grants = Array.isArray(galaData.grants) ? galaData.grants : [];
 
   const handleApplyClick = (gId: string) => {
@@ -137,15 +140,9 @@ export default function GalaGrants() {
     }
     try {
       if (!id || !selectedGrantId || !galaData) {
-        console.warn('[GalaGrants] Missing data:', {
-          id,
-          selectedGrantId,
-          galaData,
-        });
         return;
       }
 
-      console.log('[GalaGrants] Step 1: Blockchain Purchase');
       const organiserWallet = galaData.organiserWalletAddress;
       if (!organiserWallet) {
         toast.error('Gala organiser wallet address not found.');
@@ -159,29 +156,17 @@ export default function GalaGrants() {
       );
 
       if (!blockchainResult) {
-        console.log('[GalaGrants] Blockchain purchase cancelled or failed.');
         return;
       }
 
-      console.log(
-        '[GalaGrants] Step 2: Backend Synchronization',
-        blockchainResult
-      );
       const purchasePayload = {
         galaId: (galaData.id || id || '').trim(),
         transactionHash: (blockchainResult.transactionHash || '').trim(),
         walletAddress: blockchainResult.walletAddress,
       };
-      console.log(
-        '[DEBUG] Exact Backend Payload:',
-        JSON.stringify(purchasePayload, null, 2)
-      );
 
       await purchaseTicket(purchasePayload).unwrap();
 
-      console.log(
-        '[GalaGrants] Purchase fully successful. Proceeding to apply.'
-      );
       toast.success(
         t('galas.details.purchaseSuccess') || 'Ticket purchased successfully!'
       );
@@ -190,9 +175,11 @@ export default function GalaGrants() {
       if (selectedGrantId) {
         navigate(`/dashboard/galas/${id}/apply/${selectedGrantId}`);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('[GalaGrants] Error during purchase flow:', err);
-      toast.error(err?.data?.message || 'Failed to purchase ticket.');
+      const apiErr = err as { data?: { message?: string } };
+      toast.error(apiErr?.data?.message || 'Failed to purchase ticket.');
     }
   };
 
@@ -226,9 +213,9 @@ export default function GalaGrants() {
         {grants.length === 0 ? (
           <p className="empty-state">{t('galas.grants.noGrants')}</p>
         ) : (
-          grants.map((grant: any) => {
-            const gId = grant.id;
-            const gTitle = grant.name;
+          grants.map((grant: Record<string, unknown>) => {
+            const gId = grant.id as string;
+            const gTitle = grant.name as string;
 
             const getStatusLabel = (s: GrantStatus) => {
               switch (s) {
@@ -246,13 +233,15 @@ export default function GalaGrants() {
                   return 'Active';
               }
             };
-            const gStatus = getStatusLabel(grant.status);
+            const gStatus = getStatusLabel(grant.status as GrantStatus);
 
-            const gDesc = grant.description;
-            const gAmount = grant.prizeAmount;
-            const gCategory = grant.category;
+            const gDesc = grant.description as string;
+            const gAmount = grant.prizeAmount as number;
+            const gCategory = grant.category as string;
             const gDeadline = grant.applicationDeadline
-              ? new Date(grant.applicationDeadline).toLocaleDateString()
+              ? new Date(
+                  grant.applicationDeadline as string
+                ).toLocaleDateString()
               : '';
 
             const requirements = [];
@@ -272,7 +261,7 @@ export default function GalaGrants() {
                 : t('galas.grants.noneSpecified');
 
             const isApplied = applications.some(
-              (app: any) => app.grantId === gId || app.GrantId === gId
+              (app) => app.grantId === gId || app.GrantId === gId
             );
 
             return (
@@ -328,7 +317,7 @@ export default function GalaGrants() {
                 >
                   {isApplied
                     ? t('galas.grants.applied') || 'Applied'
-                    : grant.status >= GrantStatus.Completed
+                    : (grant.status as GrantStatus) >= GrantStatus.Completed
                     ? t('galas.grants.viewApplication') || 'View Application'
                     : t('galas.grants.applyToGrant')}
                   <FontAwesomeIcon

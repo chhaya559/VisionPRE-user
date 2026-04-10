@@ -8,7 +8,7 @@ export interface EveningItem {
 
 export interface Grant {
   // Define grant properties if needed, currently empty in the example
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface GalaEvent {
@@ -43,7 +43,7 @@ export interface GalaApiResponse<T> {
   success: boolean;
   message: string;
   data: T;
-  errors: any;
+  errors: unknown;
   notificationCount: number;
 }
 

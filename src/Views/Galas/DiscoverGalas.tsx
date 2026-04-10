@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetGalasQuery } from '../../Services/Api/module/GalaApi';
+import type { GalaEvent } from '../../Services/Api/module/GalaApi/types';
 import { GalaStatus } from '../../Shared/Enums';
 import './Galas.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -84,12 +85,14 @@ export default function DiscoverGalas() {
 
   const galas = apiResponse?.data?.items || [];
 
-  const activeGalas = galas.filter((g: any) => g?.status === GalaStatus.Active);
+  const activeGalas = galas.filter(
+    (g: GalaEvent) => g?.status === GalaStatus.Active
+  );
   const upcomingGalas = galas.filter(
-    (g: any) => g?.status === GalaStatus.Upcoming
+    (g: GalaEvent) => g?.status === GalaStatus.Upcoming
   );
   const pastGalas = galas.filter(
-    (g: any) => g?.status === GalaStatus.Completed
+    (g: GalaEvent) => g?.status === GalaStatus.Completed
   );
 
   const showActive = activeFilter === 'All' || activeFilter === 'Active';
@@ -143,14 +146,12 @@ export default function DiscoverGalas() {
               {t('galas.discover.activeGalas')}{' '}
               <span className="count">({activeGalas.length})</span>
             </h2>
-            {activeGalas.map((gala: any) => (
+            {activeGalas.map((gala: GalaEvent) => (
               <GalaCard
-                key={gala.id || gala.Id}
+                key={gala.id}
                 gala={gala}
                 t={t}
-                onClick={() =>
-                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
-                }
+                onClick={() => navigate(`/dashboard/galas/${gala.id}`)}
               />
             ))}
           </section>
@@ -168,14 +169,12 @@ export default function DiscoverGalas() {
                 : t('galas.discover.upcomingGalas')}{' '}
               <span className="count">({upcomingGalas.length})</span>
             </h2>
-            {upcomingGalas.map((gala: any) => (
+            {upcomingGalas.map((gala: GalaEvent) => (
               <GalaCard
-                key={gala.id || gala.Id}
+                key={gala.id}
                 gala={gala}
                 t={t}
-                onClick={() =>
-                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
-                }
+                onClick={() => navigate(`/dashboard/galas/${gala.id}`)}
               />
             ))}
           </section>
@@ -188,14 +187,12 @@ export default function DiscoverGalas() {
               {t('galas.discover.pastGalas')}{' '}
               <span className="count">({pastGalas.length})</span>
             </h2>
-            {pastGalas.map((gala: any) => (
+            {pastGalas.map((gala: GalaEvent) => (
               <GalaCard
-                key={gala.id || gala.Id}
+                key={gala.id}
                 gala={gala}
                 t={t}
-                onClick={() =>
-                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
-                }
+                onClick={() => navigate(`/dashboard/galas/${gala.id}`)}
               />
             ))}
           </section>
@@ -212,17 +209,15 @@ export default function DiscoverGalas() {
   );
 }
 
-function GalaCard({
-  gala,
-  t,
-  onClick,
-}: Readonly<{
-  gala: any;
-  t: any;
+type GalaCardProps = {
+  gala: GalaEvent;
+  t: (key: string, options?: Record<string, unknown>) => string;
   onClick: () => void;
-}>) {
+};
+
+function GalaCard({ gala, t, onClick }: Readonly<GalaCardProps>) {
   const title = gala.name || t('galas.discover.untitledGala');
-  const dateStr = gala.eventDate || gala.Date || gala.event_date;
+  const dateStr = gala.eventDate;
   const date = dateStr
     ? new Date(dateStr).toLocaleDateString('en-GB', {
         day: '2-digit',
@@ -230,11 +225,9 @@ function GalaCard({
         year: 'numeric',
       })
     : t('galas.discover.tbd');
-  const location =
-    gala.city || gala.venue || gala.Location || t('galas.discover.tbd');
-  const attendees = gala.appliedCount ?? gala.Attendees ?? 0;
-  const prizePool =
-    gala.totalGalaValue ?? gala.totalPrizePool ?? gala.PrizePool ?? 0;
+  const location = gala.city || gala.venue || t('galas.discover.tbd');
+  const attendees = gala.appliedCount ?? gala.expectedAttendees ?? 0;
+  const prizePool = gala.totalGalaValue ?? 0;
 
   const getStatusLabel = (s: GalaStatus) => {
     switch (s) {
@@ -253,7 +246,6 @@ function GalaCard({
   const status = getStatusLabel(gala.status);
   const imageUrl =
     gala.coverImageUrl ||
-    gala.imageUrl ||
     'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80';
 
   return (
@@ -271,7 +263,7 @@ function GalaCard({
           {status === 'Active' && <span className="status-dot" />}
           {t(`galas.discover.status${status}`)}
         </div>
-        {gala.isTicketPurchased && (
+        {gala.isRegistered && (
           <div className="registered-badge">
             <FontAwesomeIcon icon={faCheckCircle} />
             {t('galas.discover.ticketPurchased') || 'Ticket Purchased'}

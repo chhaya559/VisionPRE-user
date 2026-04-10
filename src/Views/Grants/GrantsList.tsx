@@ -24,47 +24,107 @@ import {
 } from '../../Shared/GrantApplicationStatus';
 import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 
+interface GrantApplicationDto {
+  id?: string;
+  Id?: string;
+  galaId?: string;
+  GalaId?: string;
+  galaName?: string;
+  GalaName?: string;
+  galaTitle?: string;
+  GalaTitle?: string;
+  grantName?: string;
+  GrantName?: string;
+  status: string | number;
+  submittedAt?: string;
+  createdAt?: string;
+  interviewDate?: string;
+}
+
+interface GalaDto {
+  id?: string;
+  Id?: string;
+  name?: string;
+  Name?: string;
+  eventDate?: string;
+}
+
 export default function GrantsList() {
   const navigate = useNavigate();
   const { t } = useTranslation('private');
   const { data: appsResponse, isLoading: appsLoading } =
     useGetMyApplicationsQuery({});
   const { data: galasResponse, isLoading: galasLoading } = useGetGalasQuery({});
-  const applications = (appsResponse as any)?.data || appsResponse || [];
-  const galas = (galasResponse as any)?.data?.items || [];
+  const applications =
+    (appsResponse as { data?: unknown })?.data || appsResponse || [];
+  const galas =
+    (galasResponse as { data?: { items?: unknown[] } })?.data?.items || [];
 
   const isLoading = appsLoading || galasLoading;
 
-  // Group applications by Gala
-  const groupedApps = Array.isArray(applications)
-    ? applications.reduce((acc: any, app: any) => {
-        const galaId =
-          app.galaId || app.GalaId || app.galaName || app.GalaName || 'unknown';
-        if (!acc[galaId]) acc[galaId] = [];
-        acc[galaId].push(app);
-        return acc;
-      }, {})
-    : {};
+  const grouped = (
+    Array.isArray(applications) ? (applications as GrantApplicationDto[]) : []
+  ).reduce(
+    (acc: Record<string, GrantApplicationDto[]>, app: GrantApplicationDto) => {
+      const galaId = (app.galaId ||
+        app.GalaId ||
+        app.galaName ||
+        app.GalaName ||
+        'unknown') as string;
+      if (!acc[galaId]) acc[galaId] = [];
+      acc[galaId].push(app);
+      return acc;
+    },
+    {}
+  );
+
+  type GalaGroup = {
+    galaId: string;
+    galaTitle: string;
+    applications: GrantApplicationDto[];
+  };
+
+  const galasWithApplications: GalaGroup[] = (
+    Object.entries(grouped) as [string, GrantApplicationDto[]][]
+  )
+    .filter(([, apps]) => apps.length > 0)
+    .map(([galaId, apps]) => {
+      const firstApp = apps[0];
+      return {
+        galaId,
+        galaTitle: (firstApp?.galaTitle ||
+          firstApp?.GalaTitle ||
+          firstApp?.galaName ||
+          firstApp?.GalaName ||
+          'Unknown Gala') as string,
+        applications: apps,
+      };
+    });
 
   // Stats
   const pendingCount = Array.isArray(applications)
-    ? applications.filter((a: any) =>
-        isGrantPendingStatus(getGrantApplicationStatusValue(a))
+    ? (applications as GrantApplicationDto[]).filter((a: GrantApplicationDto) =>
+        isGrantPendingStatus(
+          getGrantApplicationStatusValue(a as { status: string | number })
+        )
       ).length
     : 0;
   const approvedCount = Array.isArray(applications)
-    ? applications.filter((a: any) =>
-        isGrantApprovedStatus(getGrantApplicationStatusValue(a))
+    ? (applications as GrantApplicationDto[]).filter((a: GrantApplicationDto) =>
+        isGrantApprovedStatus(
+          getGrantApplicationStatusValue(a as { status: string | number })
+        )
       ).length
     : 0;
   const rejectedCount = Array.isArray(applications)
-    ? applications.filter(
-        (a: any) =>
-          getGrantApplicationStatusValue(a) === GrantApplicationStatus.Rejected
+    ? (applications as GrantApplicationDto[]).filter(
+        (a: GrantApplicationDto) =>
+          getGrantApplicationStatusValue(a as { status: string | number }) ===
+          GrantApplicationStatus.Rejected
       ).length
     : 0;
 
-  const getStatusBadge = (status: any) => {
+  const getStatusBadge = (status: string | number | undefined) => {
     const normalizedStatus = Number(status);
 
     if (isGrantApprovedStatus(normalizedStatus))
@@ -177,29 +237,36 @@ export default function GrantsList() {
         </h2>
 
         <div className="galas-group-list">
-          {Object.keys(groupedApps).length === 0 ? (
+          {galasWithApplications.length === 0 ? (
             <div className="empty-state">
               <p>{t('grants.list.noApplications')}</p>
             </div>
           ) : (
-            Object.keys(groupedApps).map((gId) => {
-              const galaApps = groupedApps[gId];
-              const gala = galas.find(
-                (g: any) => g.id === gId || g.Id === gId
+            galasWithApplications.map((galaGroup) => {
+              const galaRaw = (galas as GalaDto[]).find(
+                (g) => g.id === galaGroup.galaId || g.Id === galaGroup.galaId
               ) ||
-                galas.find((g: any) => g.name === gId || g.Name === gId) || {
-                  name:
-                    galaApps[0].galaName ||
-                    galaApps[0].GalaName ||
-                    'Gala Vision 2026',
-                  eventDate: galaApps[0].submittedAt || galaApps[0].createdAt,
+                (galas as GalaDto[]).find(
+                  (g) =>
+                    g.name === galaGroup.galaTitle ||
+                    g.Name === galaGroup.galaTitle
+                ) || {
+                  name: galaGroup.galaTitle,
+                  eventDate:
+                    (galaGroup.applications[0] as GrantApplicationDto)
+                      ?.submittedAt ||
+                    (galaGroup.applications[0] as GrantApplicationDto)
+                      ?.createdAt,
                 };
+              const gala = galaRaw as GalaDto;
 
               return (
-                <div key={gId} className="gala-group-card">
+                <div key={galaGroup.galaId} className="gala-group-card">
                   <header className="gala-group-header">
                     <div className="gala-meta">
-                      <h3>{gala.name || gala.Name}</h3>
+                      <h3>
+                        {String(gala.name || gala.Name || galaGroup.galaTitle)}
+                      </h3>
                       <span className="event-date">
                         {t('grants.list.on')}{' '}
                         {gala.eventDate
@@ -210,15 +277,19 @@ export default function GrantsList() {
                           : t('grants.list.tbd')}
                       </span>
                     </div>
-                    <div className="app-count-badge">{galaApps.length}</div>
+                    <div className="app-count-badge">
+                      {galaGroup.applications.length}
+                    </div>
                   </header>
 
                   <div className="nested-apps-list">
-                    {galaApps.map((app: any) => {
-                      const galaIdForRedirect = gala.id || gala.Id || gId;
+                    {galaGroup.applications.map((app) => {
+                      const galaIdForRedirect =
+                        (gala as Record<string, unknown>).id ||
+                        galaGroup.galaId;
                       return (
                         <div
-                          key={app.id || app.Id}
+                          key={String(app.id || app.Id || galaGroup.galaId)}
                           className="nested-app-item"
                           onClick={() =>
                             navigate(
@@ -231,27 +302,31 @@ export default function GrantsList() {
                             <FontAwesomeIcon icon={faClock} />
                           </div>
                           <div className="app-details">
-                            <h4>{app.grantName || app.GrantName}</h4>
+                            <h4>
+                              {String(app.grantName || app.GrantName || '')}
+                            </h4>
                             <p className="interview-info">
                               {t('grants.list.interview')}{' '}
                               {app.interviewDate
                                 ? new Date(
-                                    app.interviewDate
+                                    app.interviewDate as string
                                   ).toLocaleDateString()
                                 : getGrantApplicationStatusLabel(
-                                    getGrantApplicationStatusValue(app)
+                                    getGrantApplicationStatusValue(
+                                      app as { status: string | number }
+                                    )
                                   )}{' '}
                               {t('grants.list.at')}
                             </p>
                             <p className="submission-date">
                               {t('grants.list.submittedOn')}{' '}
                               {new Date(
-                                app.submittedAt || app.createdAt
+                                (app.submittedAt || app.createdAt) as string
                               ).toLocaleDateString()}
                             </p>
                           </div>
                           <div className="app-actions">
-                            {getStatusBadge(app.status)}
+                            {getStatusBadge(app.status as string | number)}
                             <FontAwesomeIcon
                               icon={faChevronRight}
                               className="chevron"

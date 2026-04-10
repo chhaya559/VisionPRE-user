@@ -85,7 +85,15 @@ const baseQueryWithInterceptor: BaseQueryFn<
 const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithInterceptor,
-  tagTypes: ['Notification', 'Profile', 'Subscription', 'NotificationSettings'],
+  tagTypes: [
+    'Notification',
+    'Profile',
+    'Subscription',
+    'NotificationSettings',
+    'Grants',
+    'Galas',
+    'GalaDetails',
+  ],
   endpoints: () => ({}),
 });
 

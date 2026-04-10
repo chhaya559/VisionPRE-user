@@ -39,7 +39,7 @@ export default function StepStage() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<StepStageForm>({
-    resolver: yupResolver(schema) as any,
+    resolver: yupResolver(schema),
     defaultValues: {
       stage: formData.stage || '',
     },

@@ -5,6 +5,10 @@ import {
   usePurchaseTicketMutation,
   useToggleSaveGalaMutation,
 } from '../../Services/Api/module/GalaApi';
+import type {
+  GalaEvent,
+  EveningItem,
+} from '../../Services/Api/module/GalaApi/types';
 import { GalaStatus } from '../../Shared/Enums';
 import './GalaDetails.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -97,13 +101,12 @@ export default function GalaDetails() {
     );
   }
 
-  const galaData = (apiResponse as any)?.data || apiResponse || {};
+  const galaData: GalaEvent = (apiResponse?.data || {}) as GalaEvent;
   const id = urlId || '';
 
   const title = galaData.name;
-  const isRegistered =
-    galaData.isTicketPurchased || galaData.isRegistered || false;
-  const ticketPrice = galaData.ticketPrice || galaData.ticket_price || 0;
+  const isRegistered = galaData.isRegistered || false;
+  const ticketPrice = galaData.ticketPrice || 0;
 
   const getStatusLabel = (s: GalaStatus) => {
     switch (s) {
@@ -121,7 +124,7 @@ export default function GalaDetails() {
   };
   const status = getStatusLabel(galaData.status);
 
-  const imageUrl = galaData.coverImageUrl || galaData.imageUrl;
+  const imageUrl = galaData.coverImageUrl;
   const date = galaData.eventDate
     ? new Date(galaData.eventDate).toLocaleDateString()
     : 'TBD';
@@ -129,13 +132,12 @@ export default function GalaDetails() {
   const location =
     galaData.venue && galaData.city
       ? `${galaData.venue}, ${galaData.city}`
-      : galaData.city || galaData.location || 'TBD';
+      : galaData.city || 'TBD';
   const attendees = galaData.appliedCount ?? galaData.expectedAttendees ?? 0;
-  const prizePool = galaData.totalGalaValue ?? galaData.totalPrizePool ?? 0;
-  const description =
-    galaData.about || galaData.description || 'No description available.';
+  const prizePool = galaData.totalGalaValue ?? 0;
+  const description = galaData.about || 'No description available.';
 
-  const rawProgram = galaData.eveningItems || galaData.program;
+  const rawProgram = galaData.eveningItems;
   const program = Array.isArray(rawProgram) ? rawProgram : [];
 
   const rawGrants = galaData.grants;
@@ -151,14 +153,10 @@ export default function GalaDetails() {
       return;
     }
     try {
-      // 1. Blockchain Transaction
-      console.log('[GalaDetails] Initiating handlePurchase...');
       if (!id || !galaData) {
-        console.warn('[GalaDetails] Missing id or gala data');
         return;
       }
 
-      console.log('[GalaDetails] Step 1: Blockchain Purchase');
       const organiserWallet = galaData.organiserWalletAddress;
       if (!organiserWallet) {
         toast.error('Gala organiser wallet address not found.');
@@ -172,34 +170,26 @@ export default function GalaDetails() {
       );
 
       if (!blockchainResult) {
-        console.log('[GalaDetails] Blockchain purchase cancelled or failed.');
         return;
       }
 
-      console.log(
-        '[GalaDetails] Step 2: Backend Synchronization',
-        blockchainResult
-      );
       const purchasePayload = {
         galaId: (galaData.id || id || '').trim(),
         transactionHash: (blockchainResult.transactionHash || '').trim(),
         walletAddress: blockchainResult.walletAddress,
       };
-      console.log(
-        '[DEBUG] Exact Backend Payload:',
-        JSON.stringify(purchasePayload, null, 2)
-      );
 
       await purchaseTicket(purchasePayload).unwrap();
 
-      console.log('[GalaDetails] Purchase fully successful.');
       toast.success(
         t('galas.details.purchaseSuccess') || 'Ticket purchased successfully!'
       );
       refetch();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('[GalaDetails] Error during purchase flow:', err);
-      toast.error(err?.data?.message || 'Failed to complete purchase.');
+      const apiErr = err as { data?: { message?: string } };
+      toast.error(apiErr?.data?.message || 'Failed to complete purchase.');
     }
   };
 
@@ -213,7 +203,7 @@ export default function GalaDetails() {
         (galaData.id || id || '').trim()
       ).unwrap();
       toast.success(
-        result?.message ||
+        (result?.message as string) ||
           (galaData.isSaved ? 'Removed from saved' : 'Added to saved')
       );
     } catch {
@@ -281,10 +271,10 @@ export default function GalaDetails() {
             {program.length > 0 && (
               <div className="program-section">
                 <h2>{t('galas.details.eveningProgram')}</h2>
-                {program.map((p: any, i: number) => {
-                  const pTime = p.time || p.Time;
-                  const pTitle = p.title || p.Title;
-                  const pDesc = p.description || p.Description;
+                {program.map((p: EveningItem, i: number) => {
+                  const pTime = p.time;
+                  const pTitle = p.title;
+                  const pDesc = p.description;
                   return (
                     <div key={i} className="program-item">
                       <div className="program-time">{formatTime(pTime)}</div>

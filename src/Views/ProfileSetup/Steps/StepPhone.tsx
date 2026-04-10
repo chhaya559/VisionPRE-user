@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
 interface StepPhoneForm {
-  phone?: string | null;
+  phone: string | null;
 }
 
 const schema = yup.object({

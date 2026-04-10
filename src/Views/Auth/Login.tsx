@@ -88,7 +88,8 @@ export default function LoginPage() {
         );
         // navigate('/dashboard');
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('Google login failed:', err);
     }
   }
@@ -110,7 +111,8 @@ export default function LoginPage() {
         );
         // navigate('/dashboard');
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      // eslint-disable-next-line no-console
       console.error('Apple login failed:', err);
     }
   };

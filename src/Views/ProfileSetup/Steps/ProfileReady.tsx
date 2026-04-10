@@ -30,14 +30,12 @@ export default function ProfileReady() {
     };
 
     try {
-      console.log('Submitting onboarding payload:', payload);
-      const response = await OnboardingProfile(payload).unwrap();
-      console.log('Onboarding response:', response);
+      await OnboardingProfile(payload).unwrap();
       dispatch(setAuthData({ isProfileCompleted: true }));
       navigate('/dashboard', { replace: true });
-    } catch (error: any) {
-      console.log('Onboarding error:', error);
-      const errorMessage = error?.data?.message || '';
+    } catch (error: unknown) {
+      const apiErr = error as { data?: { message?: string } };
+      const errorMessage = apiErr?.data?.message || '';
 
       if (errorMessage.toLowerCase().includes('not found')) {
         toast.error(

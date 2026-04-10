@@ -65,7 +65,7 @@ export const SubscriptionApi = api.injectEndpoints({
       }),
     }),
     updateSubscription: builder.mutation({
-      query: (payload: any) => ({
+      query: (payload: Record<string, unknown>) => ({
         url: '/profile/subscription/update',
         method: 'PUT',
         body: { command: payload },

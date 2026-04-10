@@ -22,8 +22,9 @@ function AppLayout({ isAuthenticated, children }: AppLayoutProps) {
       if (refreshToken) {
         await logoutApi(refreshToken).unwrap();
       }
-    } catch (err) {
-      console.error('Logout API error:', err);
+    } catch (error: unknown) {
+      // eslint-disable-next-line no-console
+      console.error('Logout failed:', error);
     } finally {
       dispatch(logout());
       dispatch(hideLogoutModal());

@@ -1,84 +1,95 @@
 import api from '../../api';
-import { NotificationItem } from '../../../../Shared/Types';
 
 export const NotificationApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    FCMtoken: builder.mutation({
+    FCMtoken: builder.mutation<
+      { success: boolean },
+      { token: string; deviceType: string }
+    >({
       query: (body) => ({
         url: '/notifications/device-token',
         method: 'POST',
         body,
       }),
     }),
-    getNotifications: builder.query<any, any>({
+    getNotifications: builder.query<
+      Record<string, unknown>,
+      Record<string, never>
+    >({
       query: () => ({
         url: '/notifications',
         method: 'GET',
       }),
       providesTags: (result: unknown) => {
-        const items =
-          (result as any)?.data?.items ||
-          (result as any)?.data?.notifications ||
-          (result as any)?.data ||
-          (result as any)?.items ||
-          (result as any)?.notifications ||
+        const resultObj = result as Record<string, unknown> | null | undefined;
+        const dataObj = (resultObj?.data as Record<string, unknown>) ?? {};
+        const items: unknown[] =
+          (dataObj?.items as unknown[] | undefined) ||
+          (dataObj?.notifications as unknown[] | undefined) ||
+          (Array.isArray(dataObj) ? dataObj : undefined) ||
+          (resultObj?.items as unknown[] | undefined) ||
+          (resultObj?.notifications as unknown[] | undefined) ||
           [];
 
         const listTags = Array.isArray(items)
           ? items
-              .map(
-                (item: NotificationItem | any) =>
-                  item?.id || item?.Id || item?._id
-              )
+              .map((item: unknown) => {
+                const itemObj = item as Record<string, unknown>;
+                return itemObj?.id || itemObj?.Id || itemObj?._id;
+              })
               .filter(Boolean)
-              .map((id: string | number) => ({
+              .map((id: unknown) => ({
                 type: 'Notification' as const,
-                id,
+                id: id as string | number,
               }))
           : [];
 
         return [{ type: 'Notification' as const, id: 'LIST' }, ...listTags];
       },
     }),
-    getNotificationById: builder.query({
-      query: ({ id }) => ({
-        url: `/notifications/${id}`,
-        method: 'GET',
-      }),
-      providesTags: (_result, _error, { id }) => [{ type: 'Notification', id }],
-    }),
-    deleteNotification: builder.mutation({
+    getNotificationById: builder.query<Record<string, unknown>, { id: string }>(
+      {
+        query: ({ id }) => ({
+          url: `/notifications/${id}`,
+          method: 'GET',
+        }),
+        providesTags: (_result, _error, { id }) => [
+          { type: 'Notification' as const, id },
+        ],
+      }
+    ),
+    deleteNotification: builder.mutation<void, { id: string }>({
       query: ({ id }) => ({
         url: `/notifications/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: (_result, _error, { id }) => [
-        { type: 'Notification', id },
-        { type: 'Notification', id: 'LIST' },
+        { type: 'Notification' as const, id },
+        { type: 'Notification' as const, id: 'LIST' },
       ],
     }),
-    readNotificationById: builder.mutation({
+    readNotificationById: builder.mutation<void, { id: string }>({
       query: ({ id }) => ({
         url: `/notifications/${id}/read`,
         method: 'PATCH',
       }),
       invalidatesTags: (_result, _error, { id }) => [
-        { type: 'Notification', id },
-        { type: 'Notification', id: 'LIST' },
+        { type: 'Notification' as const, id },
+        { type: 'Notification' as const, id: 'LIST' },
       ],
     }),
-    getAnnouncements: builder.query<any, void>({
+    getAnnouncements: builder.query<Record<string, unknown>, void>({
       query: () => ({
         url: '/user/announcements',
         method: 'GET',
       }),
     }),
-    readAllNotification: builder.mutation({
+    readAllNotification: builder.mutation<void, void>({
       query: () => ({
         url: '/notifications/read-all',
         method: 'PATCH',
       }),
-      invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
+      invalidatesTags: [{ type: 'Notification' as const, id: 'LIST' }],
     }),
     getNotificationSettings: builder.query<
       { emailNotifications: boolean; pushNotifications: boolean },
