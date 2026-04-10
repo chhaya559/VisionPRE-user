@@ -20,9 +20,7 @@ export default function PasswordField({
   error,
 }: Readonly<PasswordProps>) {
   const [show, setShow] = useState(false);
-  const dynPlaceholder = show
-    ? `Enter ${label.toLowerCase()}`
-    : '••••••••••••';
+  const dynPlaceholder = show ? `Enter ${label.toLowerCase()}` : '••••••••••••';
 
   return (
     <div className="form-group">

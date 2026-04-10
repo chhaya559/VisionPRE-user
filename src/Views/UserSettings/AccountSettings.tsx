@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,7 +22,6 @@ import {
   useGetNotificationSettingsQuery,
   useUpdateNotificationSettingsMutation,
 } from '../../Services/Api/module/NotificationApi';
-import { useEffect } from 'react';
 
 import './ProfileEdits.scss';
 import './Subscription.scss';
@@ -233,7 +232,6 @@ export default function AccountSettings() {
                 </div>
               </div>
             </div>
-
           </aside>
         </div>
 

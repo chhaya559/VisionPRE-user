@@ -42,10 +42,10 @@ export default function GalaDetails() {
   const [toggleSave] = useToggleSaveGalaMutation();
 
   const { isActive } = useSubscription();
-  const { 
-    purchaseTicketBlockchain, 
-    isProcessing: isBlockchainProcessing, 
-    processStatus 
+  const {
+    purchaseTicketBlockchain,
+    isProcessing: isBlockchainProcessing,
+    processStatus,
   } = usePurchaseTicketBlockchain();
   const [isSubModalOpen, setIsSubModalOpen] = useState(false);
 
@@ -93,16 +93,22 @@ export default function GalaDetails() {
   const id = urlId || '';
 
   const title = galaData.name;
-  const isRegistered = galaData.isTicketPurchased || galaData.isRegistered || false;
+  const isRegistered =
+    galaData.isTicketPurchased || galaData.isRegistered || false;
   const ticketPrice = galaData.ticketPrice || galaData.ticket_price || 0;
 
   const getStatusLabel = (s: GalaStatus) => {
     switch (s) {
-      case GalaStatus.Draft: return 'Draft';
-      case GalaStatus.Upcoming: return 'Upcoming';
-      case GalaStatus.Active: return 'Active';
-      case GalaStatus.Completed: return 'Past';
-      default: return 'Active';
+      case GalaStatus.Draft:
+        return 'Draft';
+      case GalaStatus.Upcoming:
+        return 'Upcoming';
+      case GalaStatus.Active:
+        return 'Active';
+      case GalaStatus.Completed:
+        return 'Past';
+      default:
+        return 'Active';
     }
   };
   const status = getStatusLabel(galaData.status);
@@ -162,18 +168,26 @@ export default function GalaDetails() {
         return;
       }
 
-      console.log('[GalaDetails] Step 2: Backend Synchronization', blockchainResult);
-      const purchasePayload = { 
+      console.log(
+        '[GalaDetails] Step 2: Backend Synchronization',
+        blockchainResult
+      );
+      const purchasePayload = {
         galaId: (galaData.id || id || '').trim(),
         transactionHash: (blockchainResult.transactionHash || '').trim(),
-        walletAddress: blockchainResult.walletAddress
+        walletAddress: blockchainResult.walletAddress,
       };
-      console.log('[DEBUG] Exact Backend Payload:', JSON.stringify(purchasePayload, null, 2));
+      console.log(
+        '[DEBUG] Exact Backend Payload:',
+        JSON.stringify(purchasePayload, null, 2)
+      );
 
       await purchaseTicket(purchasePayload).unwrap();
 
       console.log('[GalaDetails] Purchase fully successful.');
-      toast.success(t('galas.details.purchaseSuccess') || 'Ticket purchased successfully!');
+      toast.success(
+        t('galas.details.purchaseSuccess') || 'Ticket purchased successfully!'
+      );
       refetch();
     } catch (err: any) {
       console.error('[GalaDetails] Error during purchase flow:', err);
@@ -187,8 +201,13 @@ export default function GalaDetails() {
 
   const handleToggleSave = async () => {
     try {
-      const result = await toggleSave((galaData.id || id || '').trim()).unwrap();
-      toast.success(result?.message || (galaData.isSaved ? 'Removed from saved' : 'Added to saved'));
+      const result = await toggleSave(
+        (galaData.id || id || '').trim()
+      ).unwrap();
+      toast.success(
+        result?.message ||
+          (galaData.isSaved ? 'Removed from saved' : 'Added to saved')
+      );
     } catch {
       toast.error('Something went wrong. Please try again.');
     }
@@ -218,10 +237,11 @@ export default function GalaDetails() {
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
             <div className="right-actions">
-
-              <button 
-                type="button" 
-                className={`icon-btn-round bookmark-btn ${galaData.isSaved ? 'active' : ''}`}
+              <button
+                type="button"
+                className={`icon-btn-round bookmark-btn ${
+                  galaData.isSaved ? 'active' : ''
+                }`}
                 onClick={handleToggleSave}
               >
                 <FontAwesomeIcon icon={faBookmark} />
@@ -339,22 +359,28 @@ export default function GalaDetails() {
             {isRegistered ? (
               <div className="registered-status-banner">
                 <FontAwesomeIcon icon={faCheckCircle} />
-                <span>{t('galas.details.ticketPurchased') || 'Ticket Purchased'}</span>
+                <span>
+                  {t('galas.details.ticketPurchased') || 'Ticket Purchased'}
+                </span>
               </div>
             ) : (
               <button
                 type="button"
                 className={`btn-purchase-ticket ${
-                  (isPurchasing || isBlockchainProcessing) ? 'loading' : ''
+                  isPurchasing || isBlockchainProcessing ? 'loading' : ''
                 }`}
-                disabled={isPurchasing || isBlockchainProcessing || galaData.status === GalaStatus.Completed}
+                disabled={
+                  isPurchasing ||
+                  isBlockchainProcessing ||
+                  galaData.status === GalaStatus.Completed
+                }
                 onClick={handlePurchase}
               >
                 {isPurchasing || isBlockchainProcessing
                   ? t('galas.details.processing') || 'Processing...'
-                  : !isActive 
-                    ? t('galas.details.subscribeToBuy') || 'Subscribe to Buy'
-                    : t('galas.details.buyTicketAmount', { price: ticketPrice })}
+                  : !isActive
+                  ? t('galas.details.subscribeToBuy') || 'Subscribe to Buy'
+                  : t('galas.details.buyTicketAmount', { price: ticketPrice })}
               </button>
             )}
 
@@ -381,23 +407,29 @@ export default function GalaDetails() {
         {isRegistered ? (
           <div className="registered-status-banner mobile">
             <FontAwesomeIcon icon={faCheckCircle} />
-            <span>{t('galas.details.ticketPurchased') || 'Ticket Purchased'}</span>
+            <span>
+              {t('galas.details.ticketPurchased') || 'Ticket Purchased'}
+            </span>
           </div>
         ) : (
           <button
             type="button"
             className={`btn-purchase-ticket ${
-              (isPurchasing || isBlockchainProcessing) ? 'loading' : ''
+              isPurchasing || isBlockchainProcessing ? 'loading' : ''
             }`}
-            disabled={isPurchasing || isBlockchainProcessing || galaData.status === GalaStatus.Completed}
+            disabled={
+              isPurchasing ||
+              isBlockchainProcessing ||
+              galaData.status === GalaStatus.Completed
+            }
             onClick={handlePurchase}
             style={{ marginRight: '12px', flex: 1 }}
           >
             {isPurchasing || isBlockchainProcessing
               ? '...'
-              : !isActive 
-                ? t('galas.details.subscribeToBuy') || 'Subscribe'
-                : t('galas.details.buyTicketAmountShort', {
+              : !isActive
+              ? t('galas.details.subscribeToBuy') || 'Subscribe'
+              : t('galas.details.buyTicketAmountShort', {
                   price: ticketPrice,
                 }) || `Buy Ticket ($${ticketPrice})`}
           </button>

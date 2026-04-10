@@ -20,7 +20,7 @@ export const mapWeb3Error = (error: any): string => {
   if (message.includes('User does not have enough USDC balance')) {
     return 'Insufficient USDC balance for this plan.';
   }
-  
+
   if (message.includes('already purchased ticket')) {
     return 'ALREADY_PURCHASED';
   }

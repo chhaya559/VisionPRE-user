@@ -62,7 +62,7 @@ export const PRIVATE_ROUTES: Array<CustomRouter> = [
       { path: 'profile/settings/change-password', element: <ChangePassword /> },
       { path: 'profile/settings/language', element: <LanguageSettings /> },
       { path: 'profile/settings/terms', element: <TermsAndConditions /> },
-      { path: 'profile/settings/privacy', element: <PrivacyPolicy/> },
+      { path: 'profile/settings/privacy', element: <PrivacyPolicy /> },
       { path: 'profile/settings/delete-account', element: <DeleteAccount /> },
       {
         path: 'profile/settings/subscription',

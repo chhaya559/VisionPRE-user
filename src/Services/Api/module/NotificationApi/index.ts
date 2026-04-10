@@ -26,15 +26,15 @@ export const NotificationApi = api.injectEndpoints({
 
         const listTags = Array.isArray(items)
           ? items
-            .map(
-              (item: NotificationItem | any) =>
-                item?.id || item?.Id || item?._id
-            )
-            .filter(Boolean)
-            .map((id: string | number) => ({
-              type: 'Notification' as const,
-              id,
-            }))
+              .map(
+                (item: NotificationItem | any) =>
+                  item?.id || item?.Id || item?._id
+              )
+              .filter(Boolean)
+              .map((id: string | number) => ({
+                type: 'Notification' as const,
+                id,
+              }))
           : [];
 
         return [{ type: 'Notification' as const, id: 'LIST' }, ...listTags];
@@ -80,14 +80,20 @@ export const NotificationApi = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
     }),
-    getNotificationSettings: builder.query<{ emailNotifications: boolean; pushNotifications: boolean }, void>({
+    getNotificationSettings: builder.query<
+      { emailNotifications: boolean; pushNotifications: boolean },
+      void
+    >({
       query: () => ({
         url: '/notifications/settings',
         method: 'GET',
       }),
       providesTags: ['NotificationSettings'],
     }),
-    updateNotificationSettings: builder.mutation<void, { emailNotifications: boolean; pushNotifications: boolean }>({
+    updateNotificationSettings: builder.mutation<
+      void,
+      { emailNotifications: boolean; pushNotifications: boolean }
+    >({
       query: (body) => ({
         url: '/notifications/settings',
         method: 'PATCH',

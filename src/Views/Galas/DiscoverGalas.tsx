@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { 
-  useGetGalasQuery, 
-} from '../../Services/Api/module/GalaApi';
+import { useGetGalasQuery } from '../../Services/Api/module/GalaApi';
 import { GalaStatus } from '../../Shared/Enums';
 import './Galas.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -57,9 +55,7 @@ export default function DiscoverGalas() {
 
   const galas = apiResponse?.data?.items || [];
 
-  const activeGalas = galas.filter(
-    (g: any) => g?.status === GalaStatus.Active
-  );
+  const activeGalas = galas.filter((g: any) => g?.status === GalaStatus.Active);
   const upcomingGalas = galas.filter(
     (g: any) => g?.status === GalaStatus.Upcoming
   );
@@ -123,7 +119,9 @@ export default function DiscoverGalas() {
                 key={gala.id || gala.Id}
                 gala={gala}
                 t={t}
-                onClick={() => navigate(`/dashboard/galas/${gala.id || gala.Id}`)}
+                onClick={() =>
+                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
+                }
               />
             ))}
           </section>
@@ -146,7 +144,9 @@ export default function DiscoverGalas() {
                 key={gala.id || gala.Id}
                 gala={gala}
                 t={t}
-                onClick={() => navigate(`/dashboard/galas/${gala.id || gala.Id}`)}
+                onClick={() =>
+                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
+                }
               />
             ))}
           </section>
@@ -164,7 +164,9 @@ export default function DiscoverGalas() {
                 key={gala.id || gala.Id}
                 gala={gala}
                 t={t}
-                onClick={() => navigate(`/dashboard/galas/${gala.id || gala.Id}`)}
+                onClick={() =>
+                  navigate(`/dashboard/galas/${gala.id || gala.Id}`)
+                }
               />
             ))}
           </section>
@@ -185,10 +187,10 @@ function GalaCard({
   gala,
   t,
   onClick,
-}: Readonly<{ 
-  gala: any; 
-  t: any; 
-  onClick: () => void; 
+}: Readonly<{
+  gala: any;
+  t: any;
+  onClick: () => void;
 }>) {
   const title = gala.name || 'Untitled Gala';
   const dateStr = gala.eventDate || gala.Date || gala.event_date;
@@ -201,15 +203,21 @@ function GalaCard({
     : 'TBD';
   const location = gala.city || gala.venue || gala.Location || 'TBD';
   const attendees = gala.appliedCount ?? gala.Attendees ?? 0;
-  const prizePool = gala.totalGalaValue ?? gala.totalPrizePool ?? gala.PrizePool ?? 0;
+  const prizePool =
+    gala.totalGalaValue ?? gala.totalPrizePool ?? gala.PrizePool ?? 0;
 
   const getStatusLabel = (s: GalaStatus) => {
     switch (s) {
-      case GalaStatus.Draft: return 'Draft';
-      case GalaStatus.Upcoming: return 'Upcoming';
-      case GalaStatus.Active: return 'Active';
-      case GalaStatus.Completed: return 'Past';
-      default: return 'Active';
+      case GalaStatus.Draft:
+        return 'Draft';
+      case GalaStatus.Upcoming:
+        return 'Upcoming';
+      case GalaStatus.Active:
+        return 'Active';
+      case GalaStatus.Completed:
+        return 'Past';
+      default:
+        return 'Active';
     }
   };
   const status = getStatusLabel(gala.status);

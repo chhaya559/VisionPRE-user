@@ -1,7 +1,10 @@
 import React from 'react';
 import './LogoutModal.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSignOutAlt,
+  faExclamationTriangle,
+} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 
 type LogoutModalProps = {
@@ -10,7 +13,11 @@ type LogoutModalProps = {
   onConfirm: () => void;
 };
 
-const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose, onConfirm }) => {
+const LogoutModal: React.FC<LogoutModalProps> = ({
+  isOpen,
+  onClose,
+  onConfirm,
+}) => {
   const { t } = useTranslation('private');
 
   if (!isOpen) return null;
@@ -23,7 +30,12 @@ const LogoutModal: React.FC<LogoutModalProps> = ({ isOpen, onClose, onConfirm })
         </div>
         <div className="logout-modal-content">
           <h2>{t('logout.confirmTitle', 'Logout Confirmation')}</h2>
-          <p>{t('logout.confirmMessage', 'Are you sure you want to logout? You will need to login again to access your account.')}</p>
+          <p>
+            {t(
+              'logout.confirmMessage',
+              'Are you sure you want to logout? You will need to login again to access your account.'
+            )}
+          </p>
         </div>
         <div className="logout-modal-actions">
           <button type="button" className="btn-cancel" onClick={onClose}>

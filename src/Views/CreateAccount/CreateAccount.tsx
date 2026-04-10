@@ -29,7 +29,7 @@ export default function CreateAccount() {
   const { t } = useTranslation(['common', 'terms']);
   const [registerApi, { isLoading }] = useRegisterMutation();
   const [googleLogin] = useGoogleLoginMutation();
-  
+
   function handleBack() {
     navigate(-1);
   }
@@ -75,7 +75,9 @@ export default function CreateAccount() {
 
   const onSubmit = async (data: any) => {
     if (!agreed) {
-      toast.warning('Please agree to the Terms & Conditions and Privacy Policy');
+      toast.warning(
+        'Please agree to the Terms & Conditions and Privacy Policy'
+      );
       return;
     }
 
@@ -101,7 +103,9 @@ export default function CreateAccount() {
       }
     } catch (err: any) {
       console.error('Registration error:', err);
-      toast.error(err.data?.message || 'Something went wrong. Please try again.');
+      toast.error(
+        err.data?.message || 'Something went wrong. Please try again.'
+      );
     }
   };
 
@@ -205,16 +209,44 @@ export default function CreateAccount() {
             title=""
             onClose={() => setShowTerms(false)}
           >
-            <h1 style={{ fontWeight: 600, fontSize: '24px', marginBottom: '16px' }}>{t('terms:terms_cond')}</h1>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:acceptance')}</h2>
+            <h1
+              style={{
+                fontWeight: 600,
+                fontSize: '24px',
+                marginBottom: '16px',
+              }}
+            >
+              {t('terms:terms_cond')}
+            </h1>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:acceptance')}
+            </h2>
             <p>{t('terms:acceptance_str')}</p>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:license')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:license')}
+            </h2>
             <p>{t('terms:license_str')}</p>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:account')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:account')}
+            </h2>
             <p>{t('terms:account_str')}</p>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:privacy')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:privacy')}
+            </h2>
             <p>{t('terms:privacy_str')}</p>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:grant')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:grant')}
+            </h2>
             <p>{t('terms:grant_str')}</p>
           </Modal>
 
@@ -223,16 +255,44 @@ export default function CreateAccount() {
             title=""
             onClose={() => setShowPolicy(false)}
           >
-            <h1 style={{ fontWeight: 600, fontSize: '24px', marginBottom: '16px' }}>{t('terms:privacy_policy')}</h1>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:information')}</h2>
+            <h1
+              style={{
+                fontWeight: 600,
+                fontSize: '24px',
+                marginBottom: '16px',
+              }}
+            >
+              {t('terms:privacy_policy')}
+            </h1>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:information')}
+            </h2>
             <p>{t('terms:information_str')}</p>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:use_info')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:use_info')}
+            </h2>
             <p>{t('terms:use_infoStr')}</p>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:sharing')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:sharing')}
+            </h2>
             <p>{t('terms:sharing_str')}</p>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:security')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:security')}
+            </h2>
             <p>{t('terms:security_str')}</p>
-            <h2 style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}>{t('terms:rights')}</h2>
+            <h2
+              style={{ fontWeight: 600, fontSize: '18px', marginTop: '20px' }}
+            >
+              {t('terms:rights')}
+            </h2>
             <p>{t('terms:rights_str')}</p>
           </Modal>
 

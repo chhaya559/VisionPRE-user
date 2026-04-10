@@ -41,7 +41,9 @@ export default function ResetPassword() {
       }
     } catch (error: any) {
       console.error('Reset password error:', error);
-      toast.error(error.data?.message || 'Something went wrong. Please try again.');
+      toast.error(
+        error.data?.message || 'Something went wrong. Please try again.'
+      );
     }
   };
 

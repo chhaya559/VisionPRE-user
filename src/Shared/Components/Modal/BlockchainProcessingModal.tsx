@@ -9,7 +9,10 @@ interface BlockchainProcessingModalProps {
   status: string;
 }
 
-const BlockchainProcessingModal: React.FC<BlockchainProcessingModalProps> = ({ isOpen, status }) => {
+const BlockchainProcessingModal: React.FC<BlockchainProcessingModalProps> = ({
+  isOpen,
+  status,
+}) => {
   const { t } = useTranslation('private');
 
   if (!isOpen) return null;
@@ -29,7 +32,10 @@ const BlockchainProcessingModal: React.FC<BlockchainProcessingModalProps> = ({ i
         <p className="blockchain-processing-text">{status}</p>
         <div className="blockchain-processing-security">
           <FontAwesomeIcon icon={faShield} />
-          <span>{t('subscription.processing.secureNote') || 'Secure transaction handled via MetaMask'}</span>
+          <span>
+            {t('subscription.processing.secureNote') ||
+              'Secure transaction handled via MetaMask'}
+          </span>
         </div>
       </div>
     </div>

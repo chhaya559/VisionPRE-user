@@ -8,7 +8,8 @@ import './Subscription.scss';
 export default function SubscriptionBanner() {
   const { t } = useTranslation(['settings', 'private']);
   const navigate = useNavigate();
-  const { isActive, isLoading, planName, billingCycle, expiryDate } = useSubscription();
+  const { isActive, isLoading, planName, billingCycle, expiryDate } =
+    useSubscription();
 
   if (isLoading) {
     return (
@@ -26,12 +27,12 @@ export default function SubscriptionBanner() {
 
   if (isActive) {
     const isYearly = billingCycle === 2;
-    const planTypeLabel = isYearly 
-      ? t('subscription.billing.yearly', { ns: 'settings' }) 
+    const planTypeLabel = isYearly
+      ? t('subscription.billing.yearly', { ns: 'settings' })
       : t('subscription.billing.monthly', { ns: 'settings' });
-    
-    const formattedDate = expiryDate 
-      ? new Date(expiryDate).toLocaleDateString() 
+
+    const formattedDate = expiryDate
+      ? new Date(expiryDate).toLocaleDateString()
       : t('subscription.notAvailable', { ns: 'settings' });
 
     return (
@@ -40,9 +41,16 @@ export default function SubscriptionBanner() {
           <FontAwesomeIcon icon={faCrown} />
         </div>
         <div className="sb-content">
-          <div className="sb-premium-label">{t('accountSettings.premiumMember', { ns: 'settings' })}</div>
-          <h4>{planName} ({planTypeLabel})</h4>
-          <p>{t('accountSettings.nextBilling', { ns: 'settings' })}: {formattedDate}</p>
+          <div className="sb-premium-label">
+            {t('accountSettings.premiumMember', { ns: 'settings' })}
+          </div>
+          <h4>
+            {planName} ({planTypeLabel})
+          </h4>
+          <p>
+            {t('accountSettings.nextBilling', { ns: 'settings' })}:{' '}
+            {formattedDate}
+          </p>
         </div>
         <button
           type="button"

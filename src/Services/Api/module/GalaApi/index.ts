@@ -1,5 +1,10 @@
 import api from '../../api';
-import { GalaDetailsResponse, GalasResponse, PurchaseTicketPayload, SaveGalaPayload } from './types';
+import {
+  GalaDetailsResponse,
+  GalasResponse,
+  PurchaseTicketPayload,
+  SaveGalaPayload,
+} from './types';
 
 export const GalaApi = api.injectEndpoints({
   endpoints: (builder) => ({

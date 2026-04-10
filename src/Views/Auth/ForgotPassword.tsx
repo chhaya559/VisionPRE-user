@@ -48,8 +48,7 @@ export default function ForgotPassword() {
       if (respone?.success) {
         setShowModal(true);
         reset();
-      }
-      else {
+      } else {
         toast.error(respone?.data?.message);
       }
     } catch (error: any) {

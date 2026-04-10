@@ -194,8 +194,8 @@ function DashboardHomeContent({
                   <span className="ann-date">
                     {ann.createdAt || ann.CreatedAt
                       ? new Date(
-                        ann.createdAt || ann.CreatedAt
-                      ).toLocaleDateString()
+                          ann.createdAt || ann.CreatedAt
+                        ).toLocaleDateString()
                       : 'Recently'}
                   </span>
                   <p className="ann-desc">
@@ -320,13 +320,13 @@ export default function Dashboard() {
   // Calculate Stats
   const pendingApps = Array.isArray(applications)
     ? applications.filter((a) =>
-      isGrantPendingStatus(getGrantApplicationStatusValue(a))
-    ).length
+        isGrantPendingStatus(getGrantApplicationStatusValue(a))
+      ).length
     : 0;
   const approvedApps = Array.isArray(applications)
     ? applications.filter((a) =>
-      isGrantApprovedStatus(getGrantApplicationStatusValue(a))
-    ).length
+        isGrantApprovedStatus(getGrantApplicationStatusValue(a))
+      ).length
     : 0;
   const totalApps = Array.isArray(applications) ? applications.length : 0;
 
@@ -353,32 +353,36 @@ export default function Dashboard() {
         <nav className="sidebar-nav">
           <Link
             to="/dashboard"
-            className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''
-              }`}
+            className={`nav-item ${
+              location.pathname === '/dashboard' ? 'active' : ''
+            }`}
           >
             <FontAwesomeIcon icon={faHome} />{' '}
             <span>{t('dashboard.sidebar.dashboard')}</span>
           </Link>
           <Link
             to="/dashboard/galas"
-            className={`nav-item ${location.pathname.includes('/dashboard/galas') ? 'active' : ''
-              }`}
+            className={`nav-item ${
+              location.pathname.includes('/dashboard/galas') ? 'active' : ''
+            }`}
           >
             <FontAwesomeIcon icon={faCalendarDays} />{' '}
             <span>{t('dashboard.sidebar.galas')}</span>
           </Link>
           <Link
             to="/dashboard/grants"
-            className={`nav-item ${location.pathname.includes('/dashboard/grants') ? 'active' : ''
-              }`}
+            className={`nav-item ${
+              location.pathname.includes('/dashboard/grants') ? 'active' : ''
+            }`}
           >
             <FontAwesomeIcon icon={faTrophy} />{' '}
             <span>{t('dashboard.sidebar.grants')}</span>
           </Link>
           <Link
             to="/dashboard/profile"
-            className={`nav-item ${location.pathname.includes('/dashboard/profile') ? 'active' : ''
-              }`}
+            className={`nav-item ${
+              location.pathname.includes('/dashboard/profile') ? 'active' : ''
+            }`}
           >
             <FontAwesomeIcon icon={faUser} />{' '}
             <span>{t('dashboard.sidebar.profile')}</span>
@@ -417,12 +421,14 @@ export default function Dashboard() {
               {profile?.avatarUrl ? (
                 <img src={avatarUrl} alt="Avatar" className="user-avatar" />
               ) : (
-                <div className="user-avatar-initials">{getInitials(fullName)}</div>
+                <div className="user-avatar-initials">
+                  {getInitials(fullName)}
+                </div>
               )}
               <div className="user-details">
                 <p className="name">{fullName}</p>
                 <p className="email">
-                  {'User'} • {email || 'no-email@example.com'}
+                  User • {email || 'no-email@example.com'}
                 </p>
               </div>
             </div>
@@ -501,32 +507,36 @@ export default function Dashboard() {
       <nav className="mobile-bottom-nav">
         <Link
           to="/dashboard"
-          className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''
-            }`}
+          className={`nav-item ${
+            location.pathname === '/dashboard' ? 'active' : ''
+          }`}
         >
           <FontAwesomeIcon icon={faHome} />{' '}
           <span>{t('dashboard.mobile.home')}</span>
         </Link>
         <Link
           to="/dashboard/galas"
-          className={`nav-item ${location.pathname.includes('/dashboard/galas') ? 'active' : ''
-            }`}
+          className={`nav-item ${
+            location.pathname.includes('/dashboard/galas') ? 'active' : ''
+          }`}
         >
           <FontAwesomeIcon icon={faCalendarDays} />{' '}
           <span>{t('dashboard.mobile.galas')}</span>
         </Link>
         <Link
           to="/dashboard/grants"
-          className={`nav-item ${location.pathname.includes('/dashboard/grants') ? 'active' : ''
-            }`}
+          className={`nav-item ${
+            location.pathname.includes('/dashboard/grants') ? 'active' : ''
+          }`}
         >
           <FontAwesomeIcon icon={faTrophy} />{' '}
           <span>{t('dashboard.mobile.grants')}</span>
         </Link>
         <Link
           to="/dashboard/profile"
-          className={`nav-item ${location.pathname.includes('/dashboard/profile') ? 'active' : ''
-            }`}
+          className={`nav-item ${
+            location.pathname.includes('/dashboard/profile') ? 'active' : ''
+          }`}
         >
           <FontAwesomeIcon icon={faUser} />{' '}
           <span>{t('dashboard.mobile.profile')}</span>

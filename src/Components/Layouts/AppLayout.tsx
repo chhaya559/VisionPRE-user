@@ -12,7 +12,9 @@ import { useLogoutMutation } from '../../Services/Api/module/AuthApi';
 function AppLayout({ isAuthenticated, children }: AppLayoutProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLogoutModalOpen, refreshToken } = useSelector((state: RootState) => state.common);
+  const { isLogoutModalOpen, refreshToken } = useSelector(
+    (state: RootState) => state.common
+  );
   const [logoutApi] = useLogoutMutation();
 
   const handleConfirmLogout = async () => {

@@ -39,10 +39,10 @@ export default function GalaGrants() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGrantId, setSelectedGrantId] = useState<string | null>(null);
   const { isActive } = useSubscription();
-  const { 
-    purchaseTicketBlockchain, 
-    isProcessing: isBlockchainProcessing, 
-    processStatus 
+  const {
+    purchaseTicketBlockchain,
+    isProcessing: isBlockchainProcessing,
+    processStatus,
   } = usePurchaseTicketBlockchain();
   const [isSubModalOpen, setIsSubModalOpen] = useState(false);
 
@@ -74,7 +74,8 @@ export default function GalaGrants() {
   // Map specific fields from the provided API response shape
   const galaData = (apiResponse as any)?.data || apiResponse || {};
   const galaTitle = galaData.name;
-  const isRegistered = galaData.isTicketPurchased || galaData.isRegistered || false;
+  const isRegistered =
+    galaData.isTicketPurchased || galaData.isRegistered || false;
   const ticketPrice = galaData.ticketPrice || galaData.ticket_price || 0;
   const grants = Array.isArray(galaData.grants) ? galaData.grants : [];
 
@@ -100,7 +101,11 @@ export default function GalaGrants() {
     }
     try {
       if (!id || !selectedGrantId || !galaData) {
-        console.warn('[GalaGrants] Missing data:', { id, selectedGrantId, galaData });
+        console.warn('[GalaGrants] Missing data:', {
+          id,
+          selectedGrantId,
+          galaData,
+        });
         return;
       }
 
@@ -122,17 +127,25 @@ export default function GalaGrants() {
         return;
       }
 
-      console.log('[GalaGrants] Step 2: Backend Synchronization', blockchainResult);
-      const purchasePayload = { 
+      console.log(
+        '[GalaGrants] Step 2: Backend Synchronization',
+        blockchainResult
+      );
+      const purchasePayload = {
         galaId: (galaData.id || id || '').trim(),
         transactionHash: (blockchainResult.transactionHash || '').trim(),
-        walletAddress: blockchainResult.walletAddress
+        walletAddress: blockchainResult.walletAddress,
       };
-      console.log('[DEBUG] Exact Backend Payload:', JSON.stringify(purchasePayload, null, 2));
+      console.log(
+        '[DEBUG] Exact Backend Payload:',
+        JSON.stringify(purchasePayload, null, 2)
+      );
 
       await purchaseTicket(purchasePayload).unwrap();
 
-      console.log('[GalaGrants] Purchase fully successful. Proceeding to apply.');
+      console.log(
+        '[GalaGrants] Purchase fully successful. Proceeding to apply.'
+      );
       toast.success(
         t('galas.details.purchaseSuccess') || 'Ticket purchased successfully!'
       );
@@ -183,12 +196,18 @@ export default function GalaGrants() {
 
             const getStatusLabel = (s: GrantStatus) => {
               switch (s) {
-                case GrantStatus.Draft: return 'Draft';
-                case GrantStatus.Upcoming: return 'Upcoming';
-                case GrantStatus.Active: return 'Active';
-                case GrantStatus.Completed: return 'Completed';
-                case GrantStatus.Closed: return 'Closed';
-                default: return 'Active';
+                case GrantStatus.Draft:
+                  return 'Draft';
+                case GrantStatus.Upcoming:
+                  return 'Upcoming';
+                case GrantStatus.Active:
+                  return 'Active';
+                case GrantStatus.Completed:
+                  return 'Completed';
+                case GrantStatus.Closed:
+                  return 'Closed';
+                default:
+                  return 'Active';
               }
             };
             const gStatus = getStatusLabel(grant.status);
@@ -305,26 +324,35 @@ export default function GalaGrants() {
             disabled={isPurchasing || isBlockchainProcessing || isRegistered}
             onClick={handlePurchase}
             style={{
-              background: (isPurchasing || isBlockchainProcessing || isRegistered) ? '#94A3B8' : '#10B981',
+              background:
+                isPurchasing || isBlockchainProcessing || isRegistered
+                  ? '#94A3B8'
+                  : '#10B981',
               color: 'white',
               border: 'none',
               padding: '12px 24px',
               borderRadius: '8px',
               fontWeight: 'bold',
-              cursor: (isPurchasing || isBlockchainProcessing || isRegistered) ? 'not-allowed' : 'pointer',
+              cursor:
+                isPurchasing || isBlockchainProcessing || isRegistered
+                  ? 'not-allowed'
+                  : 'pointer',
               width: '100%',
               fontSize: '1rem',
-              boxShadow: (isPurchasing || isBlockchainProcessing || isRegistered) ? 'none' : '0 4px 12px rgba(16, 185, 129, 0.2)'
+              boxShadow:
+                isPurchasing || isBlockchainProcessing || isRegistered
+                  ? 'none'
+                  : '0 4px 12px rgba(16, 185, 129, 0.2)',
             }}
           >
             {isPurchasing || isBlockchainProcessing
               ? t('galas.details.processing') || 'Processing...'
               : isRegistered
-                ? t('galas.details.ticketPurchased') || 'Ticket Purchased'
-                : !isActive
-                  ? t('galas.details.subscribeToBuy') || 'Subscribe to Buy'
-                  : t('galas.details.buyTicketNow', { price: ticketPrice }) ||
-                  `Buy Ticket ($${ticketPrice})`}
+              ? t('galas.details.ticketPurchased') || 'Ticket Purchased'
+              : !isActive
+              ? t('galas.details.subscribeToBuy') || 'Subscribe to Buy'
+              : t('galas.details.buyTicketNow', { price: ticketPrice }) ||
+                `Buy Ticket ($${ticketPrice})`}
           </button>
         </div>
       </Modal>

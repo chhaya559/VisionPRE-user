@@ -69,7 +69,6 @@ export default function ChangePassword() {
       <div className="settings-card">
         <form onSubmit={handleSubmit(onSubmit)} className="section">
           <div className="form-grid settings-form-grid">
-
             {/* Current Password */}
             <PasswordField
               id="currentPassword"

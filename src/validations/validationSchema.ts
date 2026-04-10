@@ -8,10 +8,7 @@ export const userSchema = yup.object({
     .string()
     .required(t('usernameRequired'))
     .max(10, t('usernameMax')),
-  email: yup
-    .string()
-    .required(t('emailRequired'))
-    .email(t('emailInvalid')),
+  email: yup.string().required(t('emailRequired')).email(t('emailInvalid')),
   password: yup
     .string()
     .required(t('passwordRequired'))
@@ -19,10 +16,7 @@ export const userSchema = yup.object({
     .matches(/[a-z]/, t('passwordLower'))
     .matches(/[A-Z]/, t('passwordUpper'))
     .matches(/[0-9]/, t('passwordNumber'))
-    .matches(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      t('passwordSpecial')
-    ),
+    .matches(/[!@#$%^&*(),.?":{}|<>]/, t('passwordSpecial')),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], t('passwordsMatch'))
@@ -30,18 +24,12 @@ export const userSchema = yup.object({
 });
 
 export const loginSchema = yup.object({
-  email: yup
-    .string()
-    .required(t('emailRequired'))
-    .email(t('emailInvalid')),
+  email: yup.string().required(t('emailRequired')).email(t('emailInvalid')),
   password: yup.string().required(t('passwordRequired')),
 });
 
 export const emailSchema = yup.object({
-  email: yup
-    .string()
-    .required(t('emailRequired'))
-    .email(t('emailInvalid')),
+  email: yup.string().required(t('emailRequired')).email(t('emailInvalid')),
 });
 
 export const resetPasswordSchema = yup.object({
@@ -52,10 +40,7 @@ export const resetPasswordSchema = yup.object({
     .matches(/[a-z]/, t('passwordLower'))
     .matches(/[A-Z]/, t('passwordUpper'))
     .matches(/[0-9]/, t('passwordNumber'))
-    .matches(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      t('passwordSpecial')
-    ),
+    .matches(/[!@#$%^&*(),.?":{}|<>]/, t('passwordSpecial')),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], t('passwordsMatch'))
@@ -63,9 +48,7 @@ export const resetPasswordSchema = yup.object({
 });
 
 export const changePasswordSchema = yup.object({
-  currentPassword: yup
-    .string()
-    .required(t('currentPasswordRequired')),
+  currentPassword: yup.string().required(t('currentPasswordRequired')),
   newPassword: yup
     .string()
     .required(t('newPasswordRequired'))
@@ -73,13 +56,9 @@ export const changePasswordSchema = yup.object({
     .matches(/[a-z]/, t('passwordLower'))
     .matches(/[A-Z]/, t('passwordUpper'))
     .matches(/[0-9]/, t('passwordNumber'))
-    .matches(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      t('passwordSpecial')
-    ),
+    .matches(/[!@#$%^&*(),.?":{}|<>]/, t('passwordSpecial')),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('newPassword')], t('passwordsMatch'))
     .required(t('confirmPasswordRequired')),
 });
-
