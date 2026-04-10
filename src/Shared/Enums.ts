@@ -56,6 +56,8 @@ export enum GrantApplicationStatus {
   Rejected = 5,
   Winner = 6,
   ApprovedForInterview = 7,
+  Reviewed = 8,
+  InterviewCompleted = 9,
 }
 
 export enum GrantStatus {

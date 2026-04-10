@@ -35,8 +35,14 @@
       "grants": "المنح",
       "profile": "الملف الشخصي"
     },
-    "recentAnnouncements": "Recent Announcements",
-    "noRecentAnnouncements": "No recent announcements."
+    "recentAnnouncements": "الإعلانات الأخيرة",
+    "noRecentAnnouncements": "لا توجد إعلانات حديثة."
+  },
+  "logout": {
+    "confirmTitle": "تأكيد تسجيل الخروج",
+    "confirmMessage": "هل أنت متأكد أنك تريد تسجيل الخروج؟ ستحتاج إلى تسجيل الدخول مرة أخرى للوصول إلى حسابك.",
+    "cancel": "إلغاء",
+    "confirm": "نعم، تسجيل الخروج"
   },
   "galas": {
     "discover": {

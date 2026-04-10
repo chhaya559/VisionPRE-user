@@ -169,7 +169,7 @@ i18n
     },
 
     detection: {
-      order: ['navigator', 'localStorage'],
+      order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
     },
   });

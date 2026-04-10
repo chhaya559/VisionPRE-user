@@ -25,6 +25,10 @@ export const getGrantApplicationStatusLabel = (status: any) => {
       return 'Winner';
     case GrantApplicationStatus.ApprovedForInterview:
       return 'Approved For Interview';
+    case GrantApplicationStatus.Reviewed:
+      return 'Evaluated';
+    case GrantApplicationStatus.InterviewCompleted:
+      return 'Interview Completed';
     default:
       return 'Pending';
   }

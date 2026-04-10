@@ -35,8 +35,14 @@
       "grants": "助成金",
       "profile": "プロフィール"
     },
-    "recentAnnouncements": "Recent Announcements",
-    "noRecentAnnouncements": "No recent announcements."
+    "recentAnnouncements": "最近のお知らせ",
+    "noRecentAnnouncements": "最近のお知らせはありません。"
+  },
+  "logout": {
+    "confirmTitle": "ログアウトの確認",
+    "confirmMessage": "ログアウトしてもよろしいですか？アカウントにアクセスするには再度ログインする必要があります。",
+    "cancel": "キャンセル",
+    "confirm": "はい、ログアウトします"
   },
   "galas": {
     "discover": {
@@ -53,12 +59,15 @@
       "noGalas": "ガラが見つかりません",
       "noGalasDescription": "現在、このフィルターに該当するガラはありません。",
       "applied": "応募済み",
+      "untitledGala": "無題のガラ",
+      "tbd": "未定",
       "ticketPurchased": "チケット購入済み",
       "viewDetails": "詳細を見る",
       "all": "すべて",
       "filterActive": "開催中",
       "filterUpcoming": "今後",
       "filterPlanned": "予定",
+      "filterPast": "過去",
       "filterSaved": "保存済み",
       "savedGalas": "保存されたガラ",
       "savedDescription": "ブックマークされたイベントのコレクション。",

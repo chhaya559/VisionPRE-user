@@ -46,13 +46,17 @@
     "days": "há alguns dias"
   },
   "tabs": {
-    "notifications": "Notifications",
-    "announcements": "Announcements"
+    "notifications": "Notificações",
+    "announcements": "Anúncios"
   },
   "announcements": {
-    "title": "Announcements",
-    "subtitle": "Stay updated with global news and platform updates",
-    "noAnnouncements": "No Announcements Yet",
-    "noAnnouncementsDesc": "Check back later for important updates from the platform."
-  }
+    "title": "Anúncios",
+    "subtitle": "Mantenha-se atualizado com as notícias globais e atualizações da plataforma",
+    "noAnnouncements": "Ainda não há anúncios",
+    "noAnnouncementsDesc": "Volte mais tarde para ver atualizações importantes da plataforma."
+  },
+  "New gala available": "Novo gala disponível",
+  "notificationFallback": "Notificação",
+  "openSettings": "Abrir configurações",
+  "deleteNotification": "Excluir notificação"
 }

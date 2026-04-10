@@ -36,3 +36,22 @@ export const formatList = (
   }
   return value;
 };
+
+/**
+ * Formats a time string (e.g., "21:00:00:00" or "20:19:00") to HH:mm format.
+ * @param timeStr The time string to format.
+ * @returns A formatted time string in HH:mm or the original string if it doesn't match expected pattern.
+ */
+export const formatTime = (timeStr: string | null | undefined): string => {
+  if (!timeStr || timeStr === 'TBD') return 'TBD';
+
+  // Handle cases like "21:00:00:00" or "20:19:00" or just "20:19"
+  const parts = timeStr.split(':');
+  if (parts.length >= 2) {
+    const hours = parts[0].padStart(2, '0');
+    const minutes = parts[1].padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+
+  return timeStr;
+};

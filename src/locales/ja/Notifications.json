@@ -2,26 +2,26 @@
   "title": "通知",
   "subtitle": "すべてのアクティビティを最新の状態に保つ",
   "loading": "通知を読み込み中",
-  "loadingDesc": "最新の更新を取得しています。",
+  "loadingDesc": "最新のアップデートを取得しています。",
   "errorTitle": "通知を読み込めません",
-  "errorDesc": "再試行してください。最新のアクティビティを取得できませんでした。",
-  "tryAgain": "再試行",
+  "errorDesc": "もう一度お試しください。最近のアクティビティを取得できませんでした。",
+  "tryAgain": "もう一度試す",
   "noNotifications": "まだ通知はありません",
-  "noNotificationsDesc": "イベントや申請、アクティビティに関する通知を受け取ると、ここに表示されます。",
-  "exploreGalas": "イベントを探す",
+  "noNotificationsDesc": "ガラ、申請、アクティビティに関する通知を受け取ると、ここに表示されます。",
+  "exploreGalas": "ガラを探索する",
   "total": "合計",
   "unread": "未読",
   "refresh": "更新",
   "markAllRead": "すべて既読にする",
   "markReadError": "この通知を既読にできませんでした。",
-  "markAllReadSuccess": "すべての通知が既読になりました。",
-  "markAllReadError": "現在通知を更新できません。",
+  "markAllReadSuccess": "すべての通知を既読にしました。",
+  "markAllReadError": "現在、通知を更新できません。",
   "deleteSuccess": "通知を削除しました。",
   "deleteError": "この通知を削除できませんでした。",
   "detailTitle": "通知の詳細",
   "detailSubtitle": "完全な更新を読み、アクティビティを同期させましょう。",
-  "selectPrompt": "通知を選択",
-  "selectPromptDesc": "リストから通知を選択して、ここで詳細を確認してください。",
+  "selectPrompt": "通知を選択してください",
+  "selectPromptDesc": "リストから通知を選択すると、ここに詳細が表示されます。",
   "statusRead": "既読",
   "statusNew": "新しいアクティビティ",
   "loadingMessage": "メッセージを読み込み中...",
@@ -31,9 +31,9 @@
   "delete": "削除",
   "updating": "通知を更新中...",
   "groups": {
-    "today": "今日",
+    "today": "本日",
     "thisWeek": "今週",
-    "earlier": "以前"
+    "earlier": "それ以前"
   },
   "relativeTime": {
     "justNow": "たった今",
@@ -46,13 +46,19 @@
     "days": "数日前"
   },
   "tabs": {
-    "notifications": "Notifications",
-    "announcements": "Announcements"
+    "notifications": "通知",
+    "announcements": "お知らせ"
   },
   "announcements": {
-    "title": "Announcements",
-    "subtitle": "Stay updated with global news and platform updates",
-    "noAnnouncements": "No Announcements Yet",
-    "noAnnouncementsDesc": "Check back later for important updates from the platform."
-  }
+    "title": "お知らせ",
+    "subtitle": "グローバルニュースやプラットフォームのアップデートを確認してください",
+    "noAnnouncements": "お知らせはありません",
+    "noAnnouncementsDesc": "プラットフォームからの重要なアップデートについては、後で再度確認してください。"
+  },
+  "New gala available": "新しいガラが利用可能です",
+  "notificationFallback": "通知",
+  "openSettings": "設定を開く",
+  "deleteNotification": "通知を削除",
+  "back": "戻る",
+  "close": "閉じる"
 }

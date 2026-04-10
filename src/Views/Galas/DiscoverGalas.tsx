@@ -221,7 +221,7 @@ function GalaCard({
   t: any;
   onClick: () => void;
 }>) {
-  const title = gala.name || 'Untitled Gala';
+  const title = gala.name || t('galas.discover.untitledGala');
   const dateStr = gala.eventDate || gala.Date || gala.event_date;
   const date = dateStr
     ? new Date(dateStr).toLocaleDateString('en-GB', {
@@ -229,8 +229,8 @@ function GalaCard({
         month: '2-digit',
         year: 'numeric',
       })
-    : 'TBD';
-  const location = gala.city || gala.venue || gala.Location || 'TBD';
+    : t('galas.discover.tbd');
+  const location = gala.city || gala.venue || gala.Location || t('galas.discover.tbd');
   const attendees = gala.appliedCount ?? gala.Attendees ?? 0;
   const prizePool =
     gala.totalGalaValue ?? gala.totalPrizePool ?? gala.PrizePool ?? 0;

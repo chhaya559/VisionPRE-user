@@ -35,8 +35,14 @@
       "grants": "Subsídios",
       "profile": "Perfil"
     },
-    "recentAnnouncements": "Recent Announcements",
-    "noRecentAnnouncements": "No recent announcements."
+    "recentAnnouncements": "Anúncios recentes",
+    "noRecentAnnouncements": "Nenhum anúncio recente."
+  },
+  "logout": {
+    "confirmTitle": "Confirmação de Logout",
+    "confirmMessage": "Tem certeza de que deseja sair? Você precisará fazer login novamente para acessar sua conta.",
+    "cancel": "Cancelar",
+    "confirm": "Sim, Sair"
   },
   "galas": {
     "discover": {
@@ -59,6 +65,7 @@
       "filterActive": "Ativas",
       "filterUpcoming": "Próximas",
       "filterPlanned": "Planeadas",
+      "filterPast": "Passado",
       "filterSaved": "Salvo",
       "savedGalas": "Galas salvas",
       "savedDescription": "Sua coleção de eventos marcados.",
@@ -118,7 +125,7 @@
       "statusUpcoming": "Próximo",
       "statusPublished": "Publicado",
       "statusActive": "Ativo",
-      "statusPast": "Passé",
+      "statusPast": "Passado",
       "subscriptionRequired": "Assinatura necessária",
       "subscriptionRequiredDesc": "Você precisa ter um plano de assinatura ativo para realizar esta ação.",
       "upgradeNow": "Atualizar plano agora"

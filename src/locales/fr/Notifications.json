@@ -47,12 +47,16 @@
   },
   "tabs": {
     "notifications": "Notifications",
-    "announcements": "Announcements"
+    "announcements": "Annonces"
   },
   "announcements": {
-    "title": "Announcements",
-    "subtitle": "Stay updated with global news and platform updates",
-    "noAnnouncements": "No Announcements Yet",
-    "noAnnouncementsDesc": "Check back later for important updates from the platform."
-  }
+    "title": "Annonces",
+    "subtitle": "Restez informé des actualités mondiales et des mises à jour de la plateforme",
+    "noAnnouncements": "Aucune annonce pour le moment",
+    "noAnnouncementsDesc": "Revenez plus tard pour les mises à jour importantes de la plateforme."
+  },
+  "New gala available": "Nouveau gala disponible",
+  "notificationFallback": "Notification",
+  "openSettings": "Ouvrir les paramètres",
+  "deleteNotification": "Supprimer la notification"
 }

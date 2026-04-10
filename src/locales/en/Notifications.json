@@ -54,5 +54,11 @@
     "subtitle": "Stay updated with global news and platform updates",
     "noAnnouncements": "No Announcements Yet",
     "noAnnouncementsDesc": "Check back later for important updates from the platform."
-  }
+  },
+  "New gala available": "New gala available",
+  "notificationFallback": "Notification",
+  "openSettings": "Open settings",
+  "deleteNotification": "Delete notification",
+  "back": "Back",
+  "close": "Close"
 }

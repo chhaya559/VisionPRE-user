@@ -38,6 +38,12 @@
       "profile": "Perfil"
     }
   },
+  "logout": {
+    "confirmTitle": "Confirmación de Cierre de Sesión",
+    "confirmMessage": "¿Estás seguro de que quieres cerrar sesión? Tendrás que volver a iniciar sesión para acceder a tu cuenta.",
+    "cancel": "Cancelar",
+    "confirm": "Sí, Cerrar Sesión"
+  },
   "galas": {
     "discover": {
       "title": "Descubrir galas",
@@ -59,6 +65,7 @@
       "filterActive": "Activo",
       "filterUpcoming": "Próximo",
       "filterPlanned": "Planificado",
+      "filterPast": "Pasado",
       "filterSaved": "Guardado",
       "savedGalas": "Galas guardadas",
       "savedDescription": "Tu colección de eventos marcados.",

@@ -54,5 +54,9 @@
         "subtitle": "Mantente al día con las noticias globales y las actualizaciones de la plataforma",
         "noAnnouncements": "Aún no hay anuncios",
         "noAnnouncementsDesc": "Vuelve más tarde para ver actualizaciones importantes de la plataforma."
-    }
+    },
+    "New gala available": "Nuevo gala disponible",
+    "notificationFallback": "Notificación",
+    "openSettings": "Abrir configuración",
+    "deleteNotification": "Eliminar notificación"
 }

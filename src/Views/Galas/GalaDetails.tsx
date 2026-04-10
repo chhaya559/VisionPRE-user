@@ -27,6 +27,7 @@ import { usePurchaseTicketBlockchain } from '../../hooks/usePurchaseTicketBlockc
 import SubscriptionGuardModal from '../../Shared/Components/Modal/SubscriptionGuardModal';
 import BlockchainProcessingModal from '../../Shared/Components/Modal/BlockchainProcessingModal';
 import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+import { formatTime } from '../../Shared/Utils';
 
 export default function GalaDetails() {
   const { id: urlId } = useParams<{ id: string }>();
@@ -124,7 +125,7 @@ export default function GalaDetails() {
   const date = galaData.eventDate
     ? new Date(galaData.eventDate).toLocaleDateString()
     : 'TBD';
-  const time = galaData.eventTime || 'TBD';
+  const time = formatTime(galaData.eventTime);
   const location =
     galaData.venue && galaData.city
       ? `${galaData.venue}, ${galaData.city}`
@@ -286,7 +287,7 @@ export default function GalaDetails() {
                   const pDesc = p.description || p.Description;
                   return (
                     <div key={i} className="program-item">
-                      <div className="program-time">{pTime}</div>
+                      <div className="program-time">{formatTime(pTime)}</div>
                       <div className="program-content">
                         <h4>{pTitle}</h4>
                         <p>{pDesc}</p>

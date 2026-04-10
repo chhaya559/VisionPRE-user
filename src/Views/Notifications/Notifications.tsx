@@ -58,7 +58,11 @@ const getDetailPayload = (payload: any) =>
   payload?.data ||
   payload;
 
-const toNotificationItem = (item: any, index: number): NotificationItem => {
+const toNotificationItem = (
+  item: any,
+  index: number,
+  t: any
+): NotificationItem => {
   const id = String(
     item?.id || item?.Id || item?._id || `notification-${index}`
   );
@@ -69,7 +73,7 @@ const toNotificationItem = (item: any, index: number): NotificationItem => {
     item?.Subject ||
     item?.heading ||
     item?.Heading ||
-    'Notification';
+    t('notificationFallback') || 'Notification';
   const message =
     item?.message ||
     item?.Message ||
@@ -217,18 +221,21 @@ export default function Notifications() {
     useDeleteNotificationMutation();
 
   const rawNotifications = useMemo(
-    () => getCollection(notificationsResponse).map(toNotificationItem),
-    [notificationsResponse]
+    () =>
+      getCollection(notificationsResponse).map((n, i) =>
+        toNotificationItem(n, i, t)
+      ),
+    [notificationsResponse, t]
   );
 
   const rawAnnouncements = useMemo(() => {
     const list = getCollection(announcementsResponse);
     return list.map((item: any, idx: number) => ({
-      ...toNotificationItem(item, idx),
+      ...toNotificationItem(item, idx, t),
       category: 'announcement',
       isRead: true,
     }));
-  }, [announcementsResponse]);
+  }, [announcementsResponse, t]);
 
   const notifications =
     activeTab === 'notifications' ? rawNotifications : rawAnnouncements;
@@ -335,8 +342,10 @@ export default function Notifications() {
                 type="button"
                 className="icon-button ghost"
                 onClick={() => navigate(-1)}
+                aria-label={t('back')}
+                title={t('back')}
               >
-                <FiChevronLeft />
+                <FiChevronLeft size={24} />
               </button>
               <div className="notifications-hero-copy">
                 <div className="hero-tabs">
@@ -369,9 +378,10 @@ export default function Notifications() {
                 type="button"
                 className="icon-button ghost"
                 onClick={() => navigate('/dashboard/profile/settings')}
-                title="Open settings"
+                title={t('openSettings')}
+                aria-label={t('openSettings')}
               >
-                <FiSettings />
+                <FiSettings size={22} />
               </button>
             </div>
 
@@ -511,7 +521,7 @@ export default function Notifications() {
 
                           <div className="notification-copy">
                             <div className="notification-copy-top">
-                              <h3>{item.title}</h3>
+                              <h3>{t(item.title, { defaultValue: item.title })}</h3>
                               {!item.isRead && (
                                 <span className="notification-dot" />
                               )}
@@ -557,8 +567,10 @@ export default function Notifications() {
                 type="button"
                 className="icon-button subtle"
                 onClick={() => setSelectedId(null)}
+                aria-label={t('close')}
+                title={t('close')}
               >
-                <FiX />
+                <FiX size={22} />
               </button>
             </div>
 
@@ -584,7 +596,7 @@ export default function Notifications() {
                   </span>
                 </div>
 
-                <h3>{detailTitle}</h3>
+                <h3>{t(detailTitle, { defaultValue: detailTitle })}</h3>
                 <div className="detail-time">
                   {getRelativeTime(detailCreatedAt, t)}
                 </div>

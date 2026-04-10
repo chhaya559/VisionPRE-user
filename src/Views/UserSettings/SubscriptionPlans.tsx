@@ -107,11 +107,11 @@ export default function SubscriptionPlans() {
 
       // Network-specific USDC Addresses
       const USDC_MAP: Record<string, string> = {
-        '0xaa36a7': '0xba89d4B0513eAdA62671f5db8D6Fef498Ff63331', // Updated to sUSD for Sepolia
+        '0xaa36a7': '0x274c6821487A5C2A64969037a8ae5256822BdD4D', // Updated to sUSD for Sepolia
         '0x1': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // Ethereum Mainnet
         '0x89': '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359', // Polygon Mainnet (Native)
-        '0x13881': '0xba89d4B0513eAdA62671f5db8D6Fef498Ff63331', // Updated to sUSD for Mumbai
-        '0x13882': '0xba89d4B0513eAdA62671f5db8D6Fef498Ff63331', // Updated to sUSD for Amoy
+        '0x13881': '0x274c6821487A5C2A64969037a8ae5256822BdD4D', // Updated to sUSD for Mumbai
+        '0x13882': '0x274c6821487A5C2A64969037a8ae5256822BdD4D', // Updated to sUSD for Amoy
       };
 
       const USDC_ADDRESS =

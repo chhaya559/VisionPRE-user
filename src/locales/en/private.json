@@ -40,6 +40,12 @@
       "profile": "Profile"
     }
   },
+  "logout": {
+    "confirmTitle": "Logout Confirmation",
+    "confirmMessage": "Are you sure you want to logout? You will need to login again to access your account.",
+    "cancel": "Cancel",
+    "confirm": "Yes, Logout"
+  },
   "galas": {
     "discover": {
       "title": "Discover Galas",

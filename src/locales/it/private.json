@@ -35,8 +35,14 @@
       "grants": "Sovvenzioni",
       "profile": "Profilo"
     },
-    "recentAnnouncements": "Recent Announcements",
-    "noRecentAnnouncements": "No recent announcements."
+    "recentAnnouncements": "Annunci recenti",
+    "noRecentAnnouncements": "Nessun annuncio recente."
+  },
+  "logout": {
+    "confirmTitle": "Conferma Disconnessione",
+    "confirmMessage": "Sei sicuro di voler uscire? Dovrai accedere di nuovo per accedere al tuo account.",
+    "cancel": "Annulla",
+    "confirm": "Sì, Esci"
   },
   "galas": {
     "discover": {

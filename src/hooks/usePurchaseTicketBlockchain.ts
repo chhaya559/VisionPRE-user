@@ -20,7 +20,7 @@ export const usePurchaseTicketBlockchain = () => {
   const [processStatus, setProcessStatus] = useState('');
 
   // USDC/sUSD Address for Sepolia
-  const SEPOLIA_SUSD = '0xba89d4B0513eAdA62671f5db8D6Fef498Ff63331';
+  const SEPOLIA_SUSD = '0x274c6821487A5C2A64969037a8ae5256822BdD4D';
   const SEPOLIA_CHAIN_ID = '0xaa36a7';
 
   const findPreviousPurchaseHash = async (galaId: string, attendee: string) => {

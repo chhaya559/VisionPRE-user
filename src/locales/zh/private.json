@@ -38,6 +38,12 @@
       "profile": "个人资料"
     }
   },
+  "logout": {
+    "confirmTitle": "退出确认",
+    "confirmMessage": "您确定要退出吗？您需要重新登录才能访问您的账户。",
+    "cancel": "取消",
+    "confirm": "是的，退出"
+  },
   "galas": {
     "discover": {
       "title": "探索活动",

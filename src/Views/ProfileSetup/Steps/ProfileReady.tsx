@@ -6,7 +6,7 @@ import { faRocket, faStar } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setAuthData } from '../../../Store/Common';
+import { logout, setAuthData } from '../../../Store/Common';
 import { useProfileOnboardingMutation } from '../../../Services/Api/module/UserApi';
 
 export default function ProfileReady() {
@@ -37,9 +37,18 @@ export default function ProfileReady() {
       navigate('/dashboard', { replace: true });
     } catch (error: any) {
       console.log('Onboarding error:', error);
-      toast.error(
-        error?.data?.message || 'Failed to save profile. Please try again.'
-      );
+      const errorMessage = error?.data?.message || '';
+
+      if (errorMessage.toLowerCase().includes('not found')) {
+        toast.error('Session invalid or user not found. Redirecting to login...');
+        setTimeout(() => {
+          dispatch(logout());
+          navigate('/login', { replace: true });
+        }, 2000);
+        return;
+      }
+
+      toast.error(errorMessage || 'Failed to save profile. Please try again.');
     }
   };
 

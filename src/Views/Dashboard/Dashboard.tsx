@@ -197,7 +197,7 @@ function DashboardHomeContent({
                       ? new Date(
                           ann.createdAt || ann.CreatedAt
                         ).toLocaleDateString()
-                      : 'Recently'}
+                      : t('dashboard.recently')}
                   </span>
                   <p className="ann-desc">
                     {ann.description || ann.Description}

@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { requestNotificationPermission } from './Services/notifications';
 import { useFCMtokenMutation } from './Services/Api/module/NotificationApi';
 import { WalletProvider } from './Context/WalletContext';
+import LanguageSync from './Shared/Components/LanguageSync';
 
 const baseName = import.meta.env.VITE_BASE_NAME;
 
@@ -41,6 +42,7 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
+        <LanguageSync />
         <WalletProvider>
           <HelmetProvider>
             <NotificationSetup />

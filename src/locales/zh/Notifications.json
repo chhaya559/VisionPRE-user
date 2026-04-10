@@ -54,5 +54,9 @@
     "subtitle": "随时了解全球新闻和平台更新",
     "noAnnouncements": "暂无公告",
     "noAnnouncementsDesc": "请稍后再来查看平台的重大更新。"
-  }
+  },
+  "New gala available": "新活动可用",
+  "notificationFallback": "通知",
+  "openSettings": "打开设置",
+  "deleteNotification": "删除通知"
 }

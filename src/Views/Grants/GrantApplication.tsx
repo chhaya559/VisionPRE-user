@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
 import {
   useGetGalaByIdQuery,
   useApplyGrantMutation,
@@ -9,8 +10,6 @@ import {
 import { useUploadFileMutation } from '../../Services/Api/module/UserApi';
 import { ensureAbsoluteUrl } from '../../Shared/Utils';
 import { useWalletContext } from '../../Context/WalletContext';
-import { useApplyGrantBlockchain } from '../../hooks/useApplyGrantBlockchain';
-import BlockchainProcessingModal from '../../Shared/Components/Modal/BlockchainProcessingModal';
 import './GrantApplication.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -130,11 +129,6 @@ export default function GrantApplication() {
   );
   const [applyGrant, { isLoading: isSubmitting }] = useApplyGrantMutation();
   const { account } = useWalletContext();
-  const {
-    applyForGrantBlockchain,
-    isProcessing: isBlockchainProcessing,
-    processStatus,
-  } = useApplyGrantBlockchain();
 
   const now = new Date();
   const [selectedDay, setSelectedDay] = useState(now.getDate());
@@ -233,29 +227,17 @@ export default function GrantApplication() {
     };
 
     try {
-      // 1. Blockchain Transaction
-      const blockchainResult = await applyForGrantBlockchain(
-        id || '',
-        grantId || ''
-      );
-
-      if (!blockchainResult) {
-        console.warn('[GrantApplication] Blockchain application incomplete.');
-        return;
-      }
-
-      // 2. Backend Synchronization
-      const finalPayload = {
-        ...payload,
-        walletAddress: blockchainResult.walletAddress,
-        transactionHash: blockchainResult.transactionHash,
-      };
-
-      await applyGrant(finalPayload).unwrap();
+      // Direct Backend Synchronization (Skipping Blockchain as per user request)
+      await applyGrant(payload).unwrap();
       setIsSuccess(true);
       setTimeout(() => navigate('/dashboard/grants'), 2000);
     } catch (err) {
       console.error('Failed to apply:', err);
+      const errorMessage =
+        (err as any)?.data?.message ||
+        (err as any)?.message ||
+        'Failed to apply for the grant. Please try again.';
+      toast.error(errorMessage);
     }
   };
 
@@ -464,10 +446,6 @@ export default function GrantApplication() {
           </div>
         </div>
       </form>
-      <BlockchainProcessingModal
-        isOpen={isBlockchainProcessing}
-        status={processStatus}
-      />
     </div>
   );
 }

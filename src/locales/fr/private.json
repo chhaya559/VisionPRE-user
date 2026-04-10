@@ -35,8 +35,14 @@
       "grants": "Subventions",
       "profile": "Profil"
     },
-    "recentAnnouncements": "Recent Announcements",
-    "noRecentAnnouncements": "No recent announcements."
+    "recentAnnouncements": "Annonces récentes",
+    "noRecentAnnouncements": "Aucune annonce récente."
+  },
+  "logout": {
+    "confirmTitle": "Confirmation de Déconnexion",
+    "confirmMessage": "Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre compte.",
+    "cancel": "Annuler",
+    "confirm": "Oui, se déconnecter"
   },
   "galas": {
     "discover": {
@@ -59,6 +65,7 @@
       "filterActive": "Actif",
       "filterUpcoming": "À venir",
       "filterPlanned": "Planifié",
+      "filterPast": "Passé",
       "filterSaved": "Enregistré",
       "savedGalas": "Galas enregistrés",
       "savedDescription": "Votre collection d'événements favoris.",
