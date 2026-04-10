@@ -161,7 +161,8 @@ function GalaCard({
         year: 'numeric',
       })
     : t('galas.discover.tbd');
-  const location = gala.city || gala.venue || gala.Location || t('galas.discover.tbd');
+  const location =
+    gala.city || gala.venue || gala.Location || t('galas.discover.tbd');
   const attendees = gala.appliedCount ?? gala.Attendees ?? 0;
   const prizePool =
     gala.totalGalaValue ?? gala.totalPrizePool ?? gala.PrizePool ?? 0;

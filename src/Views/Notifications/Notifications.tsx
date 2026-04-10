@@ -73,7 +73,8 @@ const toNotificationItem = (
     item?.Subject ||
     item?.heading ||
     item?.Heading ||
-    t('notificationFallback') || 'Notification';
+    t('notificationFallback') ||
+    'Notification';
   const message =
     item?.message ||
     item?.Message ||
@@ -521,7 +522,9 @@ export default function Notifications() {
 
                           <div className="notification-copy">
                             <div className="notification-copy-top">
-                              <h3>{t(item.title, { defaultValue: item.title })}</h3>
+                              <h3>
+                                {t(item.title, { defaultValue: item.title })}
+                              </h3>
                               {!item.isRead && (
                                 <span className="notification-dot" />
                               )}

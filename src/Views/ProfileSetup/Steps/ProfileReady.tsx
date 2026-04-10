@@ -40,7 +40,9 @@ export default function ProfileReady() {
       const errorMessage = error?.data?.message || '';
 
       if (errorMessage.toLowerCase().includes('not found')) {
-        toast.error('Session invalid or user not found. Redirecting to login...');
+        toast.error(
+          'Session invalid or user not found. Redirecting to login...'
+        );
         setTimeout(() => {
           dispatch(logout());
           navigate('/login', { replace: true });
