@@ -31,7 +31,7 @@ export const GalaApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Grants', 'GalaDetails'],
     }),
-    getMyApplications: builder.query<{ data: any[] }, Record<string, never>>({
+    getMyApplications: builder.query<{ data: unknown[] }, Record<string, never>>({
       query: () => ({
         url: '/user/grants/applications',
         method: 'GET',
@@ -39,7 +39,7 @@ export const GalaApi = api.injectEndpoints({
       providesTags: ['Grants'],
     }),
     purchaseTicket: builder.mutation<
-      { success: boolean; message: string; data?: any },
+      { success: boolean; message: string; data?: unknown },
       PurchaseTicketPayload
     >({
       query: (payload) => ({

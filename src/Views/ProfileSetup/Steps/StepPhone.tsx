@@ -39,6 +39,7 @@ export default function StepPhone() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<StepPhoneForm>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: yupResolver(schema) as any,
     defaultValues: {
       phone: formData.phone,

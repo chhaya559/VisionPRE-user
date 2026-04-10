@@ -131,7 +131,6 @@ export default function SubscriptionPlans() {
           amountInUnits,
           decimals
         )} sUSD, Available: ${ethers.formatUnits(balance, decimals)} sUSD`;
-        console.error(errorMsg);
         toast.error(errorMsg);
         setIsProcessing(false);
         return;
