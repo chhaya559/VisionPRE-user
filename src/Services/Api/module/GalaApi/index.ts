@@ -26,12 +26,14 @@ export const GalaApi = api.injectEndpoints({
         method: 'POST',
         body: payload,
       }),
+      invalidatesTags: ['Grants' as any, 'GalaDetails' as any],
     }),
     getMyApplications: builder.query<any, any>({
       query: () => ({
         url: '/user/grants/applications',
         method: 'GET',
       }),
+      providesTags: ['Grants' as any],
     }),
     purchaseTicket: builder.mutation<any, PurchaseTicketPayload>({
       query: (payload) => ({

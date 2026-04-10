@@ -8,6 +8,9 @@ import {
 } from '../../Services/Api/module/GalaApi';
 import { useUploadFileMutation } from '../../Services/Api/module/UserApi';
 import { ensureAbsoluteUrl } from '../../Shared/Utils';
+import { useWalletContext } from '../../Context/WalletContext';
+import { useApplyGrantBlockchain } from '../../hooks/useApplyGrantBlockchain';
+import BlockchainProcessingModal from '../../Shared/Components/Modal/BlockchainProcessingModal';
 import './GrantApplication.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -116,6 +119,8 @@ function FileUploader({
   );
 }
 
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+
 export default function GrantApplication() {
   const { id, grantId } = useParams<{ id: string; grantId: string }>();
   const navigate = useNavigate();
@@ -124,8 +129,15 @@ export default function GrantApplication() {
     id || ''
   );
   const [applyGrant, { isLoading: isSubmitting }] = useApplyGrantMutation();
+  const { account } = useWalletContext();
+  const {
+    applyForGrantBlockchain,
+    isProcessing: isBlockchainProcessing,
+    processStatus,
+  } = useApplyGrantBlockchain();
 
-  const [selectedDay, setSelectedDay] = useState(12);
+  const now = new Date();
+  const [selectedDay, setSelectedDay] = useState(now.getDate());
   const [selectedTime, setSelectedTime] = useState('10:30 AM');
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -134,9 +146,28 @@ export default function GrantApplication() {
 
   if (isFetching) {
     return (
-      <div className="grant-app-container grant-app-state loading">
-        <div className="grant-app-message">
-          {t('grants.application.loading')}
+      <div className="grant-app-container loading-state">
+        <header className="grant-app-header">
+          <div className="header-shell">
+            <Skeleton variant="text" width={80} height={20} />
+            <Skeleton variant="text" width={200} height={32} />
+            <Skeleton variant="text" width={300} height={20} />
+          </div>
+        </header>
+
+        <div className="grant-summary-box">
+          <Skeleton variant="text" width={250} height={28} />
+          <Skeleton variant="text" width={180} height={20} />
+          <Skeleton variant="text" width="100%" height={60} />
+        </div>
+
+        <div className="grant-form">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="form-group">
+              <Skeleton variant="text" width={120} />
+              <Skeleton variant="rect" height={45} />
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -165,7 +196,7 @@ export default function GrantApplication() {
   }
 
   const gTitle = grant.title || grant.Title;
-  const gAmount = grant.amount ?? grant.Amount ?? 0;
+  const gAmount = grant.prizeAmount ?? grant.amount ?? grant.Amount ?? 0;
 
   const days = Array.from({ length: 28 }, (_, i) => i + 1);
   const timeSlots = [
@@ -182,21 +213,42 @@ export default function GrantApplication() {
 
     const formData = new FormData(e.target as HTMLFormElement);
     const payload = {
-      galaId: id,
       grantId,
       companyName: formData.get('companyName'),
       industry: formData.get('industry'),
       motivationStatement: formData.get('motivationStatement'),
       businessPlanDocumentUrl: ensureAbsoluteUrl(businessPlanUrl),
       videoUrl: videoUrl ? ensureAbsoluteUrl(videoUrl) : null,
-      interviewDate: `2026-02-${selectedDay
+      interviewDate: `${now.getFullYear()}-${(now.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${selectedDay
         .toString()
         .padStart(2, '0')}T00:00:00.000Z`,
       interviewStartTime: selectedTime,
+      isDraft: false,
+      confirmInformation: formData.get('confirmInformation') === 'on',
+      agreeToTerms: formData.get('agreeToTerms') === 'on',
+      walletAddress: account || '',
+      transactionHash: galaData.blockchainTransactionHash || '',
     };
 
     try {
-      await applyGrant(payload).unwrap();
+      // 1. Blockchain Transaction
+      const blockchainResult = await applyForGrantBlockchain(id || '', grantId || '');
+      
+      if (!blockchainResult) {
+        console.warn('[GrantApplication] Blockchain application incomplete.');
+        return;
+      }
+
+      // 2. Backend Synchronization
+      const finalPayload = {
+        ...payload,
+        walletAddress: blockchainResult.walletAddress,
+        transactionHash: blockchainResult.transactionHash,
+      };
+
+      await applyGrant(finalPayload).unwrap();
       setIsSuccess(true);
       setTimeout(() => navigate('/dashboard/grants'), 2000);
     } catch (err) {
@@ -238,7 +290,6 @@ export default function GrantApplication() {
           ${gAmount.toLocaleString()} {t('grants.application.prize')} • 5{' '}
           {t('grants.application.winners')}
         </span>
-        <p>{t('grants.application.prizeDescription')}</p>
       </div>
 
       <form className="grant-form" onSubmit={handleSubmit}>
@@ -309,7 +360,7 @@ export default function GrantApplication() {
           <div className="calendar-mock">
             <div className="cal-header">
               <FontAwesomeIcon icon={faChevronLeft} />
-              {t('grants.application.month')}
+              {now.toLocaleString('default', { month: 'long' })} {now.getFullYear()}
               <FontAwesomeIcon icon={faChevronLeft} className="cal-next-icon" />
             </div>
             <div className="cal-grid">
@@ -365,13 +416,18 @@ export default function GrantApplication() {
 
         <div className="checkbox-group">
           <div className="checkbox-item">
-            <input type="checkbox" id="confirm" required />
+            <input
+              type="checkbox"
+              id="confirm"
+              name="confirmInformation"
+              required
+            />
             <label htmlFor="confirm">
               {t('grants.application.confirmInfo')}
             </label>
           </div>
           <div className="checkbox-item">
-            <input type="checkbox" id="terms" required />
+            <input type="checkbox" id="terms" name="agreeToTerms" required />
             <label htmlFor="terms">
               {t('grants.application.agreeTo')}
               <a href="#">{t('grants.application.terms')}</a>
@@ -404,6 +460,10 @@ export default function GrantApplication() {
           </div>
         </div>
       </form>
+      <BlockchainProcessingModal
+        isOpen={isBlockchainProcessing}
+        status={processStatus}
+      />
     </div>
   );
 }

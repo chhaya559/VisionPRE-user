@@ -23,6 +23,7 @@ import { useWalletContext } from '../../Context/WalletContext';
 
 import WalletConnectModal from '../../Shared/Components/WalletConnectModal/WalletConnectModal';
 import { mapWeb3Error } from '../../Shared/Web3Utils';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import './SubscriptionPlans.scss';
 
 const FEATURE_ICONS = [faCheck, faBolt, faUsers, faBell, faEyeSlash];
@@ -229,8 +230,27 @@ export default function SubscriptionPlans() {
       <div className="sp-page loading-state">
         <header className="sp-hero">
           <div className="sp-hero__bg-shape" />
-          <h1 className="sp-hero__title">Loading Plans...</h1>
+          <Skeleton variant="text" width={200} height={32} className="sp-hero__title" />
+          <Skeleton variant="text" width={300} height={20} />
         </header>
+
+        <div className="sp-content">
+          <section className="sp-features">
+            <Skeleton variant="text" width={150} height={20} />
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} variant="text" width="100%" height={30} />
+            ))}
+          </section>
+
+          <section className="sp-plans">
+            <Skeleton variant="text" width={150} height={20} />
+            <div className="sp-plans__grid">
+              {[1, 2].map((i) => (
+                <Skeleton key={i} variant="rect" width="100%" height={300} borderRadius={24} />
+              ))}
+            </div>
+          </section>
+        </div>
       </div>
     );
   }

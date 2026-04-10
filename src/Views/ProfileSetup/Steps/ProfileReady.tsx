@@ -6,7 +6,7 @@ import { faRocket, faStar } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { logout, setAuthData } from '../../../Store/Common';
+import { setAuthData } from '../../../Store/Common';
 import { useProfileOnboardingMutation } from '../../../Services/Api/module/UserApi';
 
 export default function ProfileReady() {
@@ -18,28 +18,28 @@ export default function ProfileReady() {
 
   const handleSubmit = async () => {
     const payload = {
-      FirstName: formData.firstName,
-      LastName: formData.lastName,
-      CompanyName: formData.companyName,
-      Industry: formData.industry,
-      Stage: formData.stage,
-      ProfileType: formData.profileType,
-      BusinessDescription: formData.businessDescription,
-      Goal: formData.goal,
-      PhoneNumber: formData.phone || null,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      companyName: formData.companyName,
+      industry: formData.industry,
+      stage: formData.stage,
+      profileType: formData.profileType,
+      businessDescription: formData.businessDescription,
+      goal: formData.goal,
+      phoneNumber: formData.phone || null,
     };
 
     try {
-      console.log('Submitting form data to API: ', payload);
+      console.log('Submitting onboarding payload:', payload);
       const response = await OnboardingProfile(payload).unwrap();
       console.log('Onboarding response:', response);
       dispatch(setAuthData({ isProfileCompleted: true }));
       navigate('/dashboard', { replace: true });
     } catch (error: any) {
       console.log('Onboarding error:', error);
-      toast.error('Session error or account not found. Please login again.');
-      dispatch(logout());
-      navigate('/login', { replace: true });
+      toast.error(
+        error?.data?.message || 'Failed to save profile. Please try again.'
+      );
     }
   };
 

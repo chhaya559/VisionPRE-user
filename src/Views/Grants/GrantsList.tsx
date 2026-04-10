@@ -22,6 +22,7 @@ import {
   isGrantApprovedStatus,
   isGrantPendingStatus,
 } from '../../Shared/GrantApplicationStatus';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 
 export default function GrantsList() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function GrantsList() {
   // Group applications by Gala
   const groupedApps = Array.isArray(applications)
     ? applications.reduce((acc: any, app: any) => {
-        const galaId = app.galaId || app.GalaId || 'unknown';
+        const galaId = app.galaId || app.GalaId || app.galaName || app.GalaName || 'unknown';
         if (!acc[galaId]) acc[galaId] = [];
         acc[galaId].push(app);
         return acc;
@@ -87,9 +88,28 @@ export default function GrantsList() {
       <div className="grants-hub-view loading-state">
         <header className="view-header">
           <div className="header-content">
-            <h1>Loading applications...</h1>
+            <Skeleton variant="text" width={200} height={32} />
+            <Skeleton variant="text" width={300} height={20} />
           </div>
         </header>
+
+        <section className="status-section">
+          <Skeleton variant="text" width={150} height={24} />
+          <div className="status-cards-grid">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} variant="rect" width="100%" height={100} />
+            ))}
+          </div>
+        </section>
+
+        <section className="upcoming-galas-section">
+          <Skeleton variant="text" width={180} height={24} />
+          <div className="galas-group-list">
+            {[1, 2].map((i) => (
+              <Skeleton key={i} variant="rect" width="100%" height={150} />
+            ))}
+          </div>
+        </section>
       </div>
     );
   }
@@ -163,12 +183,16 @@ export default function GrantsList() {
           ) : (
             Object.keys(groupedApps).map((gId) => {
               const galaApps = groupedApps[gId];
-              const gala = galas.find(
-                (g: any) => g.id === gId || g.Id === gId
-              ) || {
-                name: galaApps[0].galaName || 'Gala Vision 2026',
-                eventDate: galaApps[0].createdAt,
-              };
+              const gala =
+                galas.find((g: any) => g.id === gId || g.Id === gId) ||
+                galas.find((g: any) => g.name === gId || g.Name === gId) ||
+                {
+                  name:
+                    galaApps[0].galaName ||
+                    galaApps[0].GalaName ||
+                    'Gala Vision 2026',
+                  eventDate: galaApps[0].submittedAt || galaApps[0].createdAt,
+                };
 
               return (
                 <div key={gId} className="gala-group-card">
@@ -189,36 +213,44 @@ export default function GrantsList() {
                   </header>
 
                   <div className="nested-apps-list">
-                    {galaApps.map((app: any) => (
-                      <div key={app.id || app.Id} className="nested-app-item">
-                        <div className="app-icon-box">
-                          <FontAwesomeIcon icon={faClock} />
+                    {galaApps.map((app: any) => {
+                      const galaIdForRedirect = gala.id || gala.Id || gId;
+                      return (
+                        <div
+                          key={app.id || app.Id}
+                          className="nested-app-item"
+                          onClick={() => navigate(`/dashboard/galas/${galaIdForRedirect}/grants`)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <div className="app-icon-box">
+                            <FontAwesomeIcon icon={faClock} />
+                          </div>
+                          <div className="app-details">
+                            <h4>{app.grantName || app.GrantName}</h4>
+                            <p className="interview-info">
+                              {t('grants.list.interview')}{' '}
+                              {app.interviewDate
+                                ? new Date(app.interviewDate).toLocaleDateString()
+                                : getGrantApplicationStatusLabel(
+                                    getGrantApplicationStatusValue(app)
+                                  )}{' '}
+                              {t('grants.list.at')}
+                            </p>
+                            <p className="submission-date">
+                              {t('grants.list.submittedOn')}{' '}
+                              {new Date(app.submittedAt || app.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div className="app-actions">
+                            {getStatusBadge(app.status)}
+                            <FontAwesomeIcon
+                              icon={faChevronRight}
+                              className="chevron"
+                            />
+                          </div>
                         </div>
-                        <div className="app-details">
-                          <h4>{app.grantName || app.GrantName}</h4>
-                          <p className="interview-info">
-                            {t('grants.list.interview')}{' '}
-                            {app.interviewDate
-                              ? new Date(app.interviewDate).toLocaleDateString()
-                              : getGrantApplicationStatusLabel(
-                                  getGrantApplicationStatusValue(app)
-                                )}{' '}
-                            {t('grants.list.at')}
-                          </p>
-                          <p className="submission-date">
-                            {t('grants.list.submittedOn')}{' '}
-                            {new Date(app.createdAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <div className="app-actions">
-                          {getStatusBadge(app.status)}
-                          <FontAwesomeIcon
-                            icon={faChevronRight}
-                            className="chevron"
-                          />
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               );

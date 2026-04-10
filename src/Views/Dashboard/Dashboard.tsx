@@ -34,9 +34,10 @@ import {
   isGrantApprovedStatus,
   isGrantPendingStatus,
 } from '../../Shared/GrantApplicationStatus';
+import type { UserProfile } from '../../Shared/Types';
 
 export type DashboardOutletContext = {
-  profile: any;
+  profile: UserProfile | null;
   profileLoading: boolean;
   profileError: unknown;
 };
@@ -289,7 +290,7 @@ export default function Dashboard() {
   const { data: announcementsResponse, isLoading: announcementsLoading } =
     useGetAnnouncementsQuery(undefined);
 
-  const profile = profileResponse?.data;
+  const profile = profileResponse?.data as UserProfile | null;
   const galas = galasResponse?.data.items ?? [];
   const applications = appsResponse?.data ?? [];
   const notifications = notificationsResponse?.data ?? [];
@@ -330,9 +331,9 @@ export default function Dashboard() {
     : 0;
   const totalApps = Array.isArray(applications) ? applications.length : 0;
 
-  const firstName = profile?.firstName || profile?.FirstName || 'User';
-  const lastName = profile?.lastName || profile?.LastName || '';
-  const email = profile?.email || profile?.Email || '';
+  const firstName = profile?.firstName || 'User';
+  const lastName = profile?.lastName || '';
+  const email = profile?.email || '';
   const fullName = `${firstName} ${lastName}`.trim() || 'User';
 
   const avatarUrl =

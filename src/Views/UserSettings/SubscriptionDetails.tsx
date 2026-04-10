@@ -22,6 +22,7 @@ import {
 import { useWalletContext } from '../../Context/WalletContext';
 import { mapWeb3Error } from '../../Shared/Web3Utils';
 import Modal from '../../Shared/Components/Modal';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import './Subscription.scss';
 
 export default function SubscriptionDetails() {
@@ -83,10 +84,24 @@ export default function SubscriptionDetails() {
         <header className="account-settings-header">
           <div className="header-inner">
             <div className="header-copy">
-              <h1>Loading Subscription...</h1>
+              <Skeleton variant="text" width={200} height={32} />
+              <Skeleton variant="text" width={300} height={20} />
             </div>
           </div>
         </header>
+
+        <div className="account-settings-content">
+          <div className="account-settings-main">
+            <Skeleton variant="rect" width={100} height={24} borderRadius={12} />
+            <Skeleton variant="text" width="50%" height={40} />
+            <Skeleton variant="rect" width="100%" height={80} borderRadius={16} />
+            <div className="info-list">
+              {[1, 2, 3].map((i) => (
+                <Skeleton key={i} variant="rect" width="100%" height={60} />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

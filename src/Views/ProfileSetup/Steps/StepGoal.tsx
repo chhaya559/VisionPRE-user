@@ -72,13 +72,10 @@ export default function StepGoal() {
                 className={`list-option ${isSelected ? 'selected' : ''}`}
                 onClick={() => field.onChange(goal.id)}
               >
-                <span
-                  className="list-icon"
-                  style={{ backgroundColor: 'transparent', width: 'auto' }}
-                >
+                <span className="list-icon">
                   <FontAwesomeIcon icon={goal.icon} />
                 </span>
-                <div className="list-text" style={{ fontWeight: 600 }}>
+                <div className="list-text">
                   <span className="list-label">
                     {t(`goal_options.${goal.id}`)}
                   </span>

@@ -1,7 +1,8 @@
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showLogoutModal } from '../../Store/Common';
-import { ensureAbsoluteUrl } from '../../Shared/Utils';
+import { ensureAbsoluteUrl, formatList } from '../../Shared/Utils';
+import type { UserProfile } from '../../Shared/Types';
 import './MyProfile.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -18,6 +19,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import type { DashboardOutletContext } from '../Dashboard/Dashboard';
 
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+
 export default function MyProfile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,8 +34,37 @@ export default function MyProfile() {
 
   if (profileLoading) {
     return (
-      <div className="my-profile-container my-profile-state-center">
-        <div className="my-profile-loading-text">{t('myProfile.loading')}</div>
+      <div className="my-profile-container">
+        <header className="my-profile-header">
+          <div className="header-inner">
+            <Skeleton variant="text" width={150} height={32} />
+            <Skeleton variant="text" width={250} height={20} />
+          </div>
+        </header>
+
+        <div className="my-profile-content-wrapper">
+          <div className="profile-card public-profile-card">
+            <div className="card-banner" />
+            <div className="avatar-overlap-wrapper">
+              <Skeleton variant="circle" width={100} height={100} />
+            </div>
+            <div className="card-main-content">
+              <div className="name-details">
+                <Skeleton variant="text" width={200} height={28} />
+                <Skeleton variant="text" width={150} height={18} />
+              </div>
+              <div className="profile-details-list">
+                <Skeleton variant="text" width="100%" height={60} />
+              </div>
+            </div>
+          </div>
+
+          <div className="profile-card info-card">
+            <div className="card-header-row">
+              <Skeleton variant="rect" width="100%" height={60} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -63,15 +95,12 @@ export default function MyProfile() {
     );
   }
 
-  const profileData = profile || {};
-  const firstName = profileData.firstName || profileData.FirstName || 'User';
-  const lastName = profileData.lastName || profileData.LastName || '';
-  const email = profileData.email || profileData.Email || '';
-  const companyName = profileData.companyName || profileData.CompanyName;
-  const bio =
-    profileData.businessDescription ||
-    profileData.BusinessDescription ||
-    t('myProfile.noBio');
+  const profileData = (profile || {}) as UserProfile;
+  const firstName = profileData.firstName || 'User';
+  const lastName = profileData.lastName || '';
+  const email = profileData.email || '';
+  const companyName = profileData.companyName;
+  const bio = profileData.businessDescription || t('myProfile.noBio');
   const initials = firstName.charAt(0).toUpperCase();
 
   return (
@@ -164,14 +193,12 @@ export default function MyProfile() {
               <div className="business-summary">
                 <div className="summary-item">
                   <strong>{t('myProfile.industry')}</strong>{' '}
-                  {profileData.industry ||
-                    profileData.Industry ||
+                  {formatList(profileData.industry) ||
                     t('myProfile.notSet')}
                 </div>
                 <div className="summary-item">
                   <strong>{t('myProfile.stage')}</strong>{' '}
                   {profileData.stage ||
-                    profileData.Stage ||
                     t('myProfile.notSet')}
                 </div>
               </div>

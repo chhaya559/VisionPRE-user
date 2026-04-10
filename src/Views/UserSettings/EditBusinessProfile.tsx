@@ -9,33 +9,61 @@ import {
   useEditProfileMutation,
   useGetProfileQuery,
 } from '../../Services/Api/module/UserApi';
+import type { UserProfile } from '../../Shared/Types';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 
 export default function EditBusinessProfile() {
   const navigate = useNavigate();
-  const { data: apiResponse, isLoading } = useGetProfileQuery({});
+  const { data: apiResponse, isLoading } = useGetProfileQuery(undefined);
   const [editProfileMutation] = useEditProfileMutation();
   const { t } = useTranslation('settings');
   const [formData, setFormData] = useState<any>({});
 
   useEffect(() => {
     if (apiResponse?.data) {
-      const p = apiResponse.data;
+      const p = apiResponse.data as UserProfile;
       setFormData({
         ...p,
         industry: Array.isArray(p.industry)
           ? p.industry[0]
-          : p.industry || 'Technology',
+          : p.industry || '',
         foundedYear: p.foundedYear?.toString() || '',
       });
     }
   }, [apiResponse]);
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <div className="edit-profile-container edit-profile-loading">
-        {t('editBusiness.loading')}
+      <div className="edit-profile-container loading-state">
+        <header className="edit-profile-header secondary">
+          <div className="back-btn">
+            <Skeleton variant="rect" width={80} height={24} />
+          </div>
+          <div className="header-info">
+            <Skeleton variant="text" width={200} height={32} />
+            <Skeleton variant="text" width={300} height={20} />
+          </div>
+        </header>
+
+        <div className="edit-profile-form">
+          <div className="section">
+            <div className="form-grid">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="form-group">
+                  <Skeleton variant="text" width={100} />
+                  <Skeleton variant="rect" height={45} />
+                </div>
+              ))}
+              <div className="form-group">
+                <Skeleton variant="text" width={100} />
+                <Skeleton variant="rect" height={100} />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -121,9 +149,10 @@ export default function EditBusinessProfile() {
               <label>{t('editBusiness.industry')}</label>
               <select
                 name="industry"
-                value={formData.industry || 'Technology'}
+                value={formData.industry || ''}
                 onChange={handleInputChange}
               >
+                <option value="">{t('editBusiness.selectIndustry') || 'Select industry'}</option>
                 <option value="Technology">
                   {t('editBusiness.technology')}
                 </option>
@@ -140,9 +169,10 @@ export default function EditBusinessProfile() {
               <label>{t('editBusiness.companySize')}</label>
               <select
                 name="companySize"
-                value={formData.companySize || '1-10 employees'}
+                value={formData.companySize || ''}
                 onChange={handleInputChange}
               >
+                <option value="">{t('editBusiness.selectSize') || 'Select size'}</option>
                 <option value="1-10 employees">
                   {t('editBusiness.size1')}
                 </option>
@@ -170,9 +200,10 @@ export default function EditBusinessProfile() {
               <label>{t('editBusiness.annualRevenue')}</label>
               <select
                 name="annualRevenue"
-                value={formData.annualRevenue || 'Under $100K'}
+                value={formData.annualRevenue || ''}
                 onChange={handleInputChange}
               >
+                <option value="">{t('editBusiness.selectRevenue') || 'Select revenue'}</option>
                 <option value="Under $100K">
                   {t('editBusiness.revenue1')}
                 </option>
@@ -198,11 +229,7 @@ export default function EditBusinessProfile() {
               <label>{t('editBusiness.companyDescription')}</label>
               <textarea
                 name="businessDescription"
-                value={
-                  formData.businessDescription ||
-                  formData.companyDescription ||
-                  ''
-                }
+                value={formData.businessDescription || ''}
                 onChange={handleInputChange}
               />
             </div>

@@ -25,6 +25,7 @@ import {
   useReadAllNotificationMutation,
   useReadNotificationByIdMutation,
 } from '../../Services/Api/module/NotificationApi';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 import './Notifications.scss';
 
 type NotificationItem = {
@@ -419,10 +420,17 @@ export default function Notifications() {
 
           <div className="notifications-content">
             {isLoading || isFetching ? (
-              <div className="notifications-state loading">
-                <div className="state-spinner" />
-                <h2>{t('loading')}</h2>
-                <p>{t('loadingDesc')}</p>
+              <div className="notifications-list-wrap">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="notification-row skeleton-row" style={{ padding: '1.5rem', borderBottom: '1px solid #f1f5f9' }}>
+                    <Skeleton variant="circle" width={40} height={40} />
+                    <div className="notification-copy" style={{ marginLeft: '1rem', flex: 1 }}>
+                      <Skeleton variant="text" width="40%" height={20} />
+                      <Skeleton variant="text" width="80%" height={16} />
+                      <Skeleton variant="text" width="20%" height={14} />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : error ? (
               <div className="notifications-state error">
@@ -573,7 +581,11 @@ export default function Notifications() {
 
                 <div className="detail-message">
                   {isDetailLoading ? (
-                    <p>{t('loadingMessage')}</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <Skeleton variant="text" width="90%" />
+                      <Skeleton variant="text" width="80%" />
+                      <Skeleton variant="text" width="85%" />
+                    </div>
                   ) : (
                     <p>{detailMessage}</p>
                   )}

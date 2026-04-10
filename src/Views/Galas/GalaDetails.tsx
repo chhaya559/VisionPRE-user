@@ -26,6 +26,7 @@ import { useSubscription } from '../../hooks/useSubscription';
 import { usePurchaseTicketBlockchain } from '../../hooks/usePurchaseTicketBlockchain';
 import SubscriptionGuardModal from '../../Shared/Components/Modal/SubscriptionGuardModal';
 import BlockchainProcessingModal from '../../Shared/Components/Modal/BlockchainProcessingModal';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 
 export default function GalaDetails() {
   const { id: urlId } = useParams<{ id: string }>();
@@ -53,18 +54,24 @@ export default function GalaDetails() {
     return (
       <div className="gala-details-container loading-state">
         <div className="gala-details-shell">
-          <header
-            className="hero-section"
-            style={{
-              height: '200px',
-              backgroundColor: '#f3f4f6',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <p>Loading gala details...</p>
-          </header>
+          <div className="hero-section skeleton-hero">
+            <Skeleton variant="rect" width="100%" height="400px" />
+          </div>
+          <div className="details-content">
+            <div className="details-main">
+              <Skeleton variant="text" width="60%" height={32} />
+              <Skeleton variant="text" width="100%" height={100} />
+              <div className="stats-cards">
+                <Skeleton variant="rect" width={100} height={100} />
+                <Skeleton variant="rect" width={100} height={100} />
+                <Skeleton variant="rect" width={100} height={100} />
+              </div>
+            </div>
+            <div className="details-sidebar">
+              <Skeleton variant="rect" width="100%" height={250} />
+              <Skeleton variant="rect" width="100%" height={50} />
+            </div>
+          </div>
         </div>
       </div>
     );

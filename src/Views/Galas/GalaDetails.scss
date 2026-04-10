@@ -140,6 +140,14 @@
       margin: 0;
     }
   }
+
+  &.skeleton-hero {
+    background: #e2e8f0;
+    box-shadow: none;
+    .hero-overlay {
+      display: none;
+    }
+  }
 }
 
 /* ─────────────────────────────────────────────

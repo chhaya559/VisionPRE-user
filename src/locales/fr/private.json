@@ -121,7 +121,8 @@
       "statusPast": "Passé",
       "subscriptionRequired": "Abonnement requis",
       "subscriptionRequiredDesc": "Vous devez avoir un abonnement actif pour effectuer cette action.",
-      "upgradeNow": "Mettre à niveau maintenant"
+      "upgradeNow": "Mettre à niveau maintenant",
+      "applied": "Déjà appliqué"
     }
   },
   "grants": {
@@ -134,7 +135,8 @@
       "back": "Retour",
       "title": "Postuler à une subvention",
       "description": "Complétez les informations ci-dessous pour soumettre votre candidature.",
-      "prize": "Prix • 5 gagnants",
+      "prize": "Prix",
+      "winners": "gagnants",
       "prizeDescription": "Le prix est réparti entre tous les gagnants",
       "companyName": "Nom de l'entreprise *",
       "companyNamePlaceholder": "Nom de votre entreprise",
@@ -187,7 +189,7 @@
       "on": "le ",
       "tbd": "À définir",
       "interview": "Entretien : ",
-      "at": " à 14h00 - 14h30",
+      "at": "",
       "submittedOn": "Soumis le ",
       "galaName": "Gala Vision 2026"
     }

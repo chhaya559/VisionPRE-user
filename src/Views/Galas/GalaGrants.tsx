@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   useGetGalaByIdQuery,
   usePurchaseTicketMutation,
+  useGetMyApplicationsQuery,
 } from '../../Services/Api/module/GalaApi';
 import { GrantStatus } from '../../Shared/Enums';
 import Modal from '../../Shared/Components/Modal';
@@ -23,6 +24,7 @@ import {
   faPaperPlane,
   faCreditCard,
 } from '@fortawesome/free-solid-svg-icons';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 
 export default function GalaGrants() {
   const { id } = useParams<{ id: string }>();
@@ -34,6 +36,9 @@ export default function GalaGrants() {
     error,
     refetch,
   } = useGetGalaByIdQuery(id || '');
+  const { data: appsResponse } = useGetMyApplicationsQuery({});
+  const applications = (appsResponse as any)?.data || appsResponse || [];
+
   const [purchaseTicket, { isLoading: isPurchasing }] =
     usePurchaseTicketMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,8 +53,29 @@ export default function GalaGrants() {
 
   if (isLoading) {
     return (
-      <div className="gala-grants-container gala-grants-state loading">
-        <div className="gala-grants-message">{t('galas.grants.loading')}</div>
+      <div className="gala-grants-container loading-state">
+        <div className="gala-grants-top-shell">
+          <header className="gala-grants-header">
+            <Skeleton variant="text" width={80} height={20} />
+            <div className="header-copy">
+              <Skeleton variant="text" width={150} height={20} />
+              <Skeleton variant="text" width={200} height={32} />
+              <Skeleton variant="text" width={300} height={20} />
+            </div>
+          </header>
+        </div>
+        <div className="grants-list">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="grant-card">
+              <Skeleton variant="text" width="60%" height={24} />
+              <Skeleton variant="text" width="100%" height={60} />
+              <div className="grant-pills">
+                <Skeleton variant="rect" width={100} height={30} borderRadius={15} />
+                <Skeleton variant="rect" width={100} height={30} borderRadius={15} />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -235,6 +261,10 @@ export default function GalaGrants() {
                 ? requirements.join(', ')
                 : t('galas.grants.noneSpecified');
 
+            const isApplied = applications.some(
+              (app: any) => app.grantId === gId || app.GrantId === gId
+            );
+
             return (
               <div key={gId} className="grant-card">
                 <div className="grant-header">
@@ -282,13 +312,19 @@ export default function GalaGrants() {
 
                 <button
                   type="button"
-                  className="btn-apply"
-                  onClick={() => handleApplyClick(gId)}
+                  className={`btn-apply ${isApplied ? 'applied' : ''}`}
+                  onClick={() => !isApplied && handleApplyClick(gId)}
+                  disabled={isApplied}
                 >
-                  {grant.status >= GrantStatus.Completed
+                  {isApplied
+                    ? t('galas.grants.applied') || 'Applied'
+                    : grant.status >= GrantStatus.Completed
                     ? t('galas.grants.viewApplication') || 'View Application'
                     : t('galas.grants.applyToGrant')}
-                  <FontAwesomeIcon icon={faPaperPlane} className="apply-icon" />
+                  <FontAwesomeIcon
+                    icon={isApplied ? faCheckCircle : faPaperPlane}
+                    className="apply-icon"
+                  />
                 </button>
               </div>
             );

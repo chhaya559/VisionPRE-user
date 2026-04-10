@@ -125,7 +125,8 @@
       "statusPast": "Past",
       "subscriptionRequired": "Subscription Required",
       "subscriptionRequiredDesc": "You need to have an active subscription plan to perform this action.",
-      "upgradeNow": "Upgrade Plan Now"
+      "upgradeNow": "Upgrade Plan Now",
+      "applied": "Applied"
     }
   },
   "grants": {
@@ -138,7 +139,8 @@
       "back": "Back",
       "title": "Apply for Grant",
       "description": "Complete the details below to submit your grant application.",
-      "prize": "Prize • 5 Winners",
+      "prize": "Prize",
+      "winners": "Winners",
       "prizeDescription": "The prize is divided between all winners",
       "companyName": "Company Name *",
       "companyNamePlaceholder": "Your company name",
@@ -191,7 +193,7 @@
       "on": "on ",
       "tbd": "TBD",
       "interview": "Interview: ",
-      "at": " at 14h00 - 14h30",
+      "at": "",
       "submittedOn": "Submitted on ",
       "galaName": "Gala Vision 2026"
     }

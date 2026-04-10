@@ -17,15 +17,24 @@
     flex-direction: column;
     text-align: center;
     padding: 2rem;
+    background: white; // Ensure background is solid white for contrast
+    border-radius: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+
+    h2 {
+      color: $textBlack;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
   }
 }
 
 .grant-app-message {
-  color: #94A3B8;
+  color: $secondaryText;
 }
 
 .grant-app-error-title {
-  color: #EF4444;
+  color: $error;
 }
 
 .grant-app-back-btn {
@@ -36,13 +45,15 @@
 
 .grant-app-success-icon {
   font-size: 4rem;
-  color: #22C55E;
+  color: $greenText;
   margin-bottom: 1.5rem;
 }
 
 .grant-app-success-copy {
-  color: #64748B;
+  color: $textGray;
   margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .grant-app-header {
@@ -91,8 +102,8 @@
   border-radius: 16px;
   padding: 20px;
   margin-bottom: 32px;
-  max-width: 800px;
-  margin: 0 auto 32px;
+  max-width: 700px;
+  margin: 16px auto 32px;
 
   h2 {
     color: darken($primaryGreen, 10%);
@@ -133,7 +144,9 @@
       margin-bottom: 12px;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 14px 16px;
       border-radius: 12px;
@@ -157,10 +170,10 @@
     }
 
     .motivation-hint {
-       font-size: 0.75rem;
-       color: $placeholderColor;
-       margin-bottom: 8px;
-       display: block;
+      font-size: 0.75rem;
+      color: $placeholderColor;
+      margin-bottom: 8px;
+      display: block;
     }
   }
 
@@ -177,17 +190,34 @@
       margin-bottom: 24px;
 
       .icon-bg {
-        width: 48px; height: 48px;
-        background: $primaryGreen;
-        color: $primaryWhite;
-        display: flex; align-items: center; justify-content: center;
+        width: 48px;
+        height: 48px;
+        background: $secondaryGreen;
+        color: $primaryGreen;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         border-radius: 14px;
-        svg { width: 24px; height: 24px; }
+
+        svg {
+          width: 24px;
+          height: 24px;
+        }
       }
 
       .header-text {
-        h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 2px; }
-        p { font-size: 0.875rem; color: $secondaryText; margin: 0; }
+        h3 {
+          font-size: 1.125rem;
+          font-weight: 700;
+          margin-bottom: 2px;
+          color: $textBlack;
+        }
+
+        p {
+          font-size: 0.875rem;
+          color: $textGray;
+          margin: 0;
+        }
       }
     }
 
@@ -196,83 +226,179 @@
       border-radius: 16px;
       padding: 20px;
       margin-bottom: 24px;
-      
-      .cal-header {
-         display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
-         font-weight: 700; color: $primaryText;
 
-         .cal-next-icon {
+      .cal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        font-weight: 700;
+        color: $primaryText;
+
+        .cal-next-icon {
           transform: rotate(180deg);
-         }
+        }
       }
+
       .cal-grid {
-         display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; text-align: center;
-         .day-name { font-size: 0.75rem; color: $placeholderColor; margin-bottom: 8px; }
-         .day { 
-            padding: 8px 0; font-size: 0.875rem; font-weight: 600; color: $textGray; border-radius: 8px;
-            &.selected { background: $primaryGreen; color: $primaryWhite; }
-            &.empty { color: transparent; }
-         }
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+        text-align: center;
+
+        .day-name {
+          font-size: 0.75rem;
+          color: $placeholderColor;
+          margin-bottom: 8px;
+        }
+
+        .day {
+          padding: 8px 0;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: $textGray;
+          border-radius: 8px;
+
+          &.selected {
+            background: $secondaryGreen;
+            color: $primaryGreen;
+            border: 1px solid $primaryGreen;
+          }
+
+          &.empty {
+            color: transparent;
+          }
+        }
       }
     }
 
     .time-slots {
-       display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-       
-       .time-slot {
-          background: $primaryWhite; border: 1px solid $borderColor; border-radius: 10px; padding: 10px;
-          text-align: center; font-size: 0.875rem; font-weight: 600; color: $textGray; cursor: pointer;
-          &.active { background: $primaryGreen; border-color: $primaryGreen; color: $primaryWhite; }
-       }
-    }
-  }
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
 
-  .time-slots-label {
-    font-size: 0.875rem;
-    font-weight: 700;
-    margin-bottom: 12px;
+      .time-slot {
+        background: $primaryWhite;
+        border: 1px solid $borderColor;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: $textGray;
+        cursor: pointer;
+
+        &.active {
+          background: $secondaryGreen;
+          border-color: $primaryGreen;
+          color: $primaryGreen;
+        }
+      }
+    }
+
+    .time-slots-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: $textBlack;
+    }
   }
 
   .checkbox-group {
     margin-bottom: 32px;
-    
+
     .checkbox-item {
-      display: flex; gap: 12px; margin-bottom: 12px;
-      
-      input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
-      label { font-size: 0.875rem; color: $textGray; margin: 0; cursor: pointer;
-         a { color: $primaryGreen; text-decoration: none; font-weight: 600; }
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+
+      input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      label {
+        font-size: 0.875rem;
+        color: $textGray;
+        margin: 0;
+        cursor: pointer;
+
+        a {
+          color: $primaryGreen;
+          text-decoration: none;
+          font-weight: 600;
+        }
       }
     }
   }
 
   .actions {
-    display: flex; flex-direction: column; gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 
     .btn-submit {
-      background: $primaryGreen; color: $primaryWhite; border: none; padding: 16px; border-radius: 14px;
-      font-size: 1rem; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 8px;
-      cursor: pointer; box-shadow: 0 4px 12px rgba($primaryGreen, 0.2);
+      background: $primaryGreen;
+      color: $primaryWhite;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba($primaryGreen, 0.2);
 
       .submit-icon {
         margin-right: 8px;
       }
     }
+
     .btn-draft {
-      background: $borderColorLight; color: $primaryText; border: none; padding: 16px; border-radius: 14px;
-      font-size: 1rem; font-weight: 700; cursor: pointer;
+      background: $borderColorLight;
+      color: $primaryText;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
     }
   }
 
   .notice-box {
-     background: $amberLight; border: 1px solid $amberBorder; border-radius: 16px; padding: 16px; margin-top: 24px;
-     display: flex; gap: 12px;
-     
-     .notice-icon { color: $amberSecondary; flex-shrink: 0; }
-     .notice-content {
-        h4 { font-size: 0.875rem; font-weight: 700; color: $amberText; margin-bottom: 4px; }
-        p { font-size: 0.8125rem; color: $amberText; opacity: 0.8; margin: 0; }
-     }
+    background: $amberLight;
+    border: 1px solid $amberBorder;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 24px;
+    display: flex;
+    gap: 12px;
+
+    .notice-icon {
+      color: $amberSecondary;
+      flex-shrink: 0;
+    }
+
+    .notice-content {
+      h4 {
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: $amberText;
+        margin-bottom: 4px;
+      }
+
+      p {
+        font-size: 0.8125rem;
+        color: $amberText;
+        opacity: 0.8;
+        margin: 0;
+      }
+    }
   }
 
   .dropzone-container {
@@ -285,7 +411,8 @@
     cursor: pointer;
     margin-top: 8px;
 
-    &:hover, &.active {
+    &:hover,
+    &.active {
       border-color: $primaryGreen;
       background: rgba($primaryGreen, 0.05);
     }

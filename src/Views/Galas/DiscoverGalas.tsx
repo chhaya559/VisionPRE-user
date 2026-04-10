@@ -16,6 +16,8 @@ import {
   faCheckCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+
 export default function DiscoverGalas() {
   const navigate = useNavigate();
   const { t } = useTranslation('private');
@@ -34,9 +36,30 @@ export default function DiscoverGalas() {
     return (
       <div className="galas-container loading-state">
         <header className="galas-header">
-          <h1>{t('galas.discover.title')}</h1>
-          <p>Loading events...</p>
+          <Skeleton variant="text" width={200} height={32} />
+          <Skeleton variant="text" width={300} height={20} />
         </header>
+
+        <div className="galas-filters-bar">
+          <div className="galas-filters">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Skeleton key={i} variant="rect" width={80} height={36} borderRadius={18} />
+            ))}
+          </div>
+        </div>
+
+        <section className="galas-section">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="gala-card skeleton-card">
+              <Skeleton variant="rect" height={200} />
+              <div className="card-content">
+                <Skeleton variant="text" width="80%" height={24} />
+                <Skeleton variant="text" width="60%" />
+                <Skeleton variant="text" width="40%" />
+              </div>
+            </div>
+          ))}
+        </section>
       </div>
     );
   }

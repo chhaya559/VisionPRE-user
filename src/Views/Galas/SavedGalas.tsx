@@ -13,6 +13,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { GalaStatus } from '../../Shared/Enums';
 
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+
 export default function SavedGalas() {
   const navigate = useNavigate();
   const { t } = useTranslation('private');
@@ -22,23 +24,23 @@ export default function SavedGalas() {
     return (
       <div className="galas-container loading-state">
         <header className="galas-header">
-          <button
-            type="button"
-            className="back-btn-simple"
-            onClick={() => navigate(-1)}
-            style={{
-              marginBottom: '1rem',
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              color: '#64748b',
-            }}
-          >
-            <FontAwesomeIcon icon={faChevronLeft} /> {t('galas.grants.back')}
-          </button>
-          <h1>{t('galas.discover.savedGalas') || 'Saved Galas'}</h1>
-          <p>Loading your saved events...</p>
+          <Skeleton variant="text" width={80} height={20} />
+          <Skeleton variant="text" width={200} height={32} />
+          <Skeleton variant="text" width={300} height={20} />
         </header>
+
+        <section className="galas-section">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="gala-card skeleton-card">
+              <Skeleton variant="rect" height={200} />
+              <div className="card-content">
+                <Skeleton variant="text" width="80%" height={24} />
+                <Skeleton variant="text" width="60%" />
+                <Skeleton variant="text" width="40%" />
+              </div>
+            </div>
+          ))}
+        </section>
       </div>
     );
   }

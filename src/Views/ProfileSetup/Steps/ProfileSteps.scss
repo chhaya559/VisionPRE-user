@@ -260,8 +260,8 @@
         background-color: rgba($primaryGreen, 0.04);
 
         .list-icon {
-          background-color: $primaryGreen;
-          color: $primaryWhite;
+          background-color: rgba($primaryGreen, 0.1);
+          color: $primaryGreen;
         }
       }
     }

@@ -18,10 +18,13 @@ import {
   useGetProfileQuery,
   useUploadFileMutation,
 } from '../../Services/Api/module/UserApi';
+import type { UserProfile } from '../../Shared/Types';
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 
 export default function EditPublicProfile() {
   const navigate = useNavigate();
-  const { data: apiResponse, isLoading } = useGetProfileQuery({});
+  const { data: apiResponse, isLoading } = useGetProfileQuery(undefined);
+  console.log(apiResponse, "response from get query")
   const [EditPublicProfileMutation] = useEditProfileMutation();
   const [uploadFile, { isLoading: isUploading }] = useUploadFileMutation();
   const { t } = useTranslation('settings');
@@ -39,23 +42,56 @@ export default function EditPublicProfile() {
     avatarUrl: '',
   });
 
+  // Normalize stage label → short ID (for data saved before this fix)
+  const stageNormalizeMap: Record<string, string> = {
+    Ideation: 'idea',
+    'Startup - First sales': 'startup',
+    'Growth Stage': 'growth',
+    Established: 'established',
+  };
+
+  // Normalize profileType label → short ID (for data saved before this fix)
+  const profileTypeNormalizeMap: Record<string, string> = {
+    Startup: 'startup',
+    'Innovation / Technology': 'innovation',
+    'Woman entrepreneur': 'woman',
+    'Young entrepreneur': 'young',
+    'Growth-stage': 'growth',
+    'Social impact': 'impact',
+    'Diverse background': 'diverse',
+  };
+
+  // Normalize goal label → short ID
+  const goalNormalizeMap: Record<string, string> = {
+    'Meet other entrepreneurs': 'meet',
+    'Apply for grants': 'apply',
+    'Grow my business': 'grow',
+    'Attend galas': 'attend',
+  };
+
   useEffect(() => {
     if (apiResponse?.data) {
-      const p = apiResponse.data;
+      const p = apiResponse.data as UserProfile;
+
       const industryValue = Array.isArray(p.industry)
         ? p.industry
         : p.industry
-        ? [p.industry]
-        : ['Technology'];
+          ? [p.industry]
+          : [];
 
-      // Map goal if it comes back as a label instead of an ID
-      const goalsMap: Record<string, string> = {
-        'Meet other entrepreneurs': 'meet',
-        'Apply for grants': 'apply',
-        'Grow my business': 'grow',
-        'Attend galas': 'attend',
-      };
-      const goalValue = goalsMap[p.goal] || p.goal || '';
+      // Normalize stage: map label → ID if needed
+      const rawStage = p.stage || '';
+      const stage = stageNormalizeMap[rawStage] || rawStage;
+
+      // Normalize profileType: map label → ID if needed
+      const rawProfileType = p.profileType || [];
+      const profileType = rawProfileType.map(
+        (v) => profileTypeNormalizeMap[v] || v
+      );
+
+      // Normalize goal: map label → ID if needed
+      const rawGoal = p.goal || '';
+      const goal = goalNormalizeMap[rawGoal] || rawGoal;
 
       setFormData({
         firstName: p.firstName || '',
@@ -63,21 +99,52 @@ export default function EditPublicProfile() {
         phoneNumber: p.phoneNumber || '',
         companyName: p.companyName || '',
         industry: industryValue,
-        stage: p.stage || p.businessStage || 'Startup - First sales',
+        stage,
         businessDescription: p.businessDescription || '',
-        profileType: p.profileType || p.entrepreneurProfile || [],
-        goal: goalValue,
+        profileType,
+        goal,
         avatarUrl: p.avatarUrl || '',
       });
     }
   }, [apiResponse]);
-
   if (isLoading) {
     return (
       <div className="edit-profile-container loading-state">
         <header className="edit-profile-header">
-          <p>Loading profile details...</p>
+          <div className="back-btn">
+            <Skeleton variant="rect" width={80} height={24} />
+          </div>
+          <div className="header-spacer" />
+          <div className="avatar-edit">
+            <Skeleton variant="circle" width={100} height={100} />
+          </div>
+          <div className="avatar-actions">
+            <Skeleton variant="text" width={100} />
+          </div>
         </header>
+
+        <div className="edit-profile-form">
+          <div className="section">
+            <Skeleton variant="text" width={150} height={24} />
+            <div className="form-grid">
+              <div className="form-group">
+                <Skeleton variant="text" width={100} />
+                <Skeleton variant="rect" height={45} />
+              </div>
+              <div className="form-group">
+                <Skeleton variant="text" width={100} />
+                <Skeleton variant="rect" height={45} />
+              </div>
+            </div>
+          </div>
+          <div className="section">
+            <Skeleton variant="text" width={150} height={24} />
+            <div className="form-grid">
+              <Skeleton variant="rect" height={45} />
+              <Skeleton variant="rect" height={100} />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -162,7 +229,7 @@ export default function EditPublicProfile() {
         console.error('No URL found in upload response', resp);
         toast.error(
           t('editPublic.uploadFailed') ||
-            'Upload completed, but no image URL was returned.'
+          'Upload completed, but no image URL was returned.'
         );
       }
     } catch (error: any) {
@@ -204,8 +271,8 @@ export default function EditPublicProfile() {
       // On successful unwrap, we show success regardless of explicit 'success' field
       toast.success(
         response.message ||
-          t('editPublic.updateSuccess') ||
-          'Profile updated successfully!',
+        t('editPublic.updateSuccess') ||
+        'Profile updated successfully!',
         { position: 'top-right' }
       );
       navigate(-1);
@@ -367,14 +434,10 @@ export default function EditPublicProfile() {
                 value={formData.stage}
                 onChange={handleInputChange}
               >
-                <option value="Ideation">{t('editPublic.ideation')}</option>
-                <option value="Startup - First sales">
-                  {t('editPublic.startup')}
-                </option>
-                <option value="Growth Stage">{t('editPublic.growth')}</option>
-                <option value="Established">
-                  {t('editPublic.established')}
-                </option>
+                <option value="idea">{t('editPublic.ideation')}</option>
+                <option value="startup">{t('editPublic.startup')}</option>
+                <option value="growth">{t('editPublic.growth')}</option>
+                <option value="established">{t('editPublic.established')}</option>
               </select>
             </div>
             <div className="form-group">
@@ -400,19 +463,18 @@ export default function EditPublicProfile() {
           <p className="section-hint">{t('editPublic.selectAll')}</p>
           <div className="tags-grid">
             {[
-              { id: 'Startup', key: 'startupTag' },
-              { id: 'Innovation / Technology', key: 'innovation' },
-              { id: 'Woman entrepreneur', key: 'woman' },
-              { id: 'Young entrepreneur', key: 'young' },
-              { id: 'Growth-stage', key: 'growthStage' },
-              { id: 'Social impact', key: 'socialImpact' },
-              { id: 'Diverse background', key: 'diverse' },
+              { id: 'startup', key: 'startupTag' },
+              { id: 'innovation', key: 'innovation' },
+              { id: 'woman', key: 'woman' },
+              { id: 'young', key: 'young' },
+              { id: 'growth', key: 'growthStage' },
+              { id: 'impact', key: 'socialImpact' },
+              { id: 'diverse', key: 'diverse' },
             ].map((tag) => (
               <span
                 key={tag.id}
-                className={`tag ${
-                  formData.profileType.includes(tag.id) ? 'active' : ''
-                }`}
+                className={`tag ${formData.profileType.includes(tag.id) ? 'active' : ''
+                  }`}
                 onClick={() => toggleTag(tag.id)}
               >
                 {t(`editPublic.${tag.key}`)}
@@ -436,9 +498,8 @@ export default function EditPublicProfile() {
             ].map((goal) => (
               <div
                 key={goal.id}
-                className={`goal-item ${
-                  formData.goal === goal.id ? 'active' : ''
-                }`}
+                className={`goal-item ${formData.goal === goal.id ? 'active' : ''
+                  }`}
                 onClick={() => toggleGoal(goal.id)}
               >
                 <div className="icon-box">
@@ -447,10 +508,10 @@ export default function EditPublicProfile() {
                       goal.id === 'meet'
                         ? faUsers
                         : goal.id === 'apply'
-                        ? faCircleCheck
-                        : goal.id === 'grow'
-                        ? faCubes
-                        : faCalendarDays
+                          ? faCircleCheck
+                          : goal.id === 'grow'
+                            ? faCubes
+                            : faCalendarDays
                     }
                   />
                 </div>

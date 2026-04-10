@@ -260,6 +260,24 @@
       margin-left: 8px;
     }
 
+    &.applied {
+      background: $secondaryGreen;
+      color: $primaryGreen;
+      border: 1px solid $primaryGreen;
+      cursor: default;
+      transform: none !important;
+      font-weight: 800;
+      
+      .apply-icon {
+        color: $primaryGreen;
+      }
+
+      &:hover {
+        background: $secondaryGreen;
+        transform: none !important;
+      }
+    }
+
     &.disabled {
       background: #94a3b8;
       cursor: not-allowed;
