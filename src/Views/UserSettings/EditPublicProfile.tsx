@@ -24,7 +24,7 @@ import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 export default function EditPublicProfile() {
   const navigate = useNavigate();
   const { data: apiResponse, isLoading } = useGetProfileQuery(undefined);
-  console.log(apiResponse, "response from get query")
+  console.log(apiResponse, 'response from get query');
   const [EditPublicProfileMutation] = useEditProfileMutation();
   const [uploadFile, { isLoading: isUploading }] = useUploadFileMutation();
   const { t } = useTranslation('settings');
@@ -76,8 +76,8 @@ export default function EditPublicProfile() {
       const industryValue = Array.isArray(p.industry)
         ? p.industry
         : p.industry
-          ? [p.industry]
-          : [];
+        ? [p.industry]
+        : [];
 
       // Normalize stage: map label → ID if needed
       const rawStage = p.stage || '';
@@ -229,7 +229,7 @@ export default function EditPublicProfile() {
         console.error('No URL found in upload response', resp);
         toast.error(
           t('editPublic.uploadFailed') ||
-          'Upload completed, but no image URL was returned.'
+            'Upload completed, but no image URL was returned.'
         );
       }
     } catch (error: any) {
@@ -271,8 +271,8 @@ export default function EditPublicProfile() {
       // On successful unwrap, we show success regardless of explicit 'success' field
       toast.success(
         response.message ||
-        t('editPublic.updateSuccess') ||
-        'Profile updated successfully!',
+          t('editPublic.updateSuccess') ||
+          'Profile updated successfully!',
         { position: 'top-right' }
       );
       navigate(-1);
@@ -437,7 +437,9 @@ export default function EditPublicProfile() {
                 <option value="idea">{t('editPublic.ideation')}</option>
                 <option value="startup">{t('editPublic.startup')}</option>
                 <option value="growth">{t('editPublic.growth')}</option>
-                <option value="established">{t('editPublic.established')}</option>
+                <option value="established">
+                  {t('editPublic.established')}
+                </option>
               </select>
             </div>
             <div className="form-group">
@@ -473,8 +475,9 @@ export default function EditPublicProfile() {
             ].map((tag) => (
               <span
                 key={tag.id}
-                className={`tag ${formData.profileType.includes(tag.id) ? 'active' : ''
-                  }`}
+                className={`tag ${
+                  formData.profileType.includes(tag.id) ? 'active' : ''
+                }`}
                 onClick={() => toggleTag(tag.id)}
               >
                 {t(`editPublic.${tag.key}`)}
@@ -498,8 +501,9 @@ export default function EditPublicProfile() {
             ].map((goal) => (
               <div
                 key={goal.id}
-                className={`goal-item ${formData.goal === goal.id ? 'active' : ''
-                  }`}
+                className={`goal-item ${
+                  formData.goal === goal.id ? 'active' : ''
+                }`}
                 onClick={() => toggleGoal(goal.id)}
               >
                 <div className="icon-box">
@@ -508,10 +512,10 @@ export default function EditPublicProfile() {
                       goal.id === 'meet'
                         ? faUsers
                         : goal.id === 'apply'
-                          ? faCircleCheck
-                          : goal.id === 'grow'
-                            ? faCubes
-                            : faCalendarDays
+                        ? faCircleCheck
+                        : goal.id === 'grow'
+                        ? faCubes
+                        : faCalendarDays
                     }
                   />
                 </div>

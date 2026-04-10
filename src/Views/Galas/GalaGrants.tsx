@@ -70,8 +70,18 @@ export default function GalaGrants() {
               <Skeleton variant="text" width="60%" height={24} />
               <Skeleton variant="text" width="100%" height={60} />
               <div className="grant-pills">
-                <Skeleton variant="rect" width={100} height={30} borderRadius={15} />
-                <Skeleton variant="rect" width={100} height={30} borderRadius={15} />
+                <Skeleton
+                  variant="rect"
+                  width={100}
+                  height={30}
+                  borderRadius={15}
+                />
+                <Skeleton
+                  variant="rect"
+                  width={100}
+                  height={30}
+                  borderRadius={15}
+                />
               </div>
             </div>
           ))}

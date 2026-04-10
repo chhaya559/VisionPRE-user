@@ -43,7 +43,13 @@ export default function DiscoverGalas() {
         <div className="galas-filters-bar">
           <div className="galas-filters">
             {[1, 2, 3, 4, 5].map((i) => (
-              <Skeleton key={i} variant="rect" width={80} height={36} borderRadius={18} />
+              <Skeleton
+                key={i}
+                variant="rect"
+                width={80}
+                height={36}
+                borderRadius={18}
+              />
             ))}
           </div>
         </div>

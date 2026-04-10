@@ -230,7 +230,12 @@ export default function SubscriptionPlans() {
       <div className="sp-page loading-state">
         <header className="sp-hero">
           <div className="sp-hero__bg-shape" />
-          <Skeleton variant="text" width={200} height={32} className="sp-hero__title" />
+          <Skeleton
+            variant="text"
+            width={200}
+            height={32}
+            className="sp-hero__title"
+          />
           <Skeleton variant="text" width={300} height={20} />
         </header>
 
@@ -246,7 +251,13 @@ export default function SubscriptionPlans() {
             <Skeleton variant="text" width={150} height={20} />
             <div className="sp-plans__grid">
               {[1, 2].map((i) => (
-                <Skeleton key={i} variant="rect" width="100%" height={300} borderRadius={24} />
+                <Skeleton
+                  key={i}
+                  variant="rect"
+                  width="100%"
+                  height={300}
+                  borderRadius={24}
+                />
               ))}
             </div>
           </section>

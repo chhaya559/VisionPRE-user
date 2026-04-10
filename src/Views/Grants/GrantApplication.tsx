@@ -24,6 +24,8 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
+import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
+
 interface FileUploaderProps {
   label: string;
   onUploadSuccess: (url: string) => void;
@@ -118,8 +120,6 @@ function FileUploader({
     </div>
   );
 }
-
-import Skeleton from '../../Shared/Components/Skeleton/Skeleton';
 
 export default function GrantApplication() {
   const { id, grantId } = useParams<{ id: string; grantId: string }>();
@@ -234,8 +234,11 @@ export default function GrantApplication() {
 
     try {
       // 1. Blockchain Transaction
-      const blockchainResult = await applyForGrantBlockchain(id || '', grantId || '');
-      
+      const blockchainResult = await applyForGrantBlockchain(
+        id || '',
+        grantId || ''
+      );
+
       if (!blockchainResult) {
         console.warn('[GrantApplication] Blockchain application incomplete.');
         return;
@@ -360,7 +363,8 @@ export default function GrantApplication() {
           <div className="calendar-mock">
             <div className="cal-header">
               <FontAwesomeIcon icon={faChevronLeft} />
-              {now.toLocaleString('default', { month: 'long' })} {now.getFullYear()}
+              {now.toLocaleString('default', { month: 'long' })}{' '}
+              {now.getFullYear()}
               <FontAwesomeIcon icon={faChevronLeft} className="cal-next-icon" />
             </div>
             <div className="cal-grid">

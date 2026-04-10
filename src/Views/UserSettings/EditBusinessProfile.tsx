@@ -24,9 +24,7 @@ export default function EditBusinessProfile() {
       const p = apiResponse.data as UserProfile;
       setFormData({
         ...p,
-        industry: Array.isArray(p.industry)
-          ? p.industry[0]
-          : p.industry || '',
+        industry: Array.isArray(p.industry) ? p.industry[0] : p.industry || '',
         foundedYear: p.foundedYear?.toString() || '',
       });
     }
@@ -152,7 +150,9 @@ export default function EditBusinessProfile() {
                 value={formData.industry || ''}
                 onChange={handleInputChange}
               >
-                <option value="">{t('editBusiness.selectIndustry') || 'Select industry'}</option>
+                <option value="">
+                  {t('editBusiness.selectIndustry') || 'Select industry'}
+                </option>
                 <option value="Technology">
                   {t('editBusiness.technology')}
                 </option>
@@ -172,7 +172,9 @@ export default function EditBusinessProfile() {
                 value={formData.companySize || ''}
                 onChange={handleInputChange}
               >
-                <option value="">{t('editBusiness.selectSize') || 'Select size'}</option>
+                <option value="">
+                  {t('editBusiness.selectSize') || 'Select size'}
+                </option>
                 <option value="1-10 employees">
                   {t('editBusiness.size1')}
                 </option>
@@ -203,7 +205,9 @@ export default function EditBusinessProfile() {
                 value={formData.annualRevenue || ''}
                 onChange={handleInputChange}
               >
-                <option value="">{t('editBusiness.selectRevenue') || 'Select revenue'}</option>
+                <option value="">
+                  {t('editBusiness.selectRevenue') || 'Select revenue'}
+                </option>
                 <option value="Under $100K">
                   {t('editBusiness.revenue1')}
                 </option>

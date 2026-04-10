@@ -422,9 +422,19 @@ export default function Notifications() {
             {isLoading || isFetching ? (
               <div className="notifications-list-wrap">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="notification-row skeleton-row" style={{ padding: '1.5rem', borderBottom: '1px solid #f1f5f9' }}>
+                  <div
+                    key={i}
+                    className="notification-row skeleton-row"
+                    style={{
+                      padding: '1.5rem',
+                      borderBottom: '1px solid #f1f5f9',
+                    }}
+                  >
                     <Skeleton variant="circle" width={40} height={40} />
-                    <div className="notification-copy" style={{ marginLeft: '1rem', flex: 1 }}>
+                    <div
+                      className="notification-copy"
+                      style={{ marginLeft: '1rem', flex: 1 }}
+                    >
                       <Skeleton variant="text" width="40%" height={20} />
                       <Skeleton variant="text" width="80%" height={16} />
                       <Skeleton variant="text" width="20%" height={14} />
@@ -581,7 +591,13 @@ export default function Notifications() {
 
                 <div className="detail-message">
                   {isDetailLoading ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                      }}
+                    >
                       <Skeleton variant="text" width="90%" />
                       <Skeleton variant="text" width="80%" />
                       <Skeleton variant="text" width="85%" />

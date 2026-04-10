@@ -27,7 +27,9 @@ export const ensureAbsoluteUrl = (
  * @param value The value to format.
  * @returns A formatted string or the original value if it's not an array.
  */
-export const formatList = (value: string | string[] | null | undefined): string => {
+export const formatList = (
+  value: string | string[] | null | undefined
+): string => {
   if (!value) return '';
   if (Array.isArray(value)) {
     return value.filter(Boolean).join(', ');

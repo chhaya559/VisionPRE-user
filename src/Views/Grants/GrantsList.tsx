@@ -38,7 +38,8 @@ export default function GrantsList() {
   // Group applications by Gala
   const groupedApps = Array.isArray(applications)
     ? applications.reduce((acc: any, app: any) => {
-        const galaId = app.galaId || app.GalaId || app.galaName || app.GalaName || 'unknown';
+        const galaId =
+          app.galaId || app.GalaId || app.galaName || app.GalaName || 'unknown';
         if (!acc[galaId]) acc[galaId] = [];
         acc[galaId].push(app);
         return acc;
@@ -183,10 +184,10 @@ export default function GrantsList() {
           ) : (
             Object.keys(groupedApps).map((gId) => {
               const galaApps = groupedApps[gId];
-              const gala =
-                galas.find((g: any) => g.id === gId || g.Id === gId) ||
-                galas.find((g: any) => g.name === gId || g.Name === gId) ||
-                {
+              const gala = galas.find(
+                (g: any) => g.id === gId || g.Id === gId
+              ) ||
+                galas.find((g: any) => g.name === gId || g.Name === gId) || {
                   name:
                     galaApps[0].galaName ||
                     galaApps[0].GalaName ||
@@ -219,7 +220,11 @@ export default function GrantsList() {
                         <div
                           key={app.id || app.Id}
                           className="nested-app-item"
-                          onClick={() => navigate(`/dashboard/galas/${galaIdForRedirect}/grants`)}
+                          onClick={() =>
+                            navigate(
+                              `/dashboard/galas/${galaIdForRedirect}/grants`
+                            )
+                          }
                           style={{ cursor: 'pointer' }}
                         >
                           <div className="app-icon-box">
@@ -230,7 +235,9 @@ export default function GrantsList() {
                             <p className="interview-info">
                               {t('grants.list.interview')}{' '}
                               {app.interviewDate
-                                ? new Date(app.interviewDate).toLocaleDateString()
+                                ? new Date(
+                                    app.interviewDate
+                                  ).toLocaleDateString()
                                 : getGrantApplicationStatusLabel(
                                     getGrantApplicationStatusValue(app)
                                   )}{' '}
@@ -238,7 +245,9 @@ export default function GrantsList() {
                             </p>
                             <p className="submission-date">
                               {t('grants.list.submittedOn')}{' '}
-                              {new Date(app.submittedAt || app.createdAt).toLocaleDateString()}
+                              {new Date(
+                                app.submittedAt || app.createdAt
+                              ).toLocaleDateString()}
                             </p>
                           </div>
                           <div className="app-actions">

@@ -99,7 +99,7 @@ export default function MyProfile() {
   const firstName = profileData.firstName || 'User';
   const lastName = profileData.lastName || '';
   const email = profileData.email || '';
-  const companyName = profileData.companyName;
+  const { companyName } = profileData;
   const bio = profileData.businessDescription || t('myProfile.noBio');
   const initials = firstName.charAt(0).toUpperCase();
 
@@ -193,13 +193,11 @@ export default function MyProfile() {
               <div className="business-summary">
                 <div className="summary-item">
                   <strong>{t('myProfile.industry')}</strong>{' '}
-                  {formatList(profileData.industry) ||
-                    t('myProfile.notSet')}
+                  {formatList(profileData.industry) || t('myProfile.notSet')}
                 </div>
                 <div className="summary-item">
                   <strong>{t('myProfile.stage')}</strong>{' '}
-                  {profileData.stage ||
-                    t('myProfile.notSet')}
+                  {profileData.stage || t('myProfile.notSet')}
                 </div>
               </div>
             )}

@@ -92,9 +92,19 @@ export default function SubscriptionDetails() {
 
         <div className="account-settings-content">
           <div className="account-settings-main">
-            <Skeleton variant="rect" width={100} height={24} borderRadius={12} />
+            <Skeleton
+              variant="rect"
+              width={100}
+              height={24}
+              borderRadius={12}
+            />
             <Skeleton variant="text" width="50%" height={40} />
-            <Skeleton variant="rect" width="100%" height={80} borderRadius={16} />
+            <Skeleton
+              variant="rect"
+              width="100%"
+              height={80}
+              borderRadius={16}
+            />
             <div className="info-list">
               {[1, 2, 3].map((i) => (
                 <Skeleton key={i} variant="rect" width="100%" height={60} />
